@@ -5,7 +5,7 @@ export class SignInParams {
   private _email: Email;
   private _password: Password;
 
-  private constructor(email: Email, password: Password) {
+  constructor(email: Email, password: Password) {
     this._email = email;
     this._password = password;
   }

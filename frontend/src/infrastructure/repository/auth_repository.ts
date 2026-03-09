@@ -1,18 +1,31 @@
-// import client from "../api/client";
-import Cookies from "js-cookie";
-
-import { SignInParams } from "../../domain/entities/auth/sign_in_params";
-import { SignUpParams } from "../../domain/entities/auth/sign_up_params";
+import type {
+  ResponseUser,
+  ReqestSignUp,
+  ReqestSignIn,
+} from "../../common/api_body_values/auth";
 
 import { ApiRequest } from "../api/api_request";
 
 // サインアップ（新規アカウント作成）
-export const signUp = (params: SignUpParams) => {
-  return ApiRequest.postFetchData<SignUpParams>("auth", params);
-  // return client.post("auth", params);
+//responseSignUp
+export const signUp = (params: ReqestSignUp) => {
+  return ApiRequest.post<ReqestSignUp>("auth", params);
 };
 
 // サインイン（ログイン）
-export const signIn = (params: SignInParams) => {
-  return ApiRequest.postFetchData<SignInParams>("auth/sign_in", params);
+//responseSignIn
+export const signIn = (params: ReqestSignIn) => {
+  return ApiRequest.post<ReqestSignIn>("auth/sign_in", params);
+};
+
+// サインアウト（ログアウト）
+//responseSignOut
+export const signOut = () => {
+  return ApiRequest.deleteSession("auth/sign_out");
+};
+
+// 認証済みのユーザーを取得
+//responseGetCurrentUse
+export const getCurrentUser = () => {
+  return ApiRequest.getCookiesData("/auth/sessions");
 };
