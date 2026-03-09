@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import { AuthContext } from "../src/common/contexts/AuthContext";
-import CommonLayout from "./components/views/layouts/CommonLayout";
-import Home from "./components/views/pages/Home";
-import SignIn from "./components/views/pages/SignIn";
-import SignUp from "./components/views/pages/SignUp";
+import { AuthContext } from "@/common/contexts/AuthContext";
+import CommonLayout from "@/components/views/layouts/CommonLayout";
+import Home from "@/components/views/pages/Home";
+import SignIn from "@/components/views/pages/SignIn";
+import SignUp from "@/components/views/pages/SignUp";
 
-import { AuthAppService } from "../src/domain/application_service/auth_app_service";
-import { AuthRepository } from "../src/infrastructure/repository/auth_repository";
-import type { User } from "./common/api_body_values/auth";
+import { AuthAppService } from "@/domain/application_service/auth_app_service";
+import { AuthRepository } from "@/infrastructure/repository/auth_repository";
+import type { User } from "@/common/api_body_values/auth";
 
 const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -21,11 +21,13 @@ const App: React.FC = () => {
 
   const fetchUser = async () => {
     try {
-      // const response = await appService.getCurrentUser();
-      // if (response?.data.isLogin) {
-      //   setIsSignedIn(true);
-      //   setCurrentUser(response?.data.data);
-      // }
+      const response = await appService.getCurrentUser();
+      console.log("現在のログインユーザの取得");
+      console.log(response);
+      if (response?.data.is_login) {
+        setIsSignedIn(true);
+        setCurrentUser(response?.data.data);
+      }
     } catch (err) {
       console.log(err);
     } finally {

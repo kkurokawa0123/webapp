@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { AuthContext } from "../../../common/contexts/AuthContext";
+import { AuthContext } from "@/common/contexts/AuthContext";
 
 // とりあえず認証済みユーザーの名前やメールアドレスを表示
 const Home: React.FC = () => {

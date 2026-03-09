@@ -1,10 +1,11 @@
-import type { IAuthRepository } from "../interface_repository/Iauth_repository";
+import type { AxiosResponse } from "axios";
+
+import type { IAuthRepository } from "@/domain/interface_repository/Iauth_repository";
 import type {
   ReqestSignUp,
   ReqestSignIn,
   ResponseData,
-} from "../../common/api_body_values/auth";
-import type { AxiosResponse } from "axios";
+} from "@/common/api_body_values/auth";
 
 export class AuthAppService {
   private _authRepository: IAuthRepository;

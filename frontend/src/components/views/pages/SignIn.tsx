@@ -12,14 +12,14 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-import AlertMessage from "../utils/AlertMessage";
-import { AuthContext } from "../../../common/contexts/AuthContext";
-import { AuthAppService } from "../../../domain/application_service/auth_app_service";
-import { AuthRepository } from "../../../infrastructure/repository/auth_repository";
+import AlertMessage from "@/components/views/utils/AlertMessage";
+import { AuthContext } from "@/common/contexts/AuthContext";
+import { AuthAppService } from "@/domain/application_service/auth_app_service";
+import { AuthRepository } from "@/infrastructure/repository/auth_repository";
 
-import { Email } from "../../../domain/value_objects/auth/email";
-import { Password } from "../../../domain/value_objects/auth/password";
-import type { ResponseData, User } from "../../../common/api_body_values/auth";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
+import type { ResponseData, User } from "@/common/api_body_values/auth";
 
 export const ContainerBox = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(6),

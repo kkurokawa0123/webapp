@@ -10,9 +10,9 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { AuthContext } from "../../../common/contexts/AuthContext";
-import { AuthAppService } from "../../../domain/application_service/auth_app_service";
-import { AuthRepository } from "../../../infrastructure/repository/auth_repository";
+import { AuthContext } from "@/common/contexts/AuthContext";
+import { AuthAppService } from "@/domain/application_service/auth_app_service";
+import { AuthRepository } from "@/infrastructure/repository/auth_repository";
 
 type Props = {
   loading: boolean;

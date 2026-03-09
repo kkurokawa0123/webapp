@@ -3,14 +3,13 @@ import type {
   ReqestSignUp,
   ReqestSignIn,
   ResponseData,
-} from "../../common/api_body_values/auth";
+} from "@/common/api_body_values/auth";
 
-import type { IAuthRepository } from "../../domain/interface_repository/Iauth_repository";
-import { ApiRequest } from "../api/api_request";
+import type { IAuthRepository } from "@/domain/interface_repository/Iauth_repository";
+import { ApiRequest } from "@/infrastructure/api/api_request";
 
 export class AuthRepository implements IAuthRepository {
   // サインアップ（新規アカウント作成）
-  //responseSignUp
   async requestSignUp(
     params: ReqestSignUp,
   ): Promise<AxiosResponse<ResponseData>> {
@@ -18,7 +17,6 @@ export class AuthRepository implements IAuthRepository {
   }
 
   // サインイン（ログイン）
-  //responseSignIn
   async requestSignIn(
     params: ReqestSignIn,
   ): Promise<AxiosResponse<ResponseData>> {
@@ -26,13 +24,11 @@ export class AuthRepository implements IAuthRepository {
   }
 
   // サインアウト（ログアウト）
-  //responseSignOut
   async requestSignOut(): Promise<AxiosResponse<ResponseData>> {
     return ApiRequest.deleteSession("auth/sign_out");
   }
 
   // 認証済みのユーザーを取得
-  //responseGetCurrentUse
   async requestrGetCurrentUser(): Promise<
     AxiosResponse<ResponseData> | undefined
   > {

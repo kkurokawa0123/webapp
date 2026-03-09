@@ -9,17 +9,17 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-import { AuthContext } from "../../../common/contexts/AuthContext";
-import AlertMessage from "../utils/AlertMessage";
+import { AuthContext } from "@/common/contexts/AuthContext";
+import AlertMessage from "@/components/views/utils/AlertMessage";
 
-import { AuthAppService } from "../../../domain/application_service/auth_app_service";
-import { AuthRepository } from "../../../infrastructure/repository/auth_repository";
+import { AuthAppService } from "@/domain/application_service/auth_app_service";
+import { AuthRepository } from "@/infrastructure/repository/auth_repository";
 
-import { UserName } from "../../../domain/value_objects/auth/username";
-import { Email } from "../../../domain/value_objects/auth/email";
-import { Password } from "../../../domain/value_objects/auth/password";
+import { UserName } from "@/domain/value_objects/auth/username";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
 
-import type { ResponseData, User } from "../../../common/api_body_values/auth";
+import type { ResponseData, User } from "@/common/api_body_values/auth";
 
 // サインアップ用ページ
 const SignUp: React.FC = () => {

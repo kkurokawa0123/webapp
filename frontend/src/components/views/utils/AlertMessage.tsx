@@ -1,13 +1,6 @@
 import React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-// import type { AlertProps } from "@mui/material/Alert";
-
-// const AlertComponent = React.forwardRef<HTMLDivElement, AlertProps>(
-//   function AlertComponent(props, ref) {
-//     return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
-//   },
-// );
 
 interface AlertMessageProps {
   open: boolean;

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import type { User } from "../api_body_values/auth";
+import type { User } from "@/common/api_body_values/auth";
 
 type AuthContextType = {
   loading: boolean;

@@ -2,18 +2,11 @@ import React from "react";
 import Container from "@mui/material/Container";
 import { Grid } from "@mui/material";
 
-// import { styled } from "@mui/material/styles";
-
-import Header from "../layouts/Header";
+import Header from "@/components/views/layouts/Header";
 
 interface CommonLayoutProps {
   children: React.ReactElement;
 }
-
-// const Container = styled(MuiContainer)({
-//   marginTop: "3rem",
-//   justifyContent: "center",
-// });
 
 // 全てのページで共通となるレイアウト
 const CommonLayout = ({ children }: CommonLayoutProps) => {
