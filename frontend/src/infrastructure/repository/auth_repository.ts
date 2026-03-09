@@ -1,31 +1,41 @@
+import type { AxiosResponse } from "axios";
 import type {
-  ResponseUser,
   ReqestSignUp,
   ReqestSignIn,
+  ResponseData,
 } from "../../common/api_body_values/auth";
 
+import type { IAuthRepository } from "../../domain/interface_repository/Iauth_repository";
 import { ApiRequest } from "../api/api_request";
 
-// サインアップ（新規アカウント作成）
-//responseSignUp
-export const signUp = (params: ReqestSignUp) => {
-  return ApiRequest.post<ReqestSignUp>("auth", params);
-};
+export class AuthRepository implements IAuthRepository {
+  // サインアップ（新規アカウント作成）
+  //responseSignUp
+  async requestSignUp(
+    params: ReqestSignUp,
+  ): Promise<AxiosResponse<ResponseData>> {
+    return ApiRequest.post<ReqestSignUp>("auth", params);
+  }
 
-// サインイン（ログイン）
-//responseSignIn
-export const signIn = (params: ReqestSignIn) => {
-  return ApiRequest.post<ReqestSignIn>("auth/sign_in", params);
-};
+  // サインイン（ログイン）
+  //responseSignIn
+  async requestSignIn(
+    params: ReqestSignIn,
+  ): Promise<AxiosResponse<ResponseData>> {
+    return ApiRequest.post<ReqestSignIn>("auth/sign_in", params);
+  }
 
-// サインアウト（ログアウト）
-//responseSignOut
-export const signOut = () => {
-  return ApiRequest.deleteSession("auth/sign_out");
-};
+  // サインアウト（ログアウト）
+  //responseSignOut
+  async requestSignOut(): Promise<AxiosResponse<ResponseData>> {
+    return ApiRequest.deleteSession("auth/sign_out");
+  }
 
-// 認証済みのユーザーを取得
-//responseGetCurrentUse
-export const getCurrentUser = () => {
-  return ApiRequest.getCookiesData("/auth/sessions");
-};
+  // 認証済みのユーザーを取得
+  //responseGetCurrentUse
+  async requestrGetCurrentUser(): Promise<
+    AxiosResponse<ResponseData> | undefined
+  > {
+    return ApiRequest.getCookiesData("/auth/sessions");
+  }
+}
