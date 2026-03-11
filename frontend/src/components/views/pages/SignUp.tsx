@@ -19,13 +19,13 @@ import { UserName } from "@/domain/value_objects/auth/username";
 import { Email } from "@/domain/value_objects/auth/email";
 import { Password } from "@/domain/value_objects/auth/password";
 
-import type { ResponseData, User } from "@/common/api_body_values/auth";
+import type { ResponseData, User } from "@/common/api_params/auth";
 
 // サインアップ用ページ
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -61,11 +61,15 @@ const SignUp: React.FC = () => {
         Cookies.set("_client", response.headers["client"]);
         Cookies.set("_uid", response.headers["uid"]);
 
-        setIsSignedIn(true);
         const data = response?.data as ResponseData;
         const user = data.data as User;
-
-        setCurrentUser(user);
+        setAuthState((prev) => ({
+          ...prev,
+          isSignedIn: true,
+          currentUser: user,
+        }));
+        // setIsSignedIn(true);
+        // setCurrentUser(user);
 
         navigate("/");
 

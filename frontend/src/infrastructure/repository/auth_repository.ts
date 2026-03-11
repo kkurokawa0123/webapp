@@ -3,7 +3,7 @@ import type {
   ReqestSignUp,
   ReqestSignIn,
   ResponseData,
-} from "@/common/api_body_values/auth";
+} from "@/common/api_params/auth";
 
 import type { IAuthRepository } from "@/domain/interface_repository/Iauth_repository";
 import { ApiRequest } from "@/infrastructure/api/api_request";
@@ -29,9 +29,7 @@ export class AuthRepository implements IAuthRepository {
   }
 
   // 認証済みのユーザーを取得
-  async requestrGetCurrentUser(): Promise<
-    AxiosResponse<ResponseData> | undefined
-  > {
+  async requestrGetCurrentUser(): Promise<AxiosResponse<ResponseData>> {
     return ApiRequest.getCookiesData("/auth/sessions");
   }
 }

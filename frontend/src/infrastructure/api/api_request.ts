@@ -24,13 +24,6 @@ export class ApiRequest {
   }
   // 認証済みのユーザーを取得
   static async getCookiesData(url: string) {
-    if (
-      !Cookies.get("_access_token") ||
-      !Cookies.get("_client") ||
-      !Cookies.get("_uid")
-    ) {
-      return;
-    }
     return await axiosClient.get(url, {
       headers: {
         "access-token": Cookies.get("_access_token"),

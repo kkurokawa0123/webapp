@@ -59,7 +59,7 @@ const AuthButtons = (props: Props) => {
 };
 
 const Header: React.FC = () => {
-  const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
+  const { authState, setAuthState } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const repository = new AuthRepository();
@@ -74,8 +74,12 @@ const Header: React.FC = () => {
         Cookies.remove("_access_token");
         Cookies.remove("_client");
         Cookies.remove("_uid");
-
-        setIsSignedIn(false);
+        setAuthState((prev) => ({
+          ...prev,
+          isSignedIn: false,
+          currentUser: response?.data.data,
+        }));
+        // setIsSignedIn(false);
         navigate("/signin");
 
         console.log("Succeeded in sign out");
@@ -100,11 +104,11 @@ const Header: React.FC = () => {
             variant="h6"
             color="inherit"
           >
-            トップ画面
+            メニュー
           </Typography>
           <AuthButtons
-            loading={loading}
-            isSignedIn={isSignedIn}
+            loading={authState.loading}
+            isSignedIn={authState.isSignedIn}
             handleSignOut={handleSignOut}
           />
         </Toolbar>

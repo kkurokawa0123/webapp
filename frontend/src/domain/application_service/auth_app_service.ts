@@ -5,7 +5,7 @@ import type {
   ReqestSignUp,
   ReqestSignIn,
   ResponseData,
-} from "@/common/api_body_values/auth";
+} from "@/common/api_params/auth";
 
 export class AuthAppService {
   private _authRepository: IAuthRepository;
@@ -24,7 +24,7 @@ export class AuthAppService {
   async signOut(): Promise<AxiosResponse<ResponseData>> {
     return await this._authRepository.requestSignOut();
   }
-  async getCurrentUser(): Promise<AxiosResponse<ResponseData> | undefined> {
+  async getCurrentUser(): Promise<AxiosResponse<ResponseData>> {
     return await this._authRepository.requestrGetCurrentUser();
   }
 }

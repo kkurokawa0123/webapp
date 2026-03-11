@@ -19,7 +19,7 @@ import { AuthRepository } from "@/infrastructure/repository/auth_repository";
 
 import { Email } from "@/domain/value_objects/auth/email";
 import { Password } from "@/domain/value_objects/auth/password";
-import type { ResponseData, User } from "@/common/api_body_values/auth";
+import type { ResponseData, User } from "@/common/api_params/auth";
 
 export const ContainerBox = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -52,7 +52,7 @@ export const StyledLink = styled("a")(() => ({
 const SignIn: React.FC = () => {
   //
 
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -79,7 +79,15 @@ const SignIn: React.FC = () => {
         Cookies.set("_access_token", response.headers["access-token"]);
         Cookies.set("_client", response.headers["client"]);
         Cookies.set("_uid", response.headers["uid"]);
-        setIsSignedIn(true);
+
+        setAuthState((prev) => ({
+          ...prev,
+          isSignedIn: true,
+          currentUser: user,
+        }));
+
+        // setIsSignedIn(true);
+
         const data = response?.data as ResponseData;
         const user = data.data as User;
         console.log("ログインアカウント##デバック用");
@@ -87,7 +95,7 @@ const SignIn: React.FC = () => {
         console.log(user.email);
         console.log("ログインアカウント名前##デバック用");
         console.log(user.name);
-        setCurrentUser(user);
+        // setCurrentUser(user);
         navigate("/");
         console.log("ログイン成功##デバック用");
         console.log("Signed in successfully!");
