@@ -1,95 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { AuthContext } from "@/common/contexts/AuthContext";
+import { AuthProvider } from "@/components/views/providers/AuthProvider";
 import CommonLayout from "@/components/views/layouts/CommonLayout";
-// import Home from "@/components/views/pages/Home";
 import TodoMain from "@/components/views/pages/Todos/TodoMain";
 import SignIn from "@/components/views/pages/SignIn";
 import SignUp from "@/components/views/pages/SignUp";
 
-import { AuthAppService } from "@/domain/application_service/auth_app_service";
-import { AuthRepository } from "@/infrastructure/repository/auth_repository";
-import type { AuthState } from "@/domain/auth_state";
+// import { useAuth } from "@/components/hooks/auth_hook";
+import { useAuthContex } from "@/components/contexts/auth_context";
 
-const repository = new AuthRepository();
-const appService = new AuthAppService(repository);
+const queryClient = new QueryClient();
+
+const PrivateRoute = () => {
+  // const { data, isLoading } = useAuth();
+  const authState = useAuthContex();
+  const isAuthenticated = !!authState.responseData;
+  console.log("1.AuthProvider_認証状態");
+  console.log("XX.AuthProvider_data", authState?.responseData);
+  console.log("2.AuthProvider_isLoading", authState.isLoading);
+  console.log("3.AuthProvider_isAuthenticated", isAuthenticated);
+
+  if (authState.isLoading) return null;
+  console.log("4.PrivateRoute認証結果", isAuthenticated);
+  return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />;
+};
 
 const App: React.FC = () => {
-  const [authState, setAuthState] = useState<AuthState>({
-    loading: true,
-    isSignedIn: false,
-    currentUser: undefined,
-  });
-
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
-  // const [currentUser, setCurrentUser] = useState<User | undefined>();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await appService.getCurrentUser();
-        console.log("現在のログインユーザの取得", response);
-        if (response.data.is_login) {
-          setAuthState((prev) => ({
-            ...prev,
-            isSignedIn: true,
-            currentUser: response?.data.data,
-          }));
-
-          // setIsSignedIn(true);
-          // setCurrentUser(response?.data.data);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setAuthState((prev) => ({
-          ...prev,
-          loading: false,
-        }));
-        // setLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
-
-  // ユーザーが認証済みかどうかでルーティングを決定
-  // 未認証だった場合は「/signin」ページに促す
-  const Private = ({ children }: { children: React.ReactElement }) => {
-    if (!authState.loading) {
-      if (authState.isSignedIn) {
-        return children;
-      } else {
-        return <Navigate to="/signin" />;
-      }
-    } else {
-      return <></>;
-    }
-  };
-
   return (
-    <AuthContext.Provider
-      value={{
-        authState,
-        setAuthState,
-      }}
-    >
-      <CommonLayout>
-        <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route
-            path="/"
-            element={
-              <Private>
-                <TodoMain />
-              </Private>
-            }
-          />
-        </Routes>
-      </CommonLayout>
-    </AuthContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <CommonLayout>
+          <Routes>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<TodoMain />} />
+            </Route>
+          </Routes>
+        </CommonLayout>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

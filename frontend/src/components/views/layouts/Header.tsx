@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,9 +9,9 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { AuthContext } from "@/common/contexts/AuthContext";
-import { AuthAppService } from "@/domain/application_service/auth_app_service";
-import { AuthRepository } from "@/infrastructure/repository/auth_repository";
+import { useAuthContex } from "@/components/contexts/auth_context";
+
+import { useSingOut } from "@/components/hooks/auth_hook";
 
 type Props = {
   loading: boolean;
@@ -59,60 +58,50 @@ const AuthButtons = (props: Props) => {
 };
 
 const Header: React.FC = () => {
-  const { authState, setAuthState } = useContext(AuthContext);
+  const { isAuthenticated, isLoading } = useAuthContex();
   const navigate = useNavigate();
-
-  const repository = new AuthRepository();
-  const appService = new AuthAppService(repository);
+  const singOut = useSingOut();
 
   const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      const response = await appService.signOut();
+      e.preventDefault();
+      console.log("サインアウト開始");
+      singOut.signout();
 
-      if (response.status === 200) {
-        // サインアウト時には各Cookieを削除
-        Cookies.remove("_access_token");
-        Cookies.remove("_client");
-        Cookies.remove("_uid");
-        setAuthState((prev) => ({
-          ...prev,
-          isSignedIn: false,
-          currentUser: response?.data.data,
-        }));
-        // setIsSignedIn(false);
-        navigate("/signin");
+      navigate("/signin");
 
-        console.log("Succeeded in sign out");
-      } else {
-        console.log("Failed in sign out");
-      }
+      console.log("Succeeded in sign out");
     } catch (err) {
       console.log(err);
+      console.log("サインアウト致命的エラー", err);
     }
   };
 
   return (
     <>
-      <AppBar>
-        <Toolbar>
-          <IconButton edge="start" color="inherit">
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component={RouterLink}
-            to="/"
-            variant="h6"
-            color="inherit"
-          >
-            メニュー
-          </Typography>
-          <AuthButtons
-            loading={authState.loading}
-            isSignedIn={authState.isSignedIn}
-            handleSignOut={handleSignOut}
-          />
-        </Toolbar>
-      </AppBar>
+      {/* <Box sx={{ flexGrow: 1 }}> */}
+      <Box>
+        <AppBar>
+          <Toolbar>
+            <IconButton edge="start" color="inherit">
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              component={RouterLink}
+              to="/"
+              variant="h6"
+              color="inherit"
+            >
+              メニュー
+            </Typography>
+            <AuthButtons
+              loading={isLoading}
+              isSignedIn={isAuthenticated}
+              handleSignOut={handleSignOut}
+            />
+          </Toolbar>
+        </AppBar>
+      </Box>
     </>
   );
 };

@@ -1,16 +1,22 @@
-import React, { useContext } from "react";
-
-import { AuthContext } from "@/common/contexts/AuthContext";
+import React from "react";
+import { useAuthContex } from "@/components/contexts/auth_context";
 
 const TodoMain: React.FC = () => {
-  const { authState } = useContext(AuthContext);
+  const authState = useAuthContex();
 
   return (
     <>
-      {authState.isSignedIn && authState.currentUser ? (
-        <>Welcome To Todos</>
+      {/* <GlobalStyles styles={{ body: { margin: 0, padding: 0 } }} /> */}
+      {authState.isAuthenticated && authState.responseData ? (
+        <>
+          <h1>Welcome To Todos</h1>
+          <h2>Email:{authState.responseData?.data.email}</h2>
+          <h2>Name:{authState.responseData?.data.name}</h2>
+        </>
       ) : (
-        <></>
+        <>
+          <h1>エラーTodo Main</h1>
+        </>
       )}
     </>
   );

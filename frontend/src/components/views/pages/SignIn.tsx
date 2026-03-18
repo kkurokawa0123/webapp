@@ -1,9 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Cookies from "js-cookie";
 
 import { styled } from "@mui/material/styles";
-
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
@@ -13,13 +11,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
 import AlertMessage from "@/components/views/utils/AlertMessage";
-import { AuthContext } from "@/common/contexts/AuthContext";
-import { AuthAppService } from "@/domain/application_service/auth_app_service";
-import { AuthRepository } from "@/infrastructure/repository/auth_repository";
-
-import { Email } from "@/domain/value_objects/auth/email";
-import { Password } from "@/domain/value_objects/auth/password";
-import type { ResponseData, User } from "@/common/api_params/auth";
+import { useSingIn } from "@/components/hooks/auth_hook";
 
 export const ContainerBox = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -50,63 +42,23 @@ export const StyledLink = styled("a")(() => ({
 
 // サインイン用ページ
 const SignIn: React.FC = () => {
-  //
-
-  const { setAuthState } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+  const singIn = useSingIn();
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const repository = new AuthRepository();
-      const appService = new AuthAppService(repository);
+      await singIn.mutateAsync({ email, password });
 
-      const _email = new Email(email);
-      const _password = new Password(password);
-
-      const response = await appService.signIn({
-        email: _email.value,
-        password: _password.value,
-      });
-
-      console.log("ログインアカウント##デバック用中身");
-      console.log(response);
-      if (response.status === 200) {
-        // ログインに成功した場合はCookieに各値を格納
-        Cookies.set("_access_token", response.headers["access-token"]);
-        Cookies.set("_client", response.headers["client"]);
-        Cookies.set("_uid", response.headers["uid"]);
-
-        setAuthState((prev) => ({
-          ...prev,
-          isSignedIn: true,
-          currentUser: user,
-        }));
-
-        // setIsSignedIn(true);
-
-        const data = response?.data as ResponseData;
-        const user = data.data as User;
-        console.log("ログインアカウント##デバック用");
-        console.log("ログインアカウントEMAIL##デバック用");
-        console.log(user.email);
-        console.log("ログインアカウント名前##デバック用");
-        console.log(user.name);
-        // setCurrentUser(user);
-        navigate("/");
-        console.log("ログイン成功##デバック用");
-        console.log("Signed in successfully!");
-      } else {
-        console.log("ログイン失敗##デバック用");
-        setAlertMessageOpen(true);
-      }
+      navigate("/");
+      console.log("Signed in successfully!");
     } catch (err) {
-      console.log("ログイン処理例外##デバック用");
       console.log(err);
       setAlertMessageOpen(true);
+      console.log("サインイン致命的エラー", err);
     }
   };
   return (
@@ -146,7 +98,7 @@ const SignIn: React.FC = () => {
               variant="contained"
               size="large"
               fullWidth
-              disabled={!email || !password ? true : false} // 空欄があった場合はボタンを押せないように
+              disabled={!email || !password} // 空欄があった場合はボタンを押せないように
               onClick={handleSubmit}
             >
               Submit

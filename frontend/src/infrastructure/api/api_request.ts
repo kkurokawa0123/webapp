@@ -3,16 +3,14 @@ import type { AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 
 export class ApiRequest {
+  static async get(url: string, config?: AxiosRequestConfig) {
+    return await axiosClient.get(url, config);
+  }
+
   static async post<T>(url: string, body: T, config?: AxiosRequestConfig) {
     return await axiosClient.post(url, body, config);
   }
-  // static async postFetchData<T, U>(
-  //   url: string,
-  //   body: T,
-  //   config?: AxiosRequestConfig,
-  // ): Promise<AxiosResponse<U>> {
-  //   return await axiosClient.post<U>(url, body, config);
-  // }
+
   static async deleteSession(url: string) {
     return await axiosClient.delete(url, {
       headers: {
