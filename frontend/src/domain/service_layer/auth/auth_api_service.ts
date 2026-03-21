@@ -3,12 +3,14 @@ import type {
   ReqestSignIn,
   ReqestSignUp,
   ResponseData,
+  AuthAccount,
 } from "@/domain/datas/api/auth_data";
 import { HTTP_STATUS } from "@/domain/datas/api/http_status";
 
-export const onSignUp = async (params: ReqestSignUp) => {
+export const onSignUp = async (params: ReqestSignUp): Promise<ResponseData> => {
   console.log("サインアップ開始");
   const response = await api.requestSignUp(params);
+  console.log("サインアップ結果ステータス", response.status);
   if (response.status === HTTP_STATUS.OK) {
     console.log("サインアップ成功", response);
   } else {
@@ -17,9 +19,10 @@ export const onSignUp = async (params: ReqestSignUp) => {
   return response.data as ResponseData;
 };
 
-export const onSignIn = async (params: ReqestSignIn) => {
+export const onSignIn = async (params: ReqestSignIn): Promise<ResponseData> => {
   console.log("サインイン開始");
   const response = await api.requestSignIn(params);
+  console.log("サインイン結果ステータス", response.status);
   if (response.status === HTTP_STATUS.OK) {
     console.log("サインイン成功", response);
   } else {
@@ -28,20 +31,33 @@ export const onSignIn = async (params: ReqestSignIn) => {
   return response.data as ResponseData;
 };
 
-export const onSignOut = async () => {
-  console.log("サインアウト開始");
-  const response = await api.requestSignOut();
-  if (response.status === HTTP_STATUS.OK) {
-    console.log("サインアウト成功", response);
-  }
-  return response.data as ResponseData;
-};
-
-export const fetchCurrentUser = async () => {
-  const response = await api.requestrGetCurrentUser();
-
-  if (!response.data.is_login) {
+export const onSignOut = async (): Promise<ResponseData | null> => {
+  try {
+    console.log("サインアウト開始");
+    const response = await api.requestSignOut();
+    console.log("サインアウト結果ステータス", response.status);
+    if (response.status === HTTP_STATUS.OK) {
+      console.log("サインアウト成功", response);
+    }
+    return response.data as ResponseData;
+  } catch (error) {
+    console.log("サインアウト例外", error);
     return null;
   }
-  return response.data;
+};
+
+export const getAuthUser = async (): Promise<
+  AuthAccount | undefined | null
+> => {
+  const response = await api.requestrFetchValidateToken();
+  console.log("validate_token成功", response.data);
+  console.log("認証情報取結果ステータス", response.status);
+  if (response.status === HTTP_STATUS.OK) {
+    console.log("認証情報取得成功", response);
+  }
+  return {
+    id: response.data.data.id,
+    email: response.data.data.email,
+    name: response.data.data.name,
+  };
 };

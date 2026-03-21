@@ -65,9 +65,10 @@ const Header: React.FC = () => {
   const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
-      console.log("サインアウト開始");
-      singOut.signout();
 
+      await singOut.mutateAsync();
+
+      // navigate("/signin");
       navigate("/signin");
 
       console.log("Succeeded in sign out");

@@ -1,9 +1,6 @@
 import applyCaseMiddleware from "axios-case-converter";
 import axios from "axios";
-import {
-  getAuthHeaders,
-  saveAuthHeaders,
-} from "@/infrastructure/lib/auth_storage";
+// import { saveAuthHeaders } from "@/infrastructure/lib/auth_storage";
 
 // applyCaseMiddleware:
 // axiosで受け取ったレスポンスの値をスネークケース→キャメルケースに変換
@@ -24,12 +21,19 @@ const axiosClient = applyCaseMiddleware(
 
 // 🔥 リクエスト時にトークン付与
 axiosClient.interceptors.request.use((config) => {
-  const headers = getAuthHeaders();
+  const token = localStorage.getItem("access-token");
+  const client = localStorage.getItem("client");
+  const uid = localStorage.getItem("uid");
 
-  if (headers["access-token"]) {
-    config.headers.set("access-token", headers["access-token"]);
-    config.headers.set("client", headers["client"]);
-    config.headers.set("uid", headers["uid"]);
+  // const headers = getAuthHeaders();
+  console.log("interceptors_リクエスト");
+  console.log("interceptors_token中身", token);
+  console.log("interceptors_client中身", client);
+  console.log("interceptors_uid中身", uid);
+  if (token && client && uid) {
+    config.headers.set("access-token", token);
+    config.headers.set("client", client);
+    config.headers.set("uid", uid);
   }
 
   return config;
@@ -37,7 +41,19 @@ axiosClient.interceptors.request.use((config) => {
 
 // 🔥 レスポンスでトークン更新
 axiosClient.interceptors.response.use((response) => {
-  saveAuthHeaders(response.headers);
+  const headers = response.headers;
+
+  console.log("interceptors_レスポンス");
+  console.log("interceptors_token中身", headers["access-token"]);
+  console.log("interceptors_client中身", headers["client"]);
+  console.log("interceptors_uid中身", headers["uid"]);
+
+  if (headers["access-token"]) {
+    localStorage.setItem("access-token", headers["access-token"]);
+    localStorage.setItem("client", headers["client"]);
+    localStorage.setItem("uid", headers["uid"]);
+  }
+
   return response;
 });
 

@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
-import type { ResponseData } from "@/domain/datas/api/auth_data";
+import type { AuthAccount } from "@/domain/datas/api/auth_data";
 
 export type AuthContextType = {
-  responseData: ResponseData | null;
+  authData: AuthAccount | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   refetch: () => void;

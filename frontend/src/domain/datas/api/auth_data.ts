@@ -25,3 +25,8 @@ export interface User {
   image?: string;
   allowPasswordChange: boolean;
 }
+export interface AuthAccount {
+  id: number;
+  email: string;
+  name: string;
+}

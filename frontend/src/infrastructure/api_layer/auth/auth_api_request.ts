@@ -24,10 +24,10 @@ export const requestSignIn = async (
 export const requestSignOut = async (): Promise<
   AxiosResponse<ResponseData>
 > => {
-  return ApiRequest.deleteSession("auth/sign_out");
+  return ApiRequest.delete("auth/sign_out");
 };
 // 認証済みのユーザーを取得
-export const requestrGetCurrentUser = async (): Promise<
+export const requestrFetchValidateToken = async (): Promise<
   AxiosResponse<ResponseData>
 > => {
   // return ApiRequest.getCookiesData("/auth/sessions");

@@ -5,7 +5,7 @@ import type {
   ReqestSignUp,
   ReqestSignIn,
   ResponseData,
-} from "@/common/api_params/auth";
+} from "@/domain/datas/api/auth_data";
 
 export class AuthAppService {
   private _authRepository: IAuthRepository;
