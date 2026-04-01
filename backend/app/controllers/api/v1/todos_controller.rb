@@ -9,6 +9,8 @@ class Api::V1::TodosController < Api::BaseApiController
       "todos.memo as memo",
       "users.name as user_name")
       .order("todos.updated_at DESC")
+      
+    render json: { data: @user_todos }
   end
 
   def show
@@ -20,6 +22,8 @@ class Api::V1::TodosController < Api::BaseApiController
       "todos.memo as memo",
       "users.name as user_name").where(todos:{user_id:params[:id]})
       .order("todos.updated_at DESC")
+    
+    render json: { data: @user_todos }
   end
 
   def create
