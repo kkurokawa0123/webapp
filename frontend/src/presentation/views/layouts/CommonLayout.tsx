@@ -1,8 +1,8 @@
 import React from "react";
 import Container from "@mui/material/Container";
-import { Grid } from "@mui/material";
+import { Box } from "@mui/material";
 
-import Header from "@/components/views/layouts/Header";
+import Header from "@/presentation/views/layouts/Header";
 
 interface CommonLayoutProps {
   children: React.ReactElement;
@@ -16,11 +16,23 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
         <Header />
       </header>
       <main>
-        <Container maxWidth="lg" sx={{ mt: "3rem" }}>
+        <Container>
+          <Box
+            sx={{
+              minHeight: "80vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {children}
+          </Box>
+        </Container>
+        {/* <Container maxWidth="lg" sx={{ mt: "3rem" }}>
           <Grid container justifyContent="space-between">
             <Grid>{children}</Grid>
           </Grid>
-        </Container>
+        </Container> */}
       </main>
     </>
   );

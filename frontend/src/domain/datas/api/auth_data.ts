@@ -11,8 +11,10 @@ export interface ReqestSignUp {
 
 // ユーザー
 export interface ResponseData {
-  data: User;
-  is_login: boolean;
+  data?: User;
+  // severity: Severity;
+  // message: string;
+  // is_login: boolean;
 }
 
 export interface User {
@@ -26,7 +28,7 @@ export interface User {
   allowPasswordChange: boolean;
 }
 export interface AuthAccount {
-  id: number;
-  email: string;
-  name: string;
+  id?: number;
+  email?: string;
+  name?: string;
 }

@@ -1,5 +1,5 @@
-export interface ResponseData {
-  data: Todo[];
+export interface ApiResponse<T> {
+  data: T;
   // is_login: boolean;
 }
 

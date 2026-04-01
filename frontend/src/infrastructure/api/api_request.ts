@@ -1,9 +1,12 @@
 import axiosClient from "../api/client";
 import type { AxiosRequestConfig } from "axios";
-// import Cookies from "js-cookie";
+import type { AxiosResponse } from "axios";
 
 export class ApiRequest {
-  static async get(url: string, config?: AxiosRequestConfig) {
+  static async get<T>(
+    url: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<T>> {
     return await axiosClient.get(url, config);
   }
 
@@ -14,8 +17,4 @@ export class ApiRequest {
   static async delete(url: string) {
     return await axiosClient.delete(url);
   }
-  // 認証済みのユーザーを取得
-  // static async fetchValidateToken(url: string) {
-  //   return await axiosClient.get(url);
-  // }
 }

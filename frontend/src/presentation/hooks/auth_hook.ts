@@ -10,7 +10,8 @@ export const useAuth = () => {
   return useQuery({
     queryKey: ["authUser"],
     queryFn: getAuthUser,
-    staleTime: 1000 * 60 * 5, // 5分キャッシュ
+    staleTime: 1000 * 60 * 1, // 5分キャッシュ
+    gcTime: 1000 * 60 * 1, // 5分キャッシュ
     retry: false, // 認証はリトライしない
   });
 };
@@ -23,16 +24,22 @@ export const useSingIn = () => {
       onSignIn({ email, password }),
     onSuccess: (user) => {
       queryClient.setQueryData(["authUser"], {
-        id: user.data.id,
-        email: user.data.email,
-        name: user.data.name,
+        id: user.id,
+        email: user.email,
+        name: user.name,
       });
     },
+    onError: (error) => {
+      console.error("hook1サインインエラー", error);
+    },
+    // onSettled: () => {
+    //   console.log("処理の成功か否かに関わらず、データ更新の処理が完了した際の副作用として使用することができます。");
+    // },
   });
 };
 
 export const useSingUp = () => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({
@@ -45,7 +52,15 @@ export const useSingUp = () => {
       password: string;
     }) => onSignUp({ name, email, password }),
     onSuccess: (user) => {
-      queryClient.setQueryData(["authUser"], user);
+      console.error("hook1サインアップ成功", user);
+      // queryClient.setQueryData(["authUser"], {
+      //   id: user.id,
+      //   email: user.email,
+      //   name: user.name,
+      // });
+    },
+    onError: (error) => {
+      console.error("hook1サインアップエラー", error);
     },
   });
 };
@@ -62,11 +77,4 @@ export const useSingOut = () => {
       // queryClient.removeQueries({ queryKey: ["authUser"] });
     },
   });
-
-  // return useMutation({
-  //   mutationFn: onSignOut,
-  //   onSuccess: () => {
-  //     queryClient.setQueryData(["authUser"], null);
-  //   },
-  // });
 };

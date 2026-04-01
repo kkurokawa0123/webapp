@@ -8,8 +8,10 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-import AlertMessage from "@/components/views/utils/AlertMessage";
-import { useSingUp } from "@/components/hooks/auth_hook";
+import { SEVERITY } from "@/domain/datas/@types/Severity";
+import { useMessageContext } from "@/presentation/contexts/message_context";
+import { useSingUp } from "@/presentation/hooks/auth_hook";
+import { useLoadingContext } from "@/presentation/contexts/loding_context";
 
 // サインアップ用ページ
 const SignUp: React.FC = () => {
@@ -19,20 +21,34 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+
+  const { showMessage } = useMessageContext();
+  const { openLoading, closeLoading } = useLoadingContext();
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    openLoading();
 
     try {
       console.log("サインアップ開始");
-      await singUp.mutateAsync({ name, email, password });
+      await singUp.mutateAsync({
+        name,
+        email,
+        password,
+      });
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      showMessage("サインアップが完了しました", SEVERITY.SUCCESS);
+      closeLoading();
 
-      navigate("/");
+      navigate("/signin");
       console.log("Signed in successfully!");
     } catch (err) {
       console.log(err);
-      setAlertMessageOpen(true);
+      closeLoading();
+      showMessage(
+        "入力データに誤りがあります。再度正しい値を入力してください。",
+        "error",
+      );
       console.log("サインアップ致命的エラー", err);
     }
   };
@@ -46,7 +62,7 @@ const SignUp: React.FC = () => {
         sx={{ mt: 6, display: "flex", justifyContent: "center" }}
       >
         <Card sx={{ p: 2, maxWidth: 400, width: "100%" }}>
-          <CardHeader title="Sign Up" sx={{ textAlign: "center" }} />
+          <CardHeader title="アカウント新規登録" sx={{ textAlign: "center" }} />
 
           <CardContent>
             <TextField
@@ -110,12 +126,6 @@ const SignUp: React.FC = () => {
           </CardContent>
         </Card>
       </Box>
-      <AlertMessage // エラーが発生した場合はアラートを表示
-        open={alertMessageOpen}
-        setOpen={setAlertMessageOpen}
-        severity="error"
-        message="Invalid emai or password"
-      />
     </>
   );
 };

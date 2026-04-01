@@ -1,8 +1,10 @@
-import type { ReactNode } from "react";
-import { useAuth } from "@/components/hooks/auth_hook";
+import { type ReactNode } from "react";
+import { useAuth } from "@/presentation/hooks/auth_hook";
 
-import type { AuthContextType } from "@/components/contexts/auth_context";
-import { AuthContext } from "@/components/contexts/auth_context";
+import {
+  AuthContext,
+  type AuthContextType,
+} from "@/presentation/contexts/auth_context";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, refetch } = useAuth();

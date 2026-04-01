@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 
-import { styled } from "@mui/material/styles";
+// import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
@@ -10,67 +10,58 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-import AlertMessage from "@/components/views/utils/AlertMessage";
-import { useSingIn } from "@/components/hooks/auth_hook";
-
-export const ContainerBox = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(6),
-}));
-
-export const SubmitButton = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  flexGrow: 1,
-  textTransform: "none",
-}));
-
-export const HeaderBox = styled(Box)(() => ({
-  textAlign: "center",
-}));
-
-export const StyledCard = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(2),
-  maxWidth: 400,
-}));
-
-export const SpacingBox = styled(Box)(() => ({
-  marginTop: "2rem",
-}));
-
-export const StyledLink = styled("a")(() => ({
-  textDecoration: "none",
-}));
+import { SEVERITY } from "@/domain/datas/@types/Severity";
+import { useMessageContext } from "@/presentation/contexts/message_context";
+import { useAuthContex } from "@/presentation/contexts/auth_context";
+import { useSingIn } from "@/presentation/hooks/auth_hook";
+import { useLoadingContext } from "@/presentation/contexts/loding_context";
 
 // サインイン用ページ
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+
+  const { isAuthenticated } = useAuthContex();
+  const { showMessage } = useMessageContext();
+  const { openLoading, closeLoading } = useLoadingContext();
   const singIn = useSingIn();
+
+  if (isAuthenticated) {
+    // navigate("/");
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    openLoading();
+    showMessage("ログイン中....しばらくお待ちください", SEVERITY.SUCCESS);
+
     try {
-      await singIn.mutateAsync({ email, password });
+      await singIn.mutateAsync({
+        email,
+        password,
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      closeLoading();
 
       navigate("/");
-      console.log("Signed in successfully!");
     } catch (err) {
       console.log(err);
-      setAlertMessageOpen(true);
+      closeLoading();
+      showMessage(
+        "サインインに失敗しました。IDもしくはパスワードを確認してください。",
+        SEVERITY.ERROR,
+      );
       console.log("サインイン致命的エラー", err);
     }
   };
   return (
     <>
-      <Box
-        component="form"
-        noValidate
-        autoComplete="off"
-        sx={{ mt: 6, display: "flex", justifyContent: "center" }}
-      >
+      <Box component="form" sx={{ display: "flex" }}>
         <Card>
-          <CardHeader title="Sign In" />
+          <CardHeader title="ログイン" />
           <CardContent>
             <TextField
               variant="outlined"
@@ -101,7 +92,7 @@ const SignIn: React.FC = () => {
               disabled={!email || !password} // 空欄があった場合はボタンを押せないように
               onClick={handleSubmit}
             >
-              Submit
+              実行
             </Button>
             <Box textAlign="center">
               <Typography variant="body2">
@@ -112,12 +103,12 @@ const SignIn: React.FC = () => {
           </CardContent>
         </Card>
       </Box>
-      <AlertMessage // エラーが発生した場合はアラートを表示
-        open={alertMessageOpen}
-        setOpen={setAlertMessageOpen}
-        severity="error"
-        message="Invalid emai or password"
-      />
+      {/* <ShowMessageAction // エラーが発生した場合はアラートを表示
+        open={messageOpen}
+        setOpen={setMessageOpen}
+        severity={severity}
+        message={messageContent}
+      /> */}
     </>
   );
 };

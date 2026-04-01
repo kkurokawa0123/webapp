@@ -1,23 +1,42 @@
 import React from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { indigo, pink } from "@mui/material/colors";
 
-import { AuthProvider } from "@/components/views/providers/AuthProvider";
-import CommonLayout from "@/components/views/layouts/CommonLayout";
-import TodoMain from "@/components/views/pages/Todos/TodoMain";
-import SignIn from "@/components/views/pages/SignIn";
-import SignUp from "@/components/views/pages/SignUp";
+import { AuthProvider } from "@/presentation/views/providers/AuthProvider";
+import { TodoFilterProvider } from "@/presentation/views/providers/TodoFilterProvider";
+import CommonLayout from "@/presentation/views/layouts/CommonLayout";
+import TodoMain from "@/presentation/views/pages/Todos/TodoMain";
+import SignIn from "@/presentation/views/pages/SignIn";
+import SignUp from "@/presentation/views/pages/SignUp";
 
-import { useAuthContex } from "@/components/contexts/auth_context";
+import { useAuthContex } from "@/presentation/contexts/auth_context";
+
+// テーマを作成
+const theme = createTheme({
+  palette: {
+    // プライマリーカラー
+    primary: {
+      main: indigo[500],
+      light: "#757de8",
+      dark: "#002984",
+    },
+    // ついでにセカンダリーカラーも v4 に戻す
+    secondary: {
+      main: pink[500],
+      light: "#ff6090",
+      dark: "#b0003a",
+    },
+  },
+});
 
 const queryClient = new QueryClient();
 
 const PrivateRoute = () => {
   const { authData, isLoading, isAuthenticated } = useAuthContex();
-  // const isAuthenticated = !!authState.authData;
   console.log("1.AuthProvider_認証状態");
   console.log("XX.AuthProvider_data", authData);
-  // console.log("2.AuthProvider_isLoading", authData.isLoading);
   console.log("2.AuthProvider_isAuthenticated", isAuthenticated);
 
   if (isLoading) return null;
@@ -26,31 +45,23 @@ const PrivateRoute = () => {
 };
 
 const App: React.FC = () => {
-  // const authState = useAuthContex();
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <CommonLayout>
-          <Routes>
-            {/* <Route
-              path="/"
-              element={
-                authState.authData ? (
-                  <Navigate to="/todomain" replace />
-                ) : (
-                  <Navigate to="/signin" replace />
-                )
-              }
-            /> */}
-
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/todomain" element={<TodoMain />} />
-            <Route element={<PrivateRoute />}>
-              <Route path="/" element={<TodoMain />} />
-            </Route>
-          </Routes>
-        </CommonLayout>
+        <ThemeProvider theme={theme}>
+          <TodoFilterProvider>
+            <CommonLayout>
+              <Routes>
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/todomain" element={<TodoMain />} />
+                <Route element={<PrivateRoute />}>
+                  <Route path="/" element={<TodoMain />} />
+                </Route>
+              </Routes>
+            </CommonLayout>
+          </TodoFilterProvider>
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

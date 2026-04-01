@@ -25,7 +25,6 @@ axiosClient.interceptors.request.use((config) => {
   const client = localStorage.getItem("client");
   const uid = localStorage.getItem("uid");
 
-  // const headers = getAuthHeaders();
   console.log("interceptors_リクエスト");
   console.log("interceptors_token中身", token);
   console.log("interceptors_client中身", client);
