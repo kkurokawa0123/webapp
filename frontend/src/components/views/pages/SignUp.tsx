@@ -9,20 +9,23 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-import { AuthContext } from "../../../common/contexts/AuthContext";
-import AlertMessage from "../utils/AlertMessage";
-import { signUp } from "../../../infrastructure/repository/auth_repository";
-import { UserName } from "../../../domain/value_objects/auth/username";
-import { Email } from "../../../domain/value_objects/auth/email";
-import { Password } from "../../../domain/value_objects/auth/password";
+import { AuthContext } from "@/common/contexts/AuthContext";
+import AlertMessage from "@/components/views/utils/AlertMessage";
 
-import type { ResponseUser } from "../../../common/api_body_values/auth";
+import { AuthAppService } from "@/domain/application_service/auth_app_service";
+import { AuthRepository } from "@/infrastructure/repository/auth_repository";
+
+import { UserName } from "@/domain/value_objects/auth/username";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
+
+import type { ResponseData, User } from "@/common/api_params/auth";
 
 // サインアップ用ページ
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -40,23 +43,33 @@ const SignUp: React.FC = () => {
       const _email = new Email(email);
       const _password = new Password(password);
 
-      const res = await signUp({
+      const repository = new AuthRepository();
+      const appService = new AuthAppService(repository);
+
+      const response = await appService.signUp({
         name: _username.value,
         email: _email.value,
         password: _password.value,
       });
-      console.log(res);
 
-      if (res.status === 200) {
+      console.log(response);
+
+      if (response.status === 200) {
         // アカウント作成と同時にログインさせてしまう
         // 本来であればメール確認などを挟むべきだが、今回はサンプルなので
-        Cookies.set("_access_token", res.headers["access-token"]);
-        Cookies.set("_client", res.headers["client"]);
-        Cookies.set("_uid", res.headers["uid"]);
+        Cookies.set("_access_token", response.headers["access-token"]);
+        Cookies.set("_client", response.headers["client"]);
+        Cookies.set("_uid", response.headers["uid"]);
 
-        setIsSignedIn(true);
-        const data = res.data.data as ResponseUser;
-        setCurrentUser(data);
+        const data = response?.data as ResponseData;
+        const user = data.data as User;
+        setAuthState((prev) => ({
+          ...prev,
+          isSignedIn: true,
+          currentUser: user,
+        }));
+        // setIsSignedIn(true);
+        // setCurrentUser(user);
 
         navigate("/");
 

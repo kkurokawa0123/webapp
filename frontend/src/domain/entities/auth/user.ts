@@ -1,12 +1,12 @@
-import { Uid } from "../../value_objects/auth/uid";
-import { Provider } from "../../value_objects/auth/provider";
-import { Password } from "../../value_objects/auth/password";
-import { Email } from "../../value_objects/auth/email";
-import { UserName } from "../../value_objects/auth/username";
-import { NickName } from "../../value_objects/auth/nickname";
-import { Image } from "../../value_objects/auth/image";
-import { CreatedDate } from "../../value_objects/auth/createddate";
-import { UpdatedDate } from "../../value_objects/auth/updateddate";
+import { Uid } from "@/domain/value_objects/auth/uid";
+import { Provider } from "@/domain/value_objects/auth/provider";
+import { Password } from "@/domain/value_objects/auth/password";
+import { Email } from "@/domain/value_objects/auth/email";
+import { UserName } from "@/domain/value_objects/auth/username";
+import { NickName } from "@/domain/value_objects/auth/nickname";
+import { Image } from "@/domain/value_objects/auth/image";
+import { CreatedDate } from "@/domain/value_objects/auth/createddate";
+import { UpdatedDate } from "@/domain/value_objects/auth/updateddate";
 
 export class User {
   private _uid: Uid;

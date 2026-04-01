@@ -12,12 +12,14 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-import AlertMessage from "../utils/AlertMessage";
-import { AuthContext } from "../../../common/contexts/AuthContext";
-import { signIn } from "../../../infrastructure/repository/auth_repository";
-import { Email } from "../../../domain/value_objects/auth/email";
-import { Password } from "../../../domain/value_objects/auth/password";
-import type { ResponseUser } from "../../../common/api_body_values/auth";
+import AlertMessage from "@/components/views/utils/AlertMessage";
+import { AuthContext } from "@/common/contexts/AuthContext";
+import { AuthAppService } from "@/domain/application_service/auth_app_service";
+import { AuthRepository } from "@/infrastructure/repository/auth_repository";
+
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
+import type { ResponseData, User } from "@/common/api_params/auth";
 
 export const ContainerBox = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -50,7 +52,7 @@ export const StyledLink = styled("a")(() => ({
 const SignIn: React.FC = () => {
   //
 
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -59,27 +61,41 @@ const SignIn: React.FC = () => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
+      const repository = new AuthRepository();
+      const appService = new AuthAppService(repository);
+
       const _email = new Email(email);
       const _password = new Password(password);
 
-      const res = await signIn({
+      const response = await appService.signIn({
         email: _email.value,
         password: _password.value,
       });
-      console.log(res);
-      if (res.status === 200) {
+
+      console.log("ログインアカウント##デバック用中身");
+      console.log(response);
+      if (response.status === 200) {
         // ログインに成功した場合はCookieに各値を格納
-        Cookies.set("_access_token", res.headers["access-token"]);
-        Cookies.set("_client", res.headers["client"]);
-        Cookies.set("_uid", res.headers["uid"]);
-        setIsSignedIn(true);
-        const data = res?.data.data as ResponseUser;
+        Cookies.set("_access_token", response.headers["access-token"]);
+        Cookies.set("_client", response.headers["client"]);
+        Cookies.set("_uid", response.headers["uid"]);
+
+        setAuthState((prev) => ({
+          ...prev,
+          isSignedIn: true,
+          currentUser: user,
+        }));
+
+        // setIsSignedIn(true);
+
+        const data = response?.data as ResponseData;
+        const user = data.data as User;
         console.log("ログインアカウント##デバック用");
         console.log("ログインアカウントEMAIL##デバック用");
-        console.log(data.email);
+        console.log(user.email);
         console.log("ログインアカウント名前##デバック用");
-        console.log(data.name);
-        setCurrentUser(data);
+        console.log(user.name);
+        // setCurrentUser(user);
         navigate("/");
         console.log("ログイン成功##デバック用");
         console.log("Signed in successfully!");

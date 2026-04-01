@@ -1,5 +1,5 @@
-import { Email } from "../../value_objects/auth/email";
-import { Password } from "../../value_objects/auth/password";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
 
 export class SignInParams {
   private _email: Email;

@@ -1,4 +1,4 @@
-import { BaseValueObject } from "../share/base_value_objext";
+import { BaseValueObject } from "@/domain/value_objects/share/base_value_objext";
 
 type UidValue = string;
 export class Uid extends BaseValueObject<UidValue, "Uid"> {

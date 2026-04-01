@@ -10,7 +10,12 @@ export interface ReqestSignUp {
 }
 
 // ユーザー
-export interface ResponseUser {
+export interface ResponseData {
+  data: User;
+  is_login: boolean;
+}
+
+export interface User {
   id: number;
   uid: string;
   provider: string;

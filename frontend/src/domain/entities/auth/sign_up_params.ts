@@ -1,6 +1,6 @@
-import { UserName } from "../../value_objects/auth/username";
-import { Email } from "../../value_objects/auth/email";
-import { Password } from "../../value_objects/auth/password";
+import { UserName } from "@/domain/value_objects/auth/username";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
 
 export class SignUpParams {
   private _userName: UserName;
