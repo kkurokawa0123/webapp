@@ -70,32 +70,16 @@ class Api::V1::TodosController < Api::BaseApiController
     render json: { error: "Internal Server Error" }, status: :internal_server_error # 500
   end
 
-  # def bulk_delete
-  #   todos = Todo.where(user_id: params[:user_id], is_trashed: 1)
-
-  #   if todos.empty?
-  #     render json: { error: "Todo not found" }, status: :not_found and return
-  #   end
-
-  #   if todos.update_all(is_deleted: 1)
-  #     render status: :ok
-  #   else
-  #     render status: :unprocessable_entity
-  #   end
-
-    head :no_content
-  end
 
   private 
 
-
-  def set_todo
-    @todo = Todo.find_by(id: params[:id])
-  end
+    def set_todo
+      @todo = Todo.find_by(id: params[:id])
+    end
     
-  def todo_params
-    params.fetch(:todo, {}).permit(:name,:is_done,:is_trashed,:memo,:user_id)
-  end
+    def todo_params
+      params.fetch(:todo, {}).permit(:name,:is_done,:is_trashed,:memo,:user_id)
+    end
 end
 
 
