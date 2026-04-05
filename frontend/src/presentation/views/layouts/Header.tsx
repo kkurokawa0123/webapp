@@ -7,7 +7,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+// import MenuIcon from "@mui/icons-material/Menu";
+import Person from "@mui/icons-material/Person";
 
 import { useState } from "react";
 import { SEVERITY } from "@/domain/datas/@types/Severity";
@@ -63,7 +64,7 @@ const AuthButtons = (props: Props) => {
                 color="inherit"
                 onClick={props.onToggleDrawer}
               >
-                <MenuIcon />
+                <Person />
               </IconButton>
               <Typography
                 component={RouterLink}
@@ -113,7 +114,6 @@ const AuthButtons = (props: Props) => {
 };
 
 const Header: React.FC = () => {
-  // const [todoFilter, setTodoFilter] = useState<Todo_type>(TODO_TYPE.A);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { todoFilter, onSetTodoFilter } = useTodoStatusContext();

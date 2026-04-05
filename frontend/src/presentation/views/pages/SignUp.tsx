@@ -121,7 +121,7 @@ const SignUp: React.FC = () => {
               }}
               onClick={handleSubmit}
             >
-              Submit
+              登録
             </Button>
           </CardContent>
         </Card>

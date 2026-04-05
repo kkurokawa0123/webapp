@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import type { AuthAccount } from "@/domain/datas/api/auth_data";
 
 export type AuthContextType = {
-  authData: AuthAccount | null;
+  authData: AuthAccount;
   isLoading: boolean;
   isAuthenticated: boolean;
   refetch: () => void;

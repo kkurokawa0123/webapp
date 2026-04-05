@@ -35,21 +35,20 @@ const queryClient = new QueryClient();
 
 const PrivateRoute = () => {
   const { authData, isLoading, isAuthenticated } = useAuthContex();
-  console.log("1.AuthProvider_認証状態");
-  console.log("XX.AuthProvider_data", authData);
-  console.log("2.AuthProvider_isAuthenticated", isAuthenticated);
+  console.log("認証確認");
+  console.log("AuthProvider:data", authData);
+  console.log("AuthProvider:isAuthenticated", isAuthenticated);
 
-  if (isLoading) return null;
-  console.log("3.PrivateRoute認証結果", isAuthenticated);
+  if (isLoading) return;
   return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />;
 };
 
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider theme={theme}>
-          <TodoFilterProvider>
+      <ThemeProvider theme={theme}>
+        <TodoFilterProvider>
+          <AuthProvider>
             <CommonLayout>
               <Routes>
                 <Route path="/signin" element={<SignIn />} />
@@ -60,9 +59,9 @@ const App: React.FC = () => {
                 </Route>
               </Routes>
             </CommonLayout>
-          </TodoFilterProvider>
-        </ThemeProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </TodoFilterProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };

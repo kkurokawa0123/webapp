@@ -2,46 +2,118 @@ import { useState } from "react";
 
 import { useAuthContex } from "@/presentation/contexts/auth_context";
 import { useLoadingContext } from "@/presentation/contexts/loding_context";
-import { useTodoById } from "@/presentation/hooks/todo_hook";
+import {
+  useTodosById,
+  useCreateTodo,
+  useUpdateTodo,
+} from "@/presentation/hooks/todo_hook";
 
 import { TodoList } from "@/presentation/views/pages/Todos/partial/TodoList";
 import { TodoAddFormDialog } from "@/presentation/views/pages/Todos/partial/TodoAddFormDialog";
 import { TodoActionButton } from "@/presentation/views/pages/Todos/partial/TodoActionButton";
+import { TodoAlertDialog } from "@/presentation/views/pages/Todos/partial/TodoAlertDialog";
+
+import { SEVERITY } from "@/domain/datas/@types/Severity";
+import { type Todo } from "@/domain/datas/api/todo_data";
+import { useMessageContext } from "@/presentation/contexts/message_context";
 
 const TodoMain: React.FC = () => {
-  const [todoName, setTodoname] = useState("");
+  const [todoName, setTodoName] = useState("");
+  const [todoMemo, setTodoMemo] = useState("固定メモ");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
 
+  const { showMessage } = useMessageContext();
   const { openLoading, closeLoading } = useLoadingContext();
-  openLoading();
   const { authData, isAuthenticated } = useAuthContex();
-  const id = authData?.id;
-  const { data, isLoading } = useTodoById(id);
+  const authData_id = isAuthenticated ? authData.id : undefined;
+  const { data, isLoading } = useTodosById(authData_id);
+  const createTodo = useCreateTodo();
+  const updateTodo = useUpdateTodo();
+  // const deleteTodo = useDeleteTodo();
 
   const handleToggleDialog = () => {
     setDialogOpen((dialogOpen) => !dialogOpen);
-    setTodoname("");
+    setTodoName("");
+    setTodoMemo("");
   };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setTodoname(e.target.value);
+    setTodoName(e.target.value);
   };
-  const handleSubmit = () => {};
 
-  if (!id || isLoading) return;
+  const handleSubmit = async () => {
+    try {
+      openLoading();
 
-  closeLoading();
+      // 🔽 これを追加（超重要）
+      (document.activeElement as HTMLElement)?.blur();
 
+      showMessage("タスク追加中....しばらくお待ちください", SEVERITY.SUCCESS);
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      // 追加のAPI処理を呼ぶ
+      await createTodo.mutateAsync({
+        name: todoName,
+        memo: todoMemo,
+        user_id: authData_id,
+      });
+      closeLoading();
+      // setDialogOpen((dialogOpen) => !dialogOpen);
+      setDialogOpen(false); // ← ここはシンプルに
+    } catch (err) {
+      console.log(err);
+      closeLoading();
+      showMessage(
+        "入力データに誤りがあります。再度正しい値を入力してください。",
+        "error",
+      );
+      console.log("サインアップ致命的エラー", err);
+    }
+  };
+
+  const handleToggleAlert = () => {
+    setAlertOpen((alertOpen) => !alertOpen);
+  };
+
+  const handleEmpty = async () => {
+    // setAlertOpen((alertOpen) => !alertOpen);
+    openLoading();
+    showMessage(
+      "タスクを削除しています....しばらくお待ちください",
+      SEVERITY.SUCCESS,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    // 削除のAPI処理を呼ぶ
+    // await deleteTodo.mutateAsync({ user_id: authData_id });
+    closeLoading();
+  };
+
+  const handleUpdateTodo = async <K extends keyof Todo, V extends Todo[K]>(
+    id: number,
+    key: K,
+    value: V,
+  ) => {
+    openLoading();
+    showMessage(
+      "タスク情報を更新います....しばらくお待ちください",
+      SEVERITY.SUCCESS,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await updateTodo.mutateAsync({
+      id,
+      [key]: value,
+      user_id: authData_id,
+    });
+    closeLoading();
+  };
+
+  if (!authData_id || isLoading) return;
   return (
     <>
       {isAuthenticated && authData ? (
         <>
-          <div>
-            <h1>Welcome To Todos</h1>
-            <h2>Email:{authData.email}</h2>
-            <h2>Name:{authData.name}</h2>
-          </div>
           <TodoAddFormDialog
             name={todoName}
             dialogOpen={dialogOpen}
@@ -49,8 +121,16 @@ const TodoMain: React.FC = () => {
             onChange={handleChange}
             onToggleDialog={handleToggleDialog}
           />
-          <TodoList todos={data} />
-          <TodoActionButton onToggleDialog={handleToggleDialog} />
+          <TodoList todos={data} onUpdateTodo={handleUpdateTodo} />
+          <TodoAlertDialog
+            alertOpen={alertOpen}
+            onEmpty={handleEmpty}
+            onToggleAlert={handleToggleAlert}
+          />
+          <TodoActionButton
+            onToggleDialog={handleToggleDialog}
+            onToggleAlert={handleToggleAlert}
+          />
         </>
       ) : (
         <>

@@ -6,7 +6,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
-import CreateIcon from "@mui/icons-material/Create";
+import Person from "@mui/icons-material/Person";
+// import CreateIcon from "@mui/icons-material/Create";
 import SubjectIcon from "@mui/icons-material/Subject";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
@@ -15,6 +16,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { styled } from "@mui/material/styles";
 import { indigo, lightBlue, pink } from "@mui/material/colors";
 
+import { useAuthContex } from "@/presentation/contexts/auth_context";
 import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
 
 // ドロワー内リストの幅をカスタマイズ
@@ -49,6 +51,8 @@ type Props = {
 };
 
 export const TodoSideBar = (props: Props) => {
+  const { authData } = useAuthContex();
+
   return (
     <>
       <Drawer
@@ -59,8 +63,9 @@ export const TodoSideBar = (props: Props) => {
         <DrawerList role="presentation" onClick={props.onToggleDrawer}>
           <DrawerHeader>
             <DrawerAvatar>
-              <CreateIcon />
+              <Person />
             </DrawerAvatar>
+            <p>ユーザー名:{authData?.name}</p>
             <p>TODO v{1.1}</p>
           </DrawerHeader>
           <List>

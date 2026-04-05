@@ -1,5 +1,6 @@
 import applyCaseMiddleware from "axios-case-converter";
-import axios from "axios";
+import axios, { type AxiosHeaders } from "axios";
+import { authStorage } from "@/infrastructure/lib/auth_storage";
 // import { saveAuthHeaders } from "@/infrastructure/lib/auth_storage";
 
 // applyCaseMiddleware:
@@ -21,14 +22,15 @@ const axiosClient = applyCaseMiddleware(
 
 // 🔥 リクエスト時にトークン付与
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access-token");
-  const client = localStorage.getItem("client");
-  const uid = localStorage.getItem("uid");
+  // const token = localStorage.getItem("access-token");
+  // const client = localStorage.getItem("client");
+  // const uid = localStorage.getItem("uid");
+  const { token, client, uid } = authStorage.get();
 
-  console.log("interceptors_リクエスト");
-  console.log("interceptors_token中身", token);
-  console.log("interceptors_client中身", client);
-  console.log("interceptors_uid中身", uid);
+  console.log("axiosClient.interceptors.request");
+  console.log("interceptors_token:", token);
+  console.log("interceptors_client:", client);
+  console.log("interceptors_uid:", uid);
   if (token && client && uid) {
     config.headers.set("access-token", token);
     config.headers.set("client", client);
@@ -40,18 +42,20 @@ axiosClient.interceptors.request.use((config) => {
 
 // 🔥 レスポンスでトークン更新
 axiosClient.interceptors.response.use((response) => {
-  const headers = response.headers;
+  const headers = response.headers as AxiosHeaders;
 
-  console.log("interceptors_レスポンス");
-  console.log("interceptors_token中身", headers["access-token"]);
-  console.log("interceptors_client中身", headers["client"]);
-  console.log("interceptors_uid中身", headers["uid"]);
+  console.log("axiosClient.interceptors.response");
+  console.log("interceptors_token:", headers["access-token"]);
+  console.log("interceptors_client:", headers["client"]);
+  console.log("interceptors_uid:", headers["uid"]);
 
-  if (headers["access-token"]) {
-    localStorage.setItem("access-token", headers["access-token"]);
-    localStorage.setItem("client", headers["client"]);
-    localStorage.setItem("uid", headers["uid"]);
-  }
+  authStorage.set(headers);
+  // if (headers["access-token"]) {
+
+  //   // localStorage.setItem("access-token", headers["access-token"]);
+  //   // localStorage.setItem("client", headers["client"]);
+  //   // localStorage.setItem("uid", headers["uid"]);
+  // }
 
   return response;
 });

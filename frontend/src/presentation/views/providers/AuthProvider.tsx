@@ -15,10 +15,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: !!data,
     refetch,
   };
-  console.log("AuthProvider_認証状態");
-  console.log("AuthProvider_value", value);
-  console.log("AuthProvider_isLoading", value.isLoading);
-  console.log("AuthProvider_isAuthenticated", value.isAuthenticated);
+  console.log("認証情報の取得");
+  console.log("AuthProvider:value", value);
+  console.log("AuthProvider:isLoading", value.isLoading);
+  console.log("AuthProvider:isAuthenticated", value.isAuthenticated);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
