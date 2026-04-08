@@ -18,6 +18,10 @@ export class ApiRequest {
     return await axiosClient.put(url, body, config);
   }
 
+  static async patch(url: string) {
+    return await axiosClient.patch(url);
+  }
+
   static async delete(url: string) {
     return await axiosClient.delete(url);
   }

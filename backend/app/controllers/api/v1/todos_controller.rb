@@ -9,6 +9,7 @@ class Api::V1::TodosController < Api::BaseApiController
       "todos.is_done as is_done",
       "todos.is_trashed as is_trashed",
       "todos.memo as memo",
+      "todos.is_deleted as is_deleted",
       "users.name as user_name")
       .order("todos.updated_at DESC")
 
@@ -26,6 +27,7 @@ class Api::V1::TodosController < Api::BaseApiController
       "todos.is_done as is_done",
       "todos.is_trashed as is_trashed",
       "todos.memo as memo",
+      "todos.is_deleted as is_deleted",
       "users.name as user_name").where(todos:{user_id: params[:id]})
       .order("todos.updated_at DESC")
       
@@ -70,6 +72,18 @@ class Api::V1::TodosController < Api::BaseApiController
     render json: { error: "Internal Server Error" }, status: :internal_server_error # 500
   end
 
+  def bulk_delete
+    user_id = params[:user_id]
+
+    updated_count = Todo.mark_as_deleted_by_user(user_id)
+
+    render json: {
+      message: "一括更新完了",
+      updated_count: updated_count
+    }, status: :ok
+    
+  end
+
 
   private 
 
@@ -78,7 +92,7 @@ class Api::V1::TodosController < Api::BaseApiController
     end
     
     def todo_params
-      params.fetch(:todo, {}).permit(:name,:is_done,:is_trashed,:memo,:user_id)
+      params.fetch(:todo, {}).permit(:name,:is_done,:is_trashed,:memo,:user_id,:is_deleted)
     end
 end
 

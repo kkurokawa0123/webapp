@@ -6,7 +6,11 @@ Rails.application.routes.draw do
         registrations: 'api/v1/auth/registrations'
       }
       resources :test, only: %i[index]
-      resources :todos, only: [:index,:show,:create,:update]
+      resources :todos, only: [:index,:show,:create,:update] do
+        collection do
+          patch :bulk_delete
+        end
+      end
 
       namespace :auth do
         resources :sessions, only: %i[index]

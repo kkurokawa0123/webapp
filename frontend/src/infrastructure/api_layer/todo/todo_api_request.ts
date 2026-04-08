@@ -20,6 +20,6 @@ export const requestUpdateTodo = async (
   return ApiRequest.put(`/todos/${id}`, todo);
 };
 
-export const requestDeleteTodo = async (user_id: number | undefined) => {
-  return ApiRequest.delete(`/todos/${user_id}`);
+export const requestBulkDeleteTodo = async (user_id: number | undefined) => {
+  return ApiRequest.patch(`/todos/bulk_delete?user_id=${user_id}`);
 };

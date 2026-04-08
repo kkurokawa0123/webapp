@@ -6,6 +6,7 @@ import {
   useTodosById,
   useCreateTodo,
   useUpdateTodo,
+  useBulk_deleteTodo,
 } from "@/presentation/hooks/todo_hook";
 
 import { TodoList } from "@/presentation/views/pages/Todos/partial/TodoList";
@@ -30,7 +31,7 @@ const TodoMain: React.FC = () => {
   const { data, isLoading } = useTodosById(authData_id);
   const createTodo = useCreateTodo();
   const updateTodo = useUpdateTodo();
-  // const deleteTodo = useDeleteTodo();
+  const bulk_deleteTodo = useBulk_deleteTodo();
 
   const handleToggleDialog = () => {
     setDialogOpen((dialogOpen) => !dialogOpen);
@@ -81,12 +82,12 @@ const TodoMain: React.FC = () => {
     // setAlertOpen((alertOpen) => !alertOpen);
     openLoading();
     showMessage(
-      "タスクを削除しています....しばらくお待ちください",
+      "タスクを完全に削除しています....しばらくお待ちください",
       SEVERITY.SUCCESS,
     );
     await new Promise((resolve) => setTimeout(resolve, 5000));
     // 削除のAPI処理を呼ぶ
-    // await deleteTodo.mutateAsync({ user_id: authData_id });
+    await bulk_deleteTodo.mutateAsync({ user_id: authData_id });
     closeLoading();
   };
 
@@ -128,6 +129,11 @@ const TodoMain: React.FC = () => {
             onToggleAlert={handleToggleAlert}
           />
           <TodoActionButton
+            isNotTrashedTodo={
+              !(
+                data?.some((todo) => todo.isTrashed && !todo.isDeleted) ?? false
+              )
+            }
             onToggleDialog={handleToggleDialog}
             onToggleAlert={handleToggleAlert}
           />

@@ -44,10 +44,10 @@ export const updateTodo = async (
   return response.data as Todo;
 };
 
-export const deleteTodo = async (
+export const bulkDeleteTodo = async (
   user_id: number | undefined,
 ): Promise<Todo> => {
-  const response = await api.requestDeleteTodo(user_id);
+  const response = await api.requestBulkDeleteTodo(user_id);
   console.log("serviceTodoDelete結果", response);
   return response.data as Todo;
 };

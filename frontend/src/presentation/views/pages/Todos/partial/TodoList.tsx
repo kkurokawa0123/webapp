@@ -36,9 +36,9 @@ export const TodoList = (props: Props) => {
       case TODO_TYPE.UNCHECK:
         return !todo.isDone && !todo.isTrashed;
       case TODO_TYPE.TRASH:
-        return todo.isTrashed;
+        return todo.isTrashed && !todo.isDeleted;
       default:
-        return todo;
+        return !todo.isDeleted;
     }
   });
 

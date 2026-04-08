@@ -22,9 +22,6 @@ const axiosClient = applyCaseMiddleware(
 
 // 🔥 リクエスト時にトークン付与
 axiosClient.interceptors.request.use((config) => {
-  // const token = localStorage.getItem("access-token");
-  // const client = localStorage.getItem("client");
-  // const uid = localStorage.getItem("uid");
   const { token, client, uid } = authStorage.get();
 
   console.log("axiosClient.interceptors.request");
@@ -50,12 +47,6 @@ axiosClient.interceptors.response.use((response) => {
   console.log("interceptors_uid:", headers["uid"]);
 
   authStorage.set(headers);
-  // if (headers["access-token"]) {
-
-  //   // localStorage.setItem("access-token", headers["access-token"]);
-  //   // localStorage.setItem("client", headers["client"]);
-  //   // localStorage.setItem("uid", headers["uid"]);
-  // }
 
   return response;
 });

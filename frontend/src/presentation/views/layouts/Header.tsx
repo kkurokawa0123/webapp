@@ -24,11 +24,9 @@ import { TodoSideBar } from "@/presentation/views/pages/Todos/partial/TodoSideBa
 
 type Props = {
   todoFilter: Todo_type;
-  // onFilter: (filter: TodoFilter) => void;
-  // drawerOpen: boolean;
-  onToggleDrawer: () => void;
   loading: boolean;
   isSignedIn: boolean;
+  onToggleDrawer: () => void;
   handleSignOut: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => Promise<void>;

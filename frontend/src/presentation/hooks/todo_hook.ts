@@ -3,13 +3,12 @@ import {
   fetchTodosByUserId,
   createTodo,
   updateTodo,
-  // deleteTodo,
+  bulkDeleteTodo,
 } from "@/domain/service_layer/todo/todo_api_service";
 import type {
   RequestTodoCreate,
   RequestTodoUpdate,
-  // RequestTodoDelete,
-  // Todo,
+  RequestTodoDelete,
 } from "@/domain/datas/api/todo_data";
 
 export const useTodosById = (id: number | undefined) => {
@@ -52,17 +51,17 @@ export const useUpdateTodo = () => {
   });
 };
 
-// export const useDeleteTodo = () => {
-//   const queryClient = useQueryClient();
+export const useBulk_deleteTodo = () => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: (param: RequestTodoDelete) => {
-//       return deleteTodo(param.user_id);
-//     },
-//     onSuccess: (_, variables) => {
-//       queryClient.invalidateQueries({
-//         queryKey: ["todos", variables.user_id],
-//       });
-//     },
-//   });
-// };
+  return useMutation({
+    mutationFn: (param: RequestTodoDelete) => {
+      return bulkDeleteTodo(param.user_id);
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["todos", variables.user_id],
+      });
+    },
+  });
+};

@@ -137,7 +137,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
               onUpdateTodo(todo.id, "isTrashed", todo.isTrashed === 1 ? 0 : 1)
             }
           >
-            {todo.isTrashed ? (
+            {todo.isTrashed && !todo.isDeleted ? (
               <Icon
                 aria-label={`todo-undo-${todo.name}`}
                 style={{ color: lightBlue[500] }}
