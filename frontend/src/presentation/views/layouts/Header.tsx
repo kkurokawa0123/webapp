@@ -7,7 +7,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+// import MenuIcon from "@mui/icons-material/Menu";
+import Person from "@mui/icons-material/Person";
 
 import { useState } from "react";
 import { SEVERITY } from "@/domain/datas/@types/Severity";
@@ -23,11 +24,9 @@ import { TodoSideBar } from "@/presentation/views/pages/Todos/partial/TodoSideBa
 
 type Props = {
   todoFilter: Todo_type;
-  // onFilter: (filter: TodoFilter) => void;
-  // drawerOpen: boolean;
-  onToggleDrawer: () => void;
   loading: boolean;
   isSignedIn: boolean;
+  onToggleDrawer: () => void;
   handleSignOut: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => Promise<void>;
@@ -63,7 +62,7 @@ const AuthButtons = (props: Props) => {
                 color="inherit"
                 onClick={props.onToggleDrawer}
               >
-                <MenuIcon />
+                <Person />
               </IconButton>
               <Typography
                 component={RouterLink}
@@ -113,7 +112,6 @@ const AuthButtons = (props: Props) => {
 };
 
 const Header: React.FC = () => {
-  // const [todoFilter, setTodoFilter] = useState<Todo_type>(TODO_TYPE.A);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { todoFilter, onSetTodoFilter } = useTodoStatusContext();

@@ -5,9 +5,11 @@ one:
   is_done: false
   is_deleted: false
   memo: MyText
+  is_trashed: false
 
 two:
   name: MyString
   is_done: false
   is_deleted: false
   memo: MyText
+  is_trashed: false

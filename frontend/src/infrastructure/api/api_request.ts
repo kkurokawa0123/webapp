@@ -14,6 +14,14 @@ export class ApiRequest {
     return await axiosClient.post(url, body, config);
   }
 
+  static async put<T>(url: string, body: T, config?: AxiosRequestConfig) {
+    return await axiosClient.put(url, body, config);
+  }
+
+  static async patch(url: string) {
+    return await axiosClient.patch(url);
+  }
+
   static async delete(url: string) {
     return await axiosClient.delete(url);
   }

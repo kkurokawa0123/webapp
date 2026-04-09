@@ -12,9 +12,6 @@ export interface ReqestSignUp {
 // ユーザー
 export interface ResponseData {
   data?: User;
-  // severity: Severity;
-  // message: string;
-  // is_login: boolean;
 }
 
 export interface User {

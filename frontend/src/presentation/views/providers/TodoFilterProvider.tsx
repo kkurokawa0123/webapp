@@ -9,7 +9,7 @@ import {
 } from "@/presentation/contexts/todo_status_context";
 
 export const TodoFilterProvider = ({ children }: { children: ReactNode }) => {
-  const [todoType, setTodoType] = useState<Todo_type>(TODO_TYPE.A);
+  const [todoType, setTodoType] = useState<Todo_type>(TODO_TYPE.ALL);
 
   const onSetTodoFilter = (type: Todo_type) => {
     setTodoType(type);

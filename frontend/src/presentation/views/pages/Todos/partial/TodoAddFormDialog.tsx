@@ -44,6 +44,7 @@ export const TodoAddFormDialog = (todoParams: TodoParams) => (
             aria-label="form-add"
             color="secondary"
             onClick={todoParams.onSubmit}
+            disabled={todoParams.name.length === 0}
           >
             追加
           </Button>

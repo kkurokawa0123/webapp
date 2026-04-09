@@ -1,4 +1,5 @@
 import * as api from "@/infrastructure/api_layer/auth/auth_api_request";
+import { authStorage } from "@/infrastructure/lib/auth_storage";
 import type {
   ReqestSignIn,
   ReqestSignUp,
@@ -31,6 +32,7 @@ export const onSignOut = async () => {
     console.log("サインアウト失敗", response);
     throw new Error("SIGN_OUT_FAILED");
   }
+  authStorage.clear();
 };
 
 export const getAuthUser = async (): Promise<

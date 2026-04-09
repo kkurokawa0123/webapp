@@ -1,11 +1,22 @@
-export const saveAuthHeaders = (headers: any) => {
-  localStorage.setItem("access-token", headers["access-token"]);
-  localStorage.setItem("client", headers["client"]);
-  localStorage.setItem("uid", headers["uid"]);
-};
+import type { AxiosHeaders } from "axios";
 
-export const getAuthHeaders = () => ({
-  "access-token": localStorage.getItem("access-token"),
-  client: localStorage.getItem("client"),
-  uid: localStorage.getItem("uid"),
-});
+export const authStorage = {
+  get: () => ({
+    token: localStorage.getItem("access-token"),
+    client: localStorage.getItem("client"),
+    uid: localStorage.getItem("uid"),
+  }),
+  set: (headers: AxiosHeaders) => {
+    console.log("headers-:", headers);
+    if (headers["access-token"]) {
+      localStorage.setItem("access-token", headers["access-token"]);
+      localStorage.setItem("client", headers["client"]);
+      localStorage.setItem("uid", headers["uid"]);
+    }
+  },
+  clear: () => {
+    localStorage.removeItem("access-token");
+    localStorage.removeItem("client");
+    localStorage.removeItem("uid");
+  },
+};

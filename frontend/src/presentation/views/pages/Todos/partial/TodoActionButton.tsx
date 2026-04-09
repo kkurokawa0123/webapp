@@ -1,19 +1,14 @@
 import Fab from "@mui/material/Fab";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { styled } from "@mui/material/styles";
 
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
 
-import type { Todo } from "@/domain/datas/api/todo_data";
-import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
-
-import { styled } from "@mui/material/styles";
-
 type Props = {
-  // todos: Todo[] | undefined;
-  // todoFilter: Todo_type;
-  // alertOpen: boolean;
+  isNotTrashedTodo: boolean;
   onToggleDialog: () => void;
+  onToggleAlert: () => void;
 };
 
 const FabButton = styled(Fab)({
@@ -23,18 +18,24 @@ const FabButton = styled(Fab)({
 });
 
 export const TodoActionButton = (props: Props) => {
-  // const deletedTodo =
-  //   props.todos?.filter((todo) => todo.is_deleted).length !== 0;
-
   const { todoFilter } = useTodoStatusContext();
   return (
     <>
       {todoFilter === "deleted" ? (
-        <FabButton aria-label="fab-delete-button">
+        <FabButton
+          aria-label="fab-delete-button"
+          color="secondary"
+          onClick={props.onToggleAlert}
+          disabled={props.isNotTrashedTodo}
+        >
           <DeleteIcon />
         </FabButton>
       ) : (
-        <FabButton aria-label="fab-add-button" onClick={props.onToggleDialog}>
+        <FabButton
+          aria-label="fab-add-button"
+          color="secondary"
+          onClick={props.onToggleDialog}
+        >
           <CreateIcon />
         </FabButton>
       )}

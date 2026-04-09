@@ -32,15 +32,10 @@ export const useSingIn = () => {
     onError: (error) => {
       console.error("hook1サインインエラー", error);
     },
-    // onSettled: () => {
-    //   console.log("処理の成功か否かに関わらず、データ更新の処理が完了した際の副作用として使用することができます。");
-    // },
   });
 };
 
 export const useSingUp = () => {
-  // const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: ({
       name,
@@ -52,15 +47,10 @@ export const useSingUp = () => {
       password: string;
     }) => onSignUp({ name, email, password }),
     onSuccess: (user) => {
-      console.error("hook1サインアップ成功", user);
-      // queryClient.setQueryData(["authUser"], {
-      //   id: user.id,
-      //   email: user.email,
-      //   name: user.name,
-      // });
+      console.error("useSingUp success", user);
     },
     onError: (error) => {
-      console.error("hook1サインアップエラー", error);
+      console.error("useSingUp fail", error);
     },
   });
 };

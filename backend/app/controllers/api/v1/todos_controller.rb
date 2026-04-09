@@ -1,16 +1,23 @@
 class Api::V1::TodosController < Api::BaseApiController
   
+  before_action :set_todo, only: [ :update]
+  
   def index
     @user_todos = User.joins(:todos).select(
       "todos.id as id",
       "todos.name as name",
       "todos.is_done as is_done",
-      "todos.is_deleted as is_deleted",
+      "todos.is_trashed as is_trashed",
       "todos.memo as memo",
+      "todos.is_deleted as is_deleted",
       "users.name as user_name")
       .order("todos.updated_at DESC")
-      
-    render json: { data: @user_todos }
+
+    if @user_todos.present?
+      render json: { data: @user_todos }, status: :ok
+    else
+      render json: { message: "TODOが存在しません"}, status: :not_found
+    end
   end
 
   def show
@@ -18,12 +25,18 @@ class Api::V1::TodosController < Api::BaseApiController
       "todos.id as id",
       "todos.name as name",
       "todos.is_done as is_done",
-      "todos.is_deleted as is_deleted",
+      "todos.is_trashed as is_trashed",
       "todos.memo as memo",
-      "users.name as user_name").where(todos:{user_id:params[:id]})
+      "todos.is_deleted as is_deleted",
+      "users.name as user_name").where(todos:{user_id: params[:id]})
       .order("todos.updated_at DESC")
-    
-    render json: { data: @user_todos }
+      
+    if @user_todos.present?
+      render json: { data: @user_todos }, status: :ok
+    else
+      render json: { message: "TODOが存在しません"}, status: :not_found
+    end
+  
   end
 
   def create
@@ -31,24 +44,56 @@ class Api::V1::TodosController < Api::BaseApiController
       Rails.logger.debug "This is a debug message"
       ActiveRecord::Base.transaction do
         @todo = Todo.new(todo_params)
-        @todo.save!
-        render :created_todo, status: :created
+        if @todo.save!
+          render json: { data: @todo },status: :created
+        else
+          render json: { message: "TODO作成失敗" }, status: :unprocessable_entity
+        end
       end
     rescue => e
       Rails.logger.warn e
-      render json: e, status: :unprocessable_content
+      render json: { error: "Internal Server Error" }, status: :internal_server_error # 500t
     end
   end
 
+  # PATCH/PUT /todos/:id
   def update
+    if @todo.nil?
+      render json: { error: "Todo not found" }, status: :not_found and return
+    end
 
+    if @todo.update(todo_params)
+      render json: { data: @todo }, status: :ok  # 200
+    else
+      render json: { errors: @todo.errors.full_messages }, status: :unprocessable_entity # 422
+    end
+  rescue => e
+    Rails.logger.error e
+    render json: { error: "Internal Server Error" }, status: :internal_server_error # 500
   end
 
-    private 
+  def bulk_delete
+    user_id = params[:user_id]
+
+    updated_count = Todo.mark_as_deleted_by_user(user_id)
+
+    render json: {
+      message: "一括更新完了",
+      updated_count: updated_count
+    }, status: :ok
     
-      def todo_params
-        params.fetch(:todo, {}).permit(:name,:is_done,:is_deleted,:memo,:user_id)
-      end
+  end
+
+
+  private 
+
+    def set_todo
+      @todo = Todo.find_by(id: params[:id])
+    end
+    
+    def todo_params
+      params.fetch(:todo, {}).permit(:name,:is_done,:is_trashed,:memo,:user_id,:is_deleted)
+    end
 end
 
 

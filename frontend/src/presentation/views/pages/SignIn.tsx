@@ -28,7 +28,6 @@ const SignIn: React.FC = () => {
   const singIn = useSingIn();
 
   if (isAuthenticated) {
-    // navigate("/");
     return <Navigate to="/" replace />;
   }
 
@@ -103,12 +102,6 @@ const SignIn: React.FC = () => {
           </CardContent>
         </Card>
       </Box>
-      {/* <ShowMessageAction // エラーが発生した場合はアラートを表示
-        open={messageOpen}
-        setOpen={setMessageOpen}
-        severity={severity}
-        message={messageContent}
-      /> */}
     </>
   );
 };

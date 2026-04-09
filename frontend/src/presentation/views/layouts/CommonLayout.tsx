@@ -28,11 +28,6 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
             {children}
           </Box>
         </Container>
-        {/* <Container maxWidth="lg" sx={{ mt: "3rem" }}>
-          <Grid container justifyContent="space-between">
-            <Grid>{children}</Grid>
-          </Grid>
-        </Container> */}
       </main>
     </>
   );
