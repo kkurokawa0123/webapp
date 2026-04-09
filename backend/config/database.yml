@@ -47,9 +47,14 @@ test:
 #
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
-#
+
+# RenderではDATABASE_URLが自動で入る
 production:
-  <<: *default
-  database: todoapp_production
-  username: todoapp
-  password: <%= ENV["TODOAPP_DATABASE_PASSWORD"] %>
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  url: <%= ENV['DATABASE_URL'] %>
+  # <<: *default
+  # database: todoapp_production
+  # username: todoapp
+  # password: <%= ENV["TODOAPP_DATABASE_PASSWORD"] %>
