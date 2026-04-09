@@ -1,6 +1,6 @@
 class RemoveColumnTodos < ActiveRecord::Migration[7.1]
   def up
-    remove_column :todos, :is_trash
+    remove_column :todos, :is_trash if column_exists?(:todos, :is_trash)
   end
 
   def down
