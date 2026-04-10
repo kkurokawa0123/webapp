@@ -11,7 +11,7 @@ export interface ReqestSignUp {
 
 // ユーザー
 export interface ResponseData {
-  data?: User;
+  data: User;
 }
 
 export interface User {
@@ -25,7 +25,7 @@ export interface User {
   allowPasswordChange: boolean;
 }
 export interface AuthAccount {
-  id?: number;
-  email?: string;
-  name?: string;
+  id: number;
+  email: string;
+  name: string;
 }
