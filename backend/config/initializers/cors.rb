@@ -7,7 +7,8 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "localhost:8000" # React側はポート番号8000で作るので「localhost:8000」を指定
+    # origins "localhost:8000" # React側はポート番号8000で作るので「localhost:8000」を指定
+    origins "webapp-six-indol.vercel.app" # React側はポート番号8000で作るので「localhost:8000」を指定
 
     resource "*",
       headers: :any,
