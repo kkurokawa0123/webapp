@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { data, isLoading, refetch } = useAuth();
 
   const value: AuthContextType = {
-    authData: data ?? null,
+    authData: data,
     isLoading,
     isAuthenticated: !!data,
     refetch,

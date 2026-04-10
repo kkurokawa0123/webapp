@@ -35,17 +35,15 @@ export const onSignOut = async () => {
   authStorage.clear();
 };
 
-export const getAuthUser = async (): Promise<
-  AuthAccount | undefined | null
-> => {
+export const getAuthUser = async (): Promise<AuthAccount> => {
   const response = await api.requestrFetchValidateToken();
 
   if (response.status === HTTP_STATUS.OK) {
     console.log("認証情報取得成功", response);
   }
   return {
-    id: response.data.data?.id,
-    email: response.data.data?.email,
-    name: response.data.data?.name,
+    id: response.data.data.id,
+    email: response.data.data.email,
+    name: response.data.data.name,
   };
 };
