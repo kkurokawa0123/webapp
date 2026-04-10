@@ -8,18 +8,23 @@ import { authStorage } from "@/infrastructure/lib/auth_storage";
 // または送信するリクエストの値をキャメルケース→スネークケースに変換してくれるライブラリ
 
 // ヘッダーに関してはケバブケースのままで良いので適用を無視するオプションを追加
-const options = {
-  ignoreHeaders: true,
-};
+// const options = {
+//   ignoreHeaders: true,
+// };
 
-const axiosClient = applyCaseMiddleware(
-  axios.create({
-    // baseURL: "http://localhost:3000/api/v1",
-    baseURL: import.meta.env.VITE_API_URL,
-    withCredentials: true,
-  }),
-  options,
-);
+// const axiosClient = applyCaseMiddleware(
+//   axios.create({
+//     // baseURL: "http://localhost:3000/api/v1",
+//     baseURL: import.meta.env.VITE_API_URL,
+//     withCredentials: true,
+//   }),
+//   options,
+// );
+
+const axiosClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
 
 // 🔥 リクエスト時にトークン付与
 axiosClient.interceptors.request.use((config) => {
