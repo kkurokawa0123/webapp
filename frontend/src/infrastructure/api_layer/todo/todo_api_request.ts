@@ -9,6 +9,7 @@ export const requestFetchTodosById = async (id: number | undefined) => {
 };
 
 export const requestCreateTodo = async (todo: RequestTodoCreate) => {
+  console.log("ENV読み込み確認:", import.meta.env.VITE_API_URL);
   return ApiRequest.post(`/todos`, todo);
 };
 
