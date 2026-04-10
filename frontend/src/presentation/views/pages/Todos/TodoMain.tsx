@@ -27,7 +27,7 @@ const TodoMain: React.FC = () => {
   const { showMessage } = useMessageContext();
   const { openLoading, closeLoading } = useLoadingContext();
   const { authData, isAuthenticated } = useAuthContex();
-  const authData_id = isAuthenticated ? authData.id : undefined;
+  const authData_id = isAuthenticated ? authData?.id : undefined;
   const { data, isLoading } = useTodosById(authData_id);
   const createTodo = useCreateTodo();
   const updateTodo = useUpdateTodo();
