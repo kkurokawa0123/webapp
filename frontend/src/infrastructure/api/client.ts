@@ -1,4 +1,4 @@
-import applyCaseMiddleware from "axios-case-converter";
+// import applyCaseMiddleware from "axios-case-converter";
 import axios, { type AxiosHeaders } from "axios";
 import { authStorage } from "@/infrastructure/lib/auth_storage";
 // import { saveAuthHeaders } from "@/infrastructure/lib/auth_storage";
