@@ -86,11 +86,11 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
           <CustomButton
             aria-label={`todo-check-${todo.name}`}
             onClick={() =>
-              onUpdateTodo(todo.id, "isDone", todo.isDone === 1 ? 0 : 1)
+              onUpdateTodo(todo.id, "is_done", todo.is_done === 1 ? 0 : 1)
             }
             disabled={todoFilter === "deleted"}
           >
-            {todo.isDone ? (
+            {todo.is_done ? (
               <Icon
                 aria-label={`todo-removed-${todo.name}`}
                 style={{
@@ -114,7 +114,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
               style={{
                 userSelect: "none",
                 color:
-                  todo.isDone && todoFilter !== TODO_TYPE.TRASH
+                  todo.is_done && todoFilter !== TODO_TYPE.TRASH
                     ? pink.A200
                     : grey[500],
               }}
@@ -134,10 +134,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
           <Trash
             aria-label={`todo-trash-${todo.name}`}
             onClick={() =>
-              onUpdateTodo(todo.id, "isTrashed", todo.isTrashed === 1 ? 0 : 1)
+              onUpdateTodo(todo.id, "is_trashed", todo.is_trashed === 1 ? 0 : 1)
             }
           >
-            {todo.isTrashed && !todo.isDeleted ? (
+            {todo.is_trashed && !todo.is_deleted ? (
               <Icon
                 aria-label={`todo-undo-${todo.name}`}
                 style={{ color: lightBlue[500] }}

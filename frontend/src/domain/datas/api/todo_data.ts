@@ -27,19 +27,9 @@ export interface ApiResponse<T> {
 export interface Todo {
   id: number;
   name: string;
-  isDone: number;
-  isDeleted: number;
+  is_done: number;
+  is_deleted: number;
   memo: string;
-  userName: string;
-  isTrashed: number;
-}
-
-export interface Todo2 {
-  id: number;
-  name: string;
-  isDone: number;
-  isDeleted: number;
-  memo: string;
-  userName: string;
-  isTrashed: number;
+  user_Name: string;
+  is_trashed: number;
 }
