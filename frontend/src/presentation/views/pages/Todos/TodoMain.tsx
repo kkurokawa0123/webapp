@@ -61,7 +61,6 @@ const TodoMain: React.FC = () => {
         user_id: authData_id,
       });
       closeLoading();
-      // setDialogOpen((dialogOpen) => !dialogOpen);
       setDialogOpen(false); // ← ここはシンプルに
     } catch (err) {
       console.log(err);
@@ -111,9 +110,10 @@ const TodoMain: React.FC = () => {
   };
 
   if (!authData_id || isLoading) return;
+  console.log("ユーザー別TodoMain一覧", data);
   return (
     <>
-      {isAuthenticated && authData ? (
+      {isAuthenticated && data ? (
         <>
           <TodoAddFormDialog
             name={todoName}
@@ -131,7 +131,8 @@ const TodoMain: React.FC = () => {
           <TodoActionButton
             isNotTrashedTodo={
               !(
-                data?.some((todo) => todo.isTrashed && !todo.isDeleted) ?? false
+                data?.some((todo) => todo.is_trashed && !todo.is_deleted) ??
+                false
               )
             }
             onToggleDialog={handleToggleDialog}
