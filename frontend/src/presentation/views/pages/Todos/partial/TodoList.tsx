@@ -27,20 +27,30 @@ const Container = styled("div")({
 export const TodoList = (props: Props) => {
   const { todoFilter } = useTodoStatusContext();
 
+  console.log("props.todos値", props.todos);
   const filteredTodos = props.todos?.filter((todo) => {
     switch (todoFilter) {
       case TODO_TYPE.ALL:
-        return !todo.isTrashed;
+        return !todo.is_trashed;
       case TODO_TYPE.CHECK:
-        return todo.isDone && !todo.isTrashed;
+        console.log(
+          "TODO_TYPE.CHECK値",
+          todo.name,
+          todo.is_done,
+          !todo.is_trashed,
+          todo.is_done && !todo.is_trashed,
+        );
+        return todo.is_done && !todo.is_trashed;
       case TODO_TYPE.UNCHECK:
-        return !todo.isDone && !todo.isTrashed;
+        return !todo.is_done && !todo.is_trashed;
       case TODO_TYPE.TRASH:
-        return todo.isTrashed && !todo.isDeleted;
+        return todo.is_trashed && !todo.is_deleted;
       default:
-        return !todo.isDeleted;
+        return !todo.is_deleted;
     }
   });
+  console.log("todoFilter値", todoFilter);
+  console.log("ユーザー別TodoList_filteredTodos", filteredTodos);
 
   return (
     <>
