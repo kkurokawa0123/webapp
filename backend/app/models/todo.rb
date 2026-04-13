@@ -1,7 +1,8 @@
 class Todo < ApplicationRecord
   belongs_to :user
 
-  scope :trashed, -> {  where(is_trashed: 1)  }
+  scope :active,  -> { where( is_deleted: 0 ) } 
+  scope :trashed, -> { where( is_trashed: 1 ) }
 
   def self.mark_as_deleted_by_user(user_id)
     where(user_id: user_id)

@@ -3,14 +3,12 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { indigo, pink } from "@mui/material/colors";
-
 import { AuthProvider } from "@/presentation/views/providers/AuthProvider";
 import { TodoFilterProvider } from "@/presentation/views/providers/TodoFilterProvider";
 import CommonLayout from "@/presentation/views/layouts/CommonLayout";
 import TodoMain from "@/presentation/views/pages/Todos/TodoMain";
 import SignIn from "@/presentation/views/pages/SignIn";
 import SignUp from "@/presentation/views/pages/SignUp";
-
 import { useAuthContex } from "@/presentation/contexts/auth_context";
 
 // テーマを作成
@@ -34,10 +32,11 @@ const theme = createTheme({
 const queryClient = new QueryClient();
 
 const PrivateRoute = () => {
-  const { authData, isLoading, isAuthenticated } = useAuthContex();
-  console.log("認証確認");
-  console.log("AuthProvider:data", authData);
-  console.log("AuthProvider:isAuthenticated", isAuthenticated);
+  const { isLoading, isAuthenticated } = useAuthContex();
+
+  // console.log("AuthProvider-authData", authData);
+  // console.log("AuthProvider-isAuthenticated", isAuthenticated);
+  // console.log("AuthProvider useAuthContex completed");
 
   if (isLoading) return;
   return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />;

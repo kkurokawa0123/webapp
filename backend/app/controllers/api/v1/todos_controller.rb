@@ -3,6 +3,7 @@ class Api::V1::TodosController < Api::BaseApiController
   before_action :set_todo, only: [ :update]
   
   def index
+
     @user_todos = User.joins(:todos).select(
       "todos.id as id",
       "todos.name as name",
@@ -13,75 +14,67 @@ class Api::V1::TodosController < Api::BaseApiController
       "users.name as user_name")
       .order("todos.updated_at DESC")
 
-    if @user_todos.present?
-      render json: { data: @user_todos }, status: :ok
-    else
-      render json: { message: "TODOが存在しません"}, status: :not_found
-    end
+    render json: { data: @user_todos }, status: :ok
   end
 
   def show
-    @user_todos = User.joins(:todos).select(
-      "todos.id as id",
-      "todos.name as name",
-      "todos.is_done as is_done",
-      "todos.is_trashed as is_trashed",
-      "todos.memo as memo",
-      "todos.is_deleted as is_deleted",
-      "users.name as user_name").where(todos:{user_id: params[:id]})
-      .order("todos.updated_at DESC")
-      
-    if @user_todos.present?
-      render json: { data: @user_todos }, status: :ok
-    else
-      render json: { message: "TODOが存在しません"}, status: :not_found
-    end
-  
+
+    @user_todos = Todo.active.joins(:user).select(
+        "todos.id as id",
+        "todos.name as name",
+        "todos.is_done as is_done",
+        "todos.is_trashed as is_trashed",
+        "todos.memo as memo",
+        "todos.is_deleted as is_deleted",
+        "users.name as user_name").where(user_id: params[:id]).order(updated_at: :desc)
+    
+    render json: { data: @user_todos }, status: :ok
   end
 
   def create
+
     begin
-      Rails.logger.debug "This is a debug message"
-      ActiveRecord::Base.transaction do
-        @todo = Todo.new(todo_params)
-        if @todo.save!
-          render json: { data: @todo },status: :created
-        else
-          render json: { message: "TODO作成失敗" }, status: :unprocessable_entity
-        end
+      # Rails.logger.debug "[DEBUG] todo_params#{todo_params.inspect}"
+      @todo = Todo.new(todo_params)
+      if @todo.save!
+        render json: { data: @todo },status: :created
+      else
+        render json: { data: [message: "Todo data failed to create - #{@todo.error.full_messages}"]}, status: :unprocessable_entity
       end
     rescue => e
       Rails.logger.warn e
-      render json: { error: "Internal Server Error" }, status: :internal_server_error # 500t
+      render json: { data: [message: "Internal Server Error"] }, status: :internal_server_error # 500t
     end
   end
 
   # PATCH/PUT /todos/:id
   def update
-    if @todo.nil?
-      render json: { error: "Todo not found" }, status: :not_found and return
-    end
 
-    if @todo.update(todo_params)
-      render json: { data: @todo }, status: :ok  # 200
-    else
-      render json: { errors: @todo.errors.full_messages }, status: :unprocessable_entity # 422
+    begin
+      # Rails.logger.debug "[DEBUG] todo_params#{todo_params.inspect}"
+      if @todo.nil?
+        render json: { error: "Todo not found" }, status: :not_found and return
+      elsif @todo.update(todo_params)
+        render json: { data: @todo }, status: :ok  # 200
+      else
+        render json: { data: [message: "Todo data failed to update - #{@todo.error.full_messages}"]}, status: :unprocessable_entity # 422
+      end
+    rescue => e
+      Rails.logger.error e
+      render json: { data: [message: "Internal Server Error"] }, status: :internal_server_error # 500t
     end
-  rescue => e
-    Rails.logger.error e
-    render json: { error: "Internal Server Error" }, status: :internal_server_error # 500
   end
 
+  # PATCH /todos/bulk_delete?user_id=XXX
   def bulk_delete
-    user_id = params[:user_id]
 
-    updated_count = Todo.mark_as_deleted_by_user(user_id)
-
-    render json: {
-      message: "一括更新完了",
-      updated_count: updated_count
-    }, status: :ok
-    
+    begin
+      sql_response = Todo.active.mark_as_deleted_by_user(params[:user_id])
+      render json: { data: [message: "bulk_delete is done",deleted_todo_count: sql_response] }, status: :ok 
+    rescue => e
+      Rails.logger.error e
+      render json: { data: [message: "Internal Server Error"] }, status: :internal_server_error # 500t
+    end
   end
 
 

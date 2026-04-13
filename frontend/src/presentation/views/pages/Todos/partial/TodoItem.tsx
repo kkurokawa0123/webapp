@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Icon from "@mui/material/Icon";
 import Card from "@mui/material/Card";
 import TextField from "@mui/material/TextField";
@@ -7,15 +8,11 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Undo from "@mui/icons-material/Undo";
 import Button from "@mui/material/Button";
-
 import { styled } from "@mui/material/styles";
 import { lightBlue, pink, grey } from "@mui/material/colors";
-
 import type { Todo } from "@/domain/datas/api/todo_data";
-
 import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
-import { useState } from "react";
 
 const TodoCard = styled(Card)(({ theme }) => ({
   marginTop: theme.spacing(1),
@@ -86,9 +83,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
           <CustomButton
             aria-label={`todo-check-${todo.name}`}
             onClick={() =>
-              onUpdateTodo(todo.id, "is_done", todo.is_done === 1 ? 0 : 1)
+              onUpdateTodo(todo.id, "is_done", Number(!todo.is_done))
             }
-            disabled={todoFilter === "deleted"}
+            disabled={todoFilter === TODO_TYPE.TRASH}
           >
             {todo.is_done ? (
               <Icon
@@ -134,7 +131,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
           <Trash
             aria-label={`todo-trash-${todo.name}`}
             onClick={() =>
-              onUpdateTodo(todo.id, "is_trashed", todo.is_trashed === 1 ? 0 : 1)
+              onUpdateTodo(todo.id, "is_trashed", Number(!todo.is_trashed))
             }
           >
             {todo.is_trashed && !todo.is_deleted ? (

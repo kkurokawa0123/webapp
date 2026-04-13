@@ -27,7 +27,6 @@ export const requestSignOut = async (): Promise<
   return ApiRequest.delete("auth/sign_out");
 };
 // 認証済みのユーザーを取得 Promise<AxiosResponse<ResponseData>>
-
 export const requestrFetchValidateToken = async () => {
   return ApiRequest.get<ResponseData>("/auth/validate_token");
 };

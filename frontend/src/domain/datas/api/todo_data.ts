@@ -15,13 +15,8 @@ export interface RequestTodoDelete {
   user_id: number | undefined;
 }
 
-// export interface RequestTodoUpdate<K extends keyof Todo, V extends Todo[K]> {
-//   K: V;
-// }
-
 export interface ApiResponse<T> {
   data: T;
-  // is_login: boolean;
 }
 
 export interface Todo {

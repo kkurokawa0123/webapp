@@ -1,8 +1,6 @@
 import { useState } from "react";
-
 import { type ReactNode } from "react";
 import { type Todo_type, TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
-
 import {
   TodoStatusContext,
   type TodoStatusContextType,

@@ -8,46 +8,63 @@ import type {
 
 export const fetchTodosByUserId = async (
   id: number | undefined,
-): Promise<Todo[]> => {
-  // ) => {
-  const response = await api.requestFetchTodosById(id);
-  // プログレスバー起動確認用
-  // await new Promise((resolve) => setTimeout(resolve, 7000));
-  if (response.status === HTTP_STATUS.OK) {
-    console.log("TODO情報取得成功", response.data);
-  } else {
-    console.log("TODO情報取得失敗", response.status);
-    throw new Error("FETCH_TODO_FAILED");
+): Promise<Todo[] | undefined> => {
+  try {
+    const response = await api.requestFetchTodosById(id);
+    if (response.status !== HTTP_STATUS.OK) {
+      throw new Error("TodosByUserId failed");
+    }
+    const apiResponse = response.data as ApiResponse<Todo[]>;
+    const todos = apiResponse.data as Todo[];
+    return todos;
+  } catch (err) {
+    console.error("TodosByUserId failed");
+    throw err;
   }
-  const apiResponse = response.data as ApiResponse<Todo[]>;
-  const todos = apiResponse.data as Todo[];
-  return todos;
 };
 
-export const createTodo = async (todo: RequestTodoCreate): Promise<Todo> => {
-  const response = await api.requestCreateTodo(todo);
-  if (response.status === HTTP_STATUS.CREATED) {
-    console.log("TODO作成成功", response.data);
-  } else {
-    console.log("TODO作成失敗", response.status);
-    throw new Error("CREATE_TODO_FAILED");
+export const createTodo = async (
+  todo: RequestTodoCreate,
+): Promise<Todo | undefined> => {
+  try {
+    const response = await api.requestCreateTodo(todo);
+    if (response.status !== HTTP_STATUS.CREATED) {
+      throw new Error("createTodo failed");
+    }
+    return response.data as Todo;
+  } catch (err) {
+    console.error("createTodo failed");
+    throw err;
   }
-  return response.data as Todo;
 };
 
 export const updateTodo = async (
   id: number,
   todo: RequestTodoUpdate,
-): Promise<Todo> => {
-  console.log("serviceTodoUpdate開始");
-  const response = await api.requestUpdateTodo(id, todo);
-  return response.data as Todo;
+): Promise<Todo | undefined> => {
+  try {
+    const response = await api.requestUpdateTodo(id, todo);
+    if (response.status !== HTTP_STATUS.OK) {
+      throw new Error("updateTodo failed");
+    }
+    return response.data as Todo;
+  } catch (err) {
+    console.error("updateTodo failed");
+    throw err;
+  }
 };
 
 export const bulkDeleteTodo = async (
   user_id: number | undefined,
-): Promise<Todo> => {
-  const response = await api.requestBulkDeleteTodo(user_id);
-  console.log("serviceTodoDelete結果", response);
-  return response.data as Todo;
+): Promise<Todo | undefined> => {
+  try {
+    const response = await api.requestBulkDeleteTodo(user_id);
+    if (response.status !== HTTP_STATUS.OK) {
+      throw new Error("bulkDeleteTodo failed");
+    }
+    return response.data as Todo;
+  } catch (err) {
+    console.error("bulkDeleteTodo failed");
+    throw err;
+  }
 };
