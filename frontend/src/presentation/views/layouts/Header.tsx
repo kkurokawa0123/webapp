@@ -1,26 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-// import MenuIcon from "@mui/icons-material/Menu";
 import Person from "@mui/icons-material/Person";
-
-import { useState } from "react";
 import { SEVERITY } from "@/domain/datas/@types/Severity";
 import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
-
+import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
 import { useAuthContex } from "@/presentation/contexts/auth_context";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
-
 import { useSingOut } from "@/presentation/hooks/auth_hook";
 import { TodoSideBar } from "@/presentation/views/pages/Todos/partial/TodoSideBar";
-// import ShowMessageAction from "@/presentation/views/utils/ShowMessage";
 
 type Props = {
   todoFilter: Todo_type;
@@ -34,13 +28,13 @@ type Props = {
 
 const toConvertTodoStatus = (arg: Todo_type) => {
   switch (arg) {
-    case "all":
+    case TODO_TYPE.ALL:
       return "すべてのタスク";
-    case "unchecked":
+    case TODO_TYPE.UNCHECK:
       return "未完了のタスク";
-    case "checked":
+    case TODO_TYPE.CHECK:
       return "完了したタスク";
-    case "deleted":
+    case TODO_TYPE.TRASH:
       return "ごみ箱";
     default:
       return "TODO";
@@ -129,18 +123,14 @@ const Header: React.FC = () => {
 
       await singOut.mutateAsync();
       showMessage("サインアウトしました", SEVERITY.SUCCESS);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      console.log("Succeeded in sign out");
     } catch (err) {
-      console.log(err);
       showMessage("サインアウトに失敗しました", SEVERITY.ERROR);
+      throw err;
     }
   };
 
   return (
     <>
-      {/* <Box sx={{ flexGrow: 1 }}> */}
       <Box sx={{ flexGrow: 1 }}>
         <AuthButtons
           todoFilter={todoFilter}

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Backdrop, CircularProgress } from "@mui/material";
-
 import { LoadingContext } from "@/presentation/contexts/loding_context";
 
 export const LoadingProvider: React.FC<{ children: React.ReactNode }> = ({

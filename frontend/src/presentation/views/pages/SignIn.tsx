@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, Link, Navigate } from "react-router-dom";
-
-// import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
@@ -9,7 +7,6 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-
 import { SEVERITY } from "@/domain/datas/@types/Severity";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useAuthContex } from "@/presentation/contexts/auth_context";
@@ -33,27 +30,24 @@ const SignIn: React.FC = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    openLoading();
-    showMessage("ログイン中....しばらくお待ちください", SEVERITY.SUCCESS);
 
     try {
+      openLoading();
+      showMessage("ログイン中....しばらくお待ちください", SEVERITY.INFO);
       await singIn.mutateAsync({
         email,
         password,
       });
-
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      closeLoading();
-
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       navigate("/");
     } catch (err) {
-      console.log(err);
-      closeLoading();
       showMessage(
         "サインインに失敗しました。IDもしくはパスワードを確認してください。",
         SEVERITY.ERROR,
       );
-      console.log("サインイン致命的エラー", err);
+      throw err;
+    } finally {
+      closeLoading();
     }
   };
   return (

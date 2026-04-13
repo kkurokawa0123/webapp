@@ -1,23 +1,19 @@
 import List from "@mui/material/List";
 import Avatar from "@mui/material/Avatar";
 import { Drawer } from "@mui/material";
-// import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
 import Person from "@mui/icons-material/Person";
-// import CreateIcon from "@mui/icons-material/Create";
 import SubjectIcon from "@mui/icons-material/Subject";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-
 import { styled } from "@mui/material/styles";
 import { indigo, lightBlue, pink } from "@mui/material/colors";
-
 import { useAuthContex } from "@/presentation/contexts/auth_context";
-import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
+import { TODO_TYPE, type Todo_type } from "@/domain/datas/@types/TodoFilter";
 
 // ドロワー内リストの幅をカスタマイズ
 const DrawerList = styled("div")(() => ({
@@ -72,7 +68,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter("all")}
+                onClick={() => props.onFilter(TODO_TYPE.ALL)}
               >
                 <ListItemIcon>
                   <SubjectIcon />
@@ -83,7 +79,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter("unchecked")}
+                onClick={() => props.onFilter(TODO_TYPE.UNCHECK)}
               >
                 <ListItemIcon>
                   <RadioButtonUncheckedIcon sx={{ color: lightBlue[500] }} />
@@ -94,7 +90,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter("checked")}
+                onClick={() => props.onFilter(TODO_TYPE.CHECK)}
               >
                 <ListItemIcon>
                   <CheckCircleOutlineIcon sx={{ color: pink.A200 }} />
@@ -105,7 +101,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter("deleted")}
+                onClick={() => props.onFilter(TODO_TYPE.TRASH)}
               >
                 <ListItemIcon>
                   <DeleteIcon />

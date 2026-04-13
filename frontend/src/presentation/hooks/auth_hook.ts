@@ -24,13 +24,13 @@ export const useSingIn = () => {
       onSignIn({ email, password }),
     onSuccess: (user) => {
       queryClient.setQueryData(["authUser"], {
-        id: user.id,
-        email: user.email,
-        name: user.name,
+        id: user?.id,
+        email: user?.email,
+        name: user?.name,
       });
     },
     onError: (error) => {
-      console.error("hook1サインインエラー", error);
+      console.error("useSingIn fail", error);
     },
   });
 };
@@ -47,7 +47,8 @@ export const useSingUp = () => {
       password: string;
     }) => onSignUp({ name, email, password }),
     onSuccess: (user) => {
-      console.error("useSingUp success", user);
+      // サインアップでは、サーバーキャッシュに情報を保存しない
+      console.log("useSingUp success", user);
     },
     onError: (error) => {
       console.error("useSingUp fail", error);

@@ -7,7 +7,6 @@ export const authStorage = {
     uid: localStorage.getItem("uid"),
   }),
   set: (headers: AxiosHeaders) => {
-    console.log("headers-:", headers);
     if (headers["access-token"]) {
       localStorage.setItem("access-token", headers["access-token"]);
       localStorage.setItem("client", headers["client"]);

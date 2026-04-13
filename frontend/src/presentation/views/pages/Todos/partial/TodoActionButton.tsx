@@ -2,7 +2,7 @@ import Fab from "@mui/material/Fab";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/material/styles";
-
+import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
 
 type Props = {
@@ -21,7 +21,7 @@ export const TodoActionButton = (props: Props) => {
   const { todoFilter } = useTodoStatusContext();
   return (
     <>
-      {todoFilter === "deleted" ? (
+      {todoFilter === TODO_TYPE.TRASH ? (
         <FabButton
           aria-label="fab-delete-button"
           color="secondary"
