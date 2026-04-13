@@ -30,7 +30,7 @@ export const useCreateTodo = () => {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["todos", variables.user_id],
+        queryKey: ["todos", variables?.user_id],
       });
     },
   });
@@ -45,22 +45,22 @@ export const useUpdateTodo = () => {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ["todos", variables.user_id],
+        queryKey: ["todos", variables?.user_id],
       });
     },
   });
 };
 
-export const useBulk_deleteTodo = () => {
+export const useBulkDeleteTodo = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (param: RequestTodoDelete) => {
       return bulkDeleteTodo(param.user_id);
     },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ["todos", variables.user_id],
+    onSuccess: async (_, variables) => {
+      await queryClient.refetchQueries({
+        queryKey: ["todos", variables?.user_id],
       });
     },
   });

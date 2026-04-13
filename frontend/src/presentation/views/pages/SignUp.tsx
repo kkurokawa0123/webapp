@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import TextField from "@mui/material/TextField";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-
 import { SEVERITY } from "@/domain/datas/@types/Severity";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useSingUp } from "@/presentation/hooks/auth_hook";
@@ -27,29 +25,31 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    openLoading();
 
     try {
-      console.log("サインアップ開始");
+      openLoading();
+
+      showMessage(
+        "ユーザーアカウントを登録しております....しばらくお待ちください",
+        SEVERITY.INFO,
+      );
       await singUp.mutateAsync({
         name,
         email,
         password,
       });
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       showMessage("サインアップが完了しました", SEVERITY.SUCCESS);
-      closeLoading();
-
       navigate("/signin");
-      console.log("Signed in successfully!");
     } catch (err) {
-      console.log(err);
-      closeLoading();
       showMessage(
         "入力データに誤りがあります。再度正しい値を入力してください。",
-        "error",
+        SEVERITY.ERROR,
       );
-      console.log("サインアップ致命的エラー", err);
+
+      throw err;
+    } finally {
+      closeLoading();
     }
   };
 

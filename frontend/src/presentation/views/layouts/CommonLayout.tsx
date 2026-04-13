@@ -1,7 +1,6 @@
 import React from "react";
 import Container from "@mui/material/Container";
 import { Box } from "@mui/material";
-
 import Header from "@/presentation/views/layouts/Header";
 
 interface CommonLayoutProps {

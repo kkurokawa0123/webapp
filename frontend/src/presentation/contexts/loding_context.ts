@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react";
 
 export type LoadingContextType = {
-  // isLoading: boolean;
   openLoading: () => void;
   closeLoading: () => void;
 };
