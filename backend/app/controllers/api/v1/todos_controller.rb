@@ -1,45 +1,33 @@
 class Api::V1::TodosController < Api::BaseApiController
   
+  before_action :authenticate_api_v1_user!
   before_action :set_todo, only: [ :update]
   
+  # GET /todos
   def index
-
-    @user_todos = User.joins(:todos).select(
-      "todos.id as id",
-      "todos.name as name",
-      "todos.is_done as is_done",
-      "todos.is_trashed as is_trashed",
-      "todos.memo as memo",
-      "todos.is_deleted as is_deleted",
-      "users.name as user_name")
-      .order("todos.updated_at DESC")
-
-    render json: { data: @user_todos }, status: :ok
+    todos = current_user.todos.order(updated_at: :DESC)
+    render json: { data: todos }, status: :ok
   end
 
+  # GET /todos/:id
   def show
-
-    @user_todos = Todo.active.joins(:user).select(
-        "todos.id as id",
-        "todos.name as name",
-        "todos.is_done as is_done",
-        "todos.is_trashed as is_trashed",
-        "todos.memo as memo",
-        "todos.is_deleted as is_deleted",
-        "users.name as user_name").where(user_id: params[:id]).order(updated_at: :desc)
-    
-    render json: { data: @user_todos }, status: :ok
+    todo = current_user.todos.find_by(id: params[:id])
+    if todo
+      render json: { data: todo }, status: :ok
+    else
+      render json: { error: "Todo not found" }, status: :not_found
+    end
   end
 
+  # POST /todos
   def create
-
     begin
       # Rails.logger.debug "[DEBUG] todo_params#{todo_params.inspect}"
-      @todo = Todo.new(todo_params)
-      if @todo.save!
-        render json: { data: @todo },status: :created
+      todo = current_user.todos.new(todo_params)
+      if todo.save
+        render json: { data: todo },status: :created
       else
-        render json: { data: [message: "Todo data failed to create - #{@todo.error.full_messages}"]}, status: :unprocessable_entity
+        render json: { data: [message: "Todo data failed to create - #{todo.errors.full_messages}"]}, status: :unprocessable_entity
       end
     rescue => e
       Rails.logger.warn e
@@ -49,15 +37,12 @@ class Api::V1::TodosController < Api::BaseApiController
 
   # PATCH/PUT /todos/:id
   def update
-
     begin
       # Rails.logger.debug "[DEBUG] todo_params#{todo_params.inspect}"
-      if @todo.nil?
-        render json: { error: "Todo not found" }, status: :not_found and return
-      elsif @todo.update(todo_params)
+      if @todo.update(todo_params)
         render json: { data: @todo }, status: :ok  # 200
       else
-        render json: { data: [message: "Todo data failed to update - #{@todo.error.full_messages}"]}, status: :unprocessable_entity # 422
+        render json: { data: [message: "Todo data failed to update - #{todo.errors.full_messages}"]}, status: :unprocessable_entity # 422
       end
     rescue => e
       Rails.logger.error e
@@ -65,11 +50,10 @@ class Api::V1::TodosController < Api::BaseApiController
     end
   end
 
-  # PATCH /todos/bulk_delete?user_id=XXX
+  # PATCH /todos/bulk_delete
   def bulk_delete
-
     begin
-      sql_response = Todo.active.mark_as_deleted_by_user(params[:user_id])
+      sql_response = Todo.active.mark_as_deleted_by_user(current_user.id)
       render json: { data: [message: "bulk_delete is done",deleted_todo_count: sql_response] }, status: :ok 
     rescue => e
       Rails.logger.error e
@@ -81,11 +65,12 @@ class Api::V1::TodosController < Api::BaseApiController
   private 
 
     def set_todo
-      @todo = Todo.find_by(id: params[:id])
+      @todo = current_user.todos.find_by(id: params[:id])
+      render json: { error: "Todo not found" }, status: :not_found unless @todo
     end
     
     def todo_params
-      params.fetch(:todo, {}).permit(:name,:is_done,:is_trashed,:memo,:user_id,:is_deleted)
+      params.fetch(:todo, {}).permit(:name,:is_done,:is_trashed,:memo)
     end
 end
 
