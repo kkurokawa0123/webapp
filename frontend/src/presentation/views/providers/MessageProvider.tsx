@@ -13,7 +13,7 @@ export const MessageProvider = ({
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<Severity>(SEVERITY.INFO);
 
-  const showMessage = (msg: string, sev: Severity = "info") => {
+  const showMessage = (msg: string, sev: Severity = SEVERITY.INFO) => {
     setMessage(msg);
     setSeverity(sev);
     setOpen(true);

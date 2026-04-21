@@ -1,13 +1,13 @@
 import { isEqual } from "lodash";
 
 export abstract class BaseValueObject<T, U> {
-  // @ts-expect-error
   private _type: U;
   protected readonly _value: T;
 
-  constructor(value: T) {
+  constructor(value: T, type: U) {
     this.validate(value);
     this._value = value;
+    this._type = type;
   }
 
   protected abstract validate(value: T): void;
@@ -17,6 +17,10 @@ export abstract class BaseValueObject<T, U> {
   }
 
   equals(other: BaseValueObject<T, U>): boolean {
-    return isEqual(this._value, other._value);
+    return isEqual(this.value, other.value);
+  }
+
+  get valueType(): U {
+    return this._type;
   }
 }
