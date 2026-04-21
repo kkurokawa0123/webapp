@@ -19,6 +19,7 @@ import { useTodoStatusContext } from "@/presentation/contexts/todo_status_contex
 import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
 import { SEVERITY } from "@/domain/datas/@types/Severity";
 import { type Todo } from "@/domain/datas/api/todo_data";
+import { COMMON_MESSAGES } from "@/domain/datas/@types/Message";
 
 const TodoMain: React.FC = () => {
   const [todoName, setTodoName] = useState("");
@@ -54,7 +55,10 @@ const TodoMain: React.FC = () => {
       // （超重要）
       (document.activeElement as HTMLElement)?.blur();
 
-      showMessage("タスク追加中....しばらくお待ちください", SEVERITY.INFO);
+      showMessage(
+        "入力したタスク内容を追加しています....しばらくお待ちください",
+        SEVERITY.INFO,
+      );
       await createTodo.mutateAsync({
         name: todoName,
         memo: todoMemo,
@@ -66,10 +70,7 @@ const TodoMain: React.FC = () => {
 
       setDialogOpen(false);
     } catch (err) {
-      showMessage(
-        "入力データに誤りがあります。再度正しい値を入力してください。",
-        SEVERITY.ERROR,
-      );
+      showMessage(COMMON_MESSAGES.VALIDATION_ERROR, SEVERITY.ERROR);
 
       throw err;
     } finally {
@@ -86,14 +87,14 @@ const TodoMain: React.FC = () => {
     try {
       openLoading();
       showMessage(
-        "タスクを完全に削除しています....しばらくお待ちください",
+        "指定したタスクを削除しています....しばらくお待ちください",
         SEVERITY.INFO,
       );
       await bulkDeleteTodo.mutateAsync({ user_id: authData_id });
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      showMessage("タスクを削除しました。", SEVERITY.SUCCESS);
+      showMessage("タスクを削除しました", SEVERITY.SUCCESS);
     } catch (err) {
-      showMessage("タスクの完全削除ができませんでした", SEVERITY.ERROR);
+      showMessage("タスクの削除ができませんでした", SEVERITY.ERROR);
       throw err;
     } finally {
       closeLoading();
@@ -108,7 +109,7 @@ const TodoMain: React.FC = () => {
     try {
       openLoading();
       showMessage(
-        "タスク情報を更新しています....しばらくお待ちください",
+        "タスクを更新しています....しばらくお待ちください",
         SEVERITY.INFO,
       );
 
@@ -119,9 +120,9 @@ const TodoMain: React.FC = () => {
       });
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      showMessage("更新が完了しました", SEVERITY.SUCCESS);
+      showMessage("タスクの更新が完了しました", SEVERITY.SUCCESS);
     } catch (err) {
-      showMessage("更新に失敗しました", SEVERITY.ERROR);
+      showMessage("タスクの更新に失敗しました", SEVERITY.ERROR);
 
       throw err;
     } finally {
@@ -130,12 +131,6 @@ const TodoMain: React.FC = () => {
   };
 
   if (!authData_id || isLoading) return;
-  // if (!authData_id || isLoading) {
-  //   openLoading();
-  //   showMessage("Todo一覧画面を起動中...しばらくお待ちください", SEVERITY.INFO);
-  // } else {
-  //   closeLoading();
-  // }
 
   return (
     <>

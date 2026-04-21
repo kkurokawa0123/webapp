@@ -4,7 +4,7 @@ type UserNameValue = string;
 
 export class UserName extends BaseValueObject<UserNameValue, "UserName"> {
   constructor(value: UserNameValue) {
-    super(value);
+    super(value, "UserName");
   }
   protected validate(value: UserNameValue): void {
     if (value.length < 1) {

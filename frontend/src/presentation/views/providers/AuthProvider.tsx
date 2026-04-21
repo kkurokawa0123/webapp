@@ -10,9 +10,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value: AuthContextType = {
     authData: data,
-    isLoading,
+    isLoading: isLoading,
     isAuthenticated: !!data,
-    refetch,
+    refetch: refetch,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -62,7 +62,7 @@ export const TodoSideBar = (props: Props) => {
               <Person />
             </DrawerAvatar>
             <p>ユーザー名:{authData?.name}</p>
-            <p>TODO v{1.1}</p>
+            <p>Todo Version{"1.2.0"}</p>
           </DrawerHeader>
           <List>
             <ListItem disablePadding>

@@ -12,6 +12,7 @@ import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useAuthContex } from "@/presentation/contexts/auth_context";
 import { useSingIn } from "@/presentation/hooks/auth_hook";
 import { useLoadingContext } from "@/presentation/contexts/loding_context";
+import { COMMON_MESSAGES } from "@/domain/datas/@types/Message";
 
 // サインイン用ページ
 const SignIn: React.FC = () => {
@@ -41,10 +42,7 @@ const SignIn: React.FC = () => {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       navigate("/");
     } catch (err) {
-      showMessage(
-        "サインインに失敗しました。IDもしくはパスワードを確認してください。",
-        SEVERITY.ERROR,
-      );
+      showMessage(COMMON_MESSAGES.VALIDATION_ERROR, SEVERITY.ERROR);
       throw err;
     } finally {
       closeLoading();
@@ -71,7 +69,7 @@ const SignIn: React.FC = () => {
               fullWidth
               label="Password"
               type="password"
-              placeholder="At least 6 characters"
+              placeholder="At least 8 characters"
               value={password}
               margin="dense"
               autoComplete="current-password"

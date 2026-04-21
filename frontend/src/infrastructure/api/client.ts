@@ -28,10 +28,6 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use((config) => {
   const { token, client, uid } = authStorage.get();
 
-  // console.log("axiosClient.interceptors.request");
-  // console.log("interceptors_token:", token);
-  // console.log("interceptors_client:", client);
-  // console.log("interceptors_uid:", uid);
   if (token && client && uid) {
     config.headers.set("access-token", token);
     config.headers.set("client", client);
@@ -42,17 +38,32 @@ axiosClient.interceptors.request.use((config) => {
 });
 
 // 🔥 レスポンスでトークン更新
-axiosClient.interceptors.response.use((response) => {
-  const headers = response.headers as AxiosHeaders;
+axiosClient.interceptors.response.use(
+  (response) => {
+    const headers = response.headers as AxiosHeaders;
+    if (headers?.["access-token"]) {
+      authStorage.set(headers);
+    }
+    return response;
+  },
+  (error) => {
+    const headers = error.response?.headers as AxiosHeaders;
 
-  // console.log("axiosClient.interceptors.response");
-  // console.log("interceptors_token:", headers["access-token"]);
-  // console.log("interceptors_client:", headers["client"]);
-  // console.log("interceptors_uid:", headers["uid"]);
+    // リクエスト送信時サーバー側トークン更新に伴い、error側でもトークン更新する
+    if (headers?.["access-token"]) {
+      authStorage.set(headers);
+    }
 
-  authStorage.set(headers);
+    if (!error.response) {
+      console.error("Network error", error);
+    }
+    // 401 Unauthorizedならログイン画面へ
+    if (error.response?.status === 401) {
+      console.error("Unauthorized error", error);
+    }
 
-  return response;
-});
+    return Promise.reject(error);
+  },
+);
 
 export default axiosClient;

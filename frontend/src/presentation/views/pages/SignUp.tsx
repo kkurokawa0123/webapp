@@ -10,6 +10,7 @@ import { SEVERITY } from "@/domain/datas/@types/Severity";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useSingUp } from "@/presentation/hooks/auth_hook";
 import { useLoadingContext } from "@/presentation/contexts/loding_context";
+import { COMMON_MESSAGES } from "@/domain/datas/@types/Message";
 
 // サインアップ用ページ
 const SignUp: React.FC = () => {
@@ -30,7 +31,7 @@ const SignUp: React.FC = () => {
       openLoading();
 
       showMessage(
-        "ユーザーアカウントを登録しております....しばらくお待ちください",
+        "ユーザーアカウントを登録しています....しばらくお待ちください",
         SEVERITY.INFO,
       );
       await singUp.mutateAsync({
@@ -42,10 +43,7 @@ const SignUp: React.FC = () => {
       showMessage("サインアップが完了しました", SEVERITY.SUCCESS);
       navigate("/signin");
     } catch (err) {
-      showMessage(
-        "入力データに誤りがあります。再度正しい値を入力してください。",
-        SEVERITY.ERROR,
-      );
+      showMessage(COMMON_MESSAGES.VALIDATION_ERROR, SEVERITY.ERROR);
 
       throw err;
     } finally {
@@ -94,6 +92,7 @@ const SignUp: React.FC = () => {
               value={password}
               margin="dense"
               autoComplete="current-password"
+              placeholder="At least 8 characters"
               onChange={(e) => setPassword(e.target.value)}
             />
 
@@ -106,6 +105,7 @@ const SignUp: React.FC = () => {
               value={passwordConfirmation}
               margin="dense"
               autoComplete="current-password"
+              placeholder="At least 8 characters"
               onChange={(e) => setPasswordConfirmation(e.target.value)}
             />
 

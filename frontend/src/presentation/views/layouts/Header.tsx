@@ -76,6 +76,14 @@ const AuthButtons = (props: Props) => {
               >
                 ログアウト
               </Button>
+              <Button
+                component={RouterLink}
+                to="/passwordchange"
+                color="inherit"
+                sx={{ textTransform: "none" }}
+              >
+                パスワード変更
+              </Button>
             </Box>
           </>
         ) : (

@@ -6,11 +6,9 @@ import type {
   RequestTodoUpdate,
 } from "@/domain/datas/api/todo_data";
 
-export const fetchTodosByUserId = async (
-  id: number | undefined,
-): Promise<Todo[] | undefined> => {
+export const fetchTodosByUserId = async (): Promise<Todo[] | undefined> => {
   try {
-    const response = await api.requestFetchTodosById(id);
+    const response = await api.requestFetchTodosById();
     if (response.status !== HTTP_STATUS.OK) {
       throw new Error("TodosByUserId failed");
     }
