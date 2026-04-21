@@ -15,7 +15,7 @@ export const useTodosById = (id: number | undefined) => {
   return useQuery({
     queryKey: ["todos", id], // IDごとにキャッシュ分離
     queryFn: () => {
-      return fetchTodosByUserId(id);
+      return fetchTodosByUserId();
     },
     enabled: !!id, // idがあるときだけ実行
   });

@@ -6,7 +6,7 @@ export class UpdatedDate extends BaseValueObject<
   "UpdatedDate"
 > {
   constructor(value: UpdatedDateValue) {
-    super(value);
+    super(value, "UpdatedDate");
   }
   protected validate(value: UpdatedDateValue): void {
     if (isNaN(value.getTime())) {

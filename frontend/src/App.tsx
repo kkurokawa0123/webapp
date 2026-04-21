@@ -9,6 +9,7 @@ import CommonLayout from "@/presentation/views/layouts/CommonLayout";
 import TodoMain from "@/presentation/views/pages/Todos/TodoMain";
 import SignIn from "@/presentation/views/pages/SignIn";
 import SignUp from "@/presentation/views/pages/SignUp";
+import PasswordChange from "@/presentation/views/pages/PasswordChange";
 import { useAuthContex } from "@/presentation/contexts/auth_context";
 
 // テーマを作成
@@ -53,6 +54,7 @@ const App: React.FC = () => {
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/todomain" element={<TodoMain />} />
+                <Route path="/passwordchange" element={<PasswordChange />} />
                 <Route element={<PrivateRoute />}>
                   <Route path="/" element={<TodoMain />} />
                 </Route>
