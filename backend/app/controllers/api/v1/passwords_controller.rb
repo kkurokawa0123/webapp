@@ -5,22 +5,18 @@ class Api::V1::PasswordsController < Api::BaseApiController
    user = current_user
 
     unless user.valid_password?(params[:current_password])
-      return render json: { error: "現在のパスワードが正しくありません" }, status: :unprocessable_entity
+      return render json: { message: "入力した現在のパスワードが正しくありません" }, status: :unprocessable_entity
     end
 
     if user.update_with_password(password_params)
       # Deviseセッション維持
       bypass_sign_in(user)
 
-      render json: { message: "パスワードを変更しました" }, status: :ok
+      render json: { message: "パスワードの更新が完了しました" }, status: :ok
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render json: { message: "パスワードの更新に失敗しました" }, status: :unprocessable_entity
     end
   end
-
-
-
-
 
   private
 
