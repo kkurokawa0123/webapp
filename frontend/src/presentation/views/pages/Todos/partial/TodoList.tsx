@@ -1,16 +1,13 @@
 import { styled } from "@mui/material/styles";
-import type { Todo } from "@/domain/datas/api/todo_data";
-import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
+import type { Todo } from "@/shared/types/todo";
+import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
 import { TodoItem } from "@/presentation/views/pages/Todos/partial/TodoItem";
+import { type TodoForm } from "@/presentation/views/shared/types/todoForm";
 
 type Props = {
   todos: Todo[] | undefined;
-  onUpdateTodo: <K extends keyof Todo>(
-    id: number,
-    key: K,
-    value: Todo[K],
-  ) => Promise<void>;
+  onUpdateTodo: (id: number, form: TodoForm) => Promise<void>;
 };
 
 const Container = styled("div")({
@@ -23,13 +20,13 @@ export const TodoList = (props: Props) => {
   const { todoFilter } = useTodoStatusContext();
   const filteredTodos = props.todos?.filter((todo) => {
     switch (todoFilter) {
-      case TODO_TYPE.ALL:
+      case TODO_FILTER_TYPE.ALL:
         return !todo.is_trashed;
-      case TODO_TYPE.CHECK:
+      case TODO_FILTER_TYPE.CHECK:
         return todo.is_done && !todo.is_trashed;
-      case TODO_TYPE.UNCHECK:
+      case TODO_FILTER_TYPE.UNCHECK:
         return !todo.is_done && !todo.is_trashed;
-      case TODO_TYPE.TRASH:
+      case TODO_FILTER_TYPE.TRASH:
         return todo.is_trashed && !todo.is_deleted;
       default:
         return todo;

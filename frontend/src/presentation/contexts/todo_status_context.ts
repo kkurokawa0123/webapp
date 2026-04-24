@@ -1,9 +1,10 @@
-import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
+// import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
+import { type Todo_Filter_Type } from "@/shared/constants/todo_filter_type";
 import { createContext, useContext } from "react";
 
 export type TodoStatusContextType = {
-  todoFilter: Todo_type;
-  onSetTodoFilter: (todo_type: Todo_type) => void;
+  todoFilter: Todo_Filter_Type;
+  onSetTodoFilter: (todo_type: Todo_Filter_Type) => void;
 };
 
 export const TodoStatusContext = createContext<

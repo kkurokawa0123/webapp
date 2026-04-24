@@ -9,16 +9,6 @@ class Api::V1::TodosController < Api::BaseApiController
     render json: { data: todos }, status: :ok
   end
 
-  # GET /todos/:id
-  def show
-    todo = current_user.todos.find_by(id: params[:id])
-    if todo
-      render json: { data: todo }, status: :ok
-    else
-      render json: { error: "Todo not found" }, status: :not_found
-    end
-  end
-
   # POST /todos
   def create
     begin
@@ -53,7 +43,7 @@ class Api::V1::TodosController < Api::BaseApiController
   # PATCH /todos/bulk_delete
   def bulk_delete
     begin
-      sql_response = Todo.active.mark_as_deleted_by_user(current_user.id)
+      sql_response = current_user.todos.mark_as_deleted
       render json: { data: [message: "bulk_delete is done",deleted_todo_count: sql_response] }, status: :ok 
     rescue => e
       Rails.logger.error e
