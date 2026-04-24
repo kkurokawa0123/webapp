@@ -9,16 +9,6 @@ class Api::V1::TodosController < Api::BaseApiController
     render json: { data: todos }, status: :ok
   end
 
-  # GET /todos/:id
-  def show
-    todo = current_user.todos.find_by(id: params[:id])
-    if todo
-      render json: { data: todo }, status: :ok
-    else
-      render json: { error: "Todo not found" }, status: :not_found
-    end
-  end
-
   # POST /todos
   def create
     begin
