@@ -10,9 +10,12 @@ import Undo from "@mui/icons-material/Undo";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { lightBlue, pink, grey } from "@mui/material/colors";
-import type { Todo } from "@/domain/datas/api/todo_data";
-import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
+import type { Todo } from "@/shared/types/todo";
+import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
+import { IS_DONE_STATUS } from "@/shared/constants/is_done_status";
+import { IS_TRASHED_STATUS } from "@/shared/constants/is_trashed_status";
+import { type TodoForm } from "@/presentation/views/shared/types/todoForm";
 
 const TodoCard = styled(Card)(({ theme }) => ({
   marginTop: theme.spacing(1),
@@ -57,41 +60,65 @@ const Trash = styled("button")(() => ({
 
 export type TodoItemProps = {
   todo: Todo;
-  onUpdateTodo: <K extends keyof Todo>(
-    id: number,
-    key: K,
-    value: Todo[K],
-  ) => void;
+  onUpdateTodo: (id: number, form: TodoForm) => Promise<void>;
 };
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
-  const [todoName, setTodoName] = useState(todo.name);
   const { todoFilter } = useTodoStatusContext();
+
+  const [form, setForm] = useState<TodoForm>({
+    name: todo.name,
+    memo: todo.memo,
+    is_done: todo.is_done ? IS_DONE_STATUS.CHECKED : IS_DONE_STATUS.UNCHEKED,
+    is_trashed: todo.is_trashed
+      ? IS_TRASHED_STATUS.CHECKED
+      : IS_TRASHED_STATUS.UNCHEKED,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  const handleUpdateTodo = <K extends keyof Todo, V extends Todo[K]>(
+    id: number,
+    key: K,
+    value: V,
+  ) => {
+    // setForm({ ...form, [key]: value });
+    const updatedForm = { ...form, [key]: value };
+    setForm(updatedForm);
+    onUpdateTodo(id, updatedForm);
+  };
 
   return (
     <TodoCard key={todo.id}>
       <Form>
         <TextField
+          name="name"
           aria-label={`todo-${todo.name}`}
           fullWidth
           variant="standard"
-          value={todoName}
-          onChange={(e) => setTodoName(e.target.value)}
+          value={form.name}
+          onChange={handleChange}
           // onBlur={() => onUpdateTodo(todo.id, "name", value)}
         />
         <ButtonContainer>
           <CustomButton
+            name="is_done"
             aria-label={`todo-check-${todo.name}`}
             onClick={() =>
-              onUpdateTodo(todo.id, "is_done", Number(!todo.is_done))
+              // onUpdateTodo(todo.id, "is_done", Number(!todo.is_done))
+              handleUpdateTodo(todo.id, "is_done", Number(!form.is_done))
             }
-            disabled={todoFilter === TODO_TYPE.TRASH}
+            disabled={todoFilter === TODO_FILTER_TYPE.TRASH}
           >
             {todo.is_done ? (
               <Icon
                 aria-label={`todo-removed-${todo.name}`}
                 style={{
-                  color: todoFilter !== TODO_TYPE.TRASH ? pink.A200 : grey[500],
+                  color:
+                    todoFilter !== TODO_FILTER_TYPE.TRASH
+                      ? pink.A200
+                      : grey[500],
                 }}
               >
                 <CheckCircleOutlineIcon />
@@ -101,7 +128,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
                 aria-label={`todo-removed-${todo.name}`}
                 style={{
                   color:
-                    todoFilter !== TODO_TYPE.TRASH ? lightBlue[500] : grey[500],
+                    todoFilter !== TODO_FILTER_TYPE.TRASH
+                      ? lightBlue[500]
+                      : grey[500],
                 }}
               >
                 <RadioButtonUncheckedIcon />
@@ -111,7 +140,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
               style={{
                 userSelect: "none",
                 color:
-                  todo.is_done && todoFilter !== TODO_TYPE.TRASH
+                  todo.is_done && todoFilter !== TODO_FILTER_TYPE.TRASH
                     ? pink.A200
                     : grey[500],
               }}
@@ -123,15 +152,20 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
             aria-label={`todo-updated-${todo.name}`}
             variant="contained"
             color="primary"
-            onClick={() => onUpdateTodo(todo.id, "name", todoName)}
-            disabled={todoName.length === 0}
+            onClick={
+              () => handleUpdateTodo(todo.id, "name", form.name)
+              // () => onUpdateTodo(todo.id, "name", todoName)
+            }
+            disabled={form.name.length === 0}
           >
             タスク名称更新
           </Button>
           <Trash
+            name="is_trashed"
             aria-label={`todo-trash-${todo.name}`}
             onClick={() =>
-              onUpdateTodo(todo.id, "is_trashed", Number(!todo.is_trashed))
+              // onUpdateTodo(todo.id, "is_trashed", Number(!todo.is_trashed))
+              handleUpdateTodo(todo.id, "is_trashed", Number(!form.is_trashed))
             }
           >
             {todo.is_trashed && !todo.is_deleted ? (

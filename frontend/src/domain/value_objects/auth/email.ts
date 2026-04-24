@@ -3,11 +3,15 @@ import { BaseValueObject } from "@/domain/value_objects/share/base_value_objext"
 type EmailValue = string;
 export class Email extends BaseValueObject<EmailValue, "Email"> {
   constructor(value: EmailValue) {
-    super(value);
+    super(value, "Email");
   }
   protected validate(value: EmailValue): void {
-    if (value.length < 1) {
-      throw new Error("XXXXは必須です");
+    if (!value) {
+      throw new Error("Eメールアドレスは入力必須です");
+    }
+    // @ がある . がある 空白がないのチェック
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      throw new Error("Eメールアドレスの入力形式が不正です");
     }
   }
 }

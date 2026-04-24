@@ -7,9 +7,9 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Person from "@mui/icons-material/Person";
-import { SEVERITY } from "@/domain/datas/@types/Severity";
-import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
-import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
+import { SEVERITY } from "@/shared/constants/severity";
+import { type Todo_Filter_Type } from "@/shared/constants/todo_filter_type";
+import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
 import { useAuthContex } from "@/presentation/contexts/auth_context";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
@@ -17,7 +17,7 @@ import { useSingOut } from "@/presentation/hooks/auth_hook";
 import { TodoSideBar } from "@/presentation/views/pages/Todos/partial/TodoSideBar";
 
 type Props = {
-  todoFilter: Todo_type;
+  todoFilter: Todo_Filter_Type;
   loading: boolean;
   isSignedIn: boolean;
   onToggleDrawer: () => void;
@@ -26,15 +26,15 @@ type Props = {
   ) => Promise<void>;
 };
 
-const toConvertTodoStatus = (arg: Todo_type) => {
+const toConvertTodoStatus = (arg: Todo_Filter_Type) => {
   switch (arg) {
-    case TODO_TYPE.ALL:
+    case TODO_FILTER_TYPE.ALL:
       return "すべてのタスク";
-    case TODO_TYPE.UNCHECK:
+    case TODO_FILTER_TYPE.UNCHECK:
       return "未完了のタスク";
-    case TODO_TYPE.CHECK:
+    case TODO_FILTER_TYPE.CHECK:
       return "完了したタスク";
-    case TODO_TYPE.TRASH:
+    case TODO_FILTER_TYPE.TRASH:
       return "ごみ箱";
     default:
       return "TODO";
@@ -75,6 +75,14 @@ const AuthButtons = (props: Props) => {
                 onClick={props.handleSignOut}
               >
                 ログアウト
+              </Button>
+              <Button
+                component={RouterLink}
+                to="/passwordchange"
+                color="inherit"
+                sx={{ textTransform: "none" }}
+              >
+                パスワード変更
               </Button>
             </Box>
           </>

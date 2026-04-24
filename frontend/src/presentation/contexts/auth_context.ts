@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { AuthAccount } from "@/domain/datas/api/auth_data";
+import type { AuthAccount } from "@/shared/types/auth_account";
 
 export type AuthContextType = {
   authData: AuthAccount | undefined;
