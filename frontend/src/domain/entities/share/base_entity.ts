@@ -9,17 +9,20 @@ type ToPrimitive<T> =
 
 export abstract class BaseEntity<T> {
   constructor() {}
-  toRequestData(): ToPrimitive<T> {
-    const result = {} as ToPrimitive<T>;
+  // BaseEntityの役割を限定する
+  // デバッグ用
+  // 簡易用途
+  // toRequestData(): ToPrimitive<T> {
+  result = {} as ToPrimitive<T>;
 
-    Object.entries(this).forEach(([key, value]) => {
-      if (value instanceof BaseValueObject) {
-        (result as Record<string, unknown>)[key] = value.value;
-      } else {
-        (result as Record<string, unknown>)[key] = value;
-      }
-    });
+  //   Object.entries(this).forEach(([key, value]) => {
+  //     if (value instanceof BaseValueObject) {
+  //       (result as Record<string, unknown>)[key] = value.value;
+  //     } else {
+  //       (result as Record<string, unknown>)[key] = value;
+  //     }
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 }

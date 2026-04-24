@@ -7,18 +7,23 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { SEVERITY } from "@/domain/datas/@types/Severity";
+import { SEVERITY } from "@/shared/constants/severity";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useAuthContex } from "@/presentation/contexts/auth_context";
 import { useSingIn } from "@/presentation/hooks/auth_hook";
 import { useLoadingContext } from "@/presentation/contexts/loding_context";
-import { COMMON_MESSAGES } from "@/domain/datas/@types/Message";
+import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
+import { SignInParams } from "@/domain/entities/auth/sign_in_params";
 
 // サインイン用ページ
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
   const { isAuthenticated } = useAuthContex();
   const { showMessage } = useMessageContext();
@@ -35,18 +40,26 @@ const SignIn: React.FC = () => {
     try {
       openLoading();
       showMessage("ログイン中....しばらくお待ちください", SEVERITY.INFO);
-      await singIn.mutateAsync({
-        email,
-        password,
-      });
+      const params = SignInParams.create(
+        new Email(form.email),
+        new Password(form.password),
+      );
+      await singIn.mutateAsync(params);
       await new Promise((resolve) => setTimeout(resolve, 3000));
       navigate("/");
     } catch (err) {
-      showMessage(COMMON_MESSAGES.VALIDATION_ERROR, SEVERITY.ERROR);
-      throw err;
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR;
+      showMessage(message, SEVERITY.ERROR);
     } finally {
       closeLoading();
     }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
   return (
     <>
@@ -55,32 +68,34 @@ const SignIn: React.FC = () => {
           <CardHeader title="ログイン" />
           <CardContent>
             <TextField
+              name="email"
               variant="outlined"
               required
               fullWidth
               label="Email"
-              value={email}
+              value={form.email}
               margin="dense"
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={handleChange}
             />
             <TextField
+              name="password"
               variant="outlined"
               required
               fullWidth
               label="Password"
               type="password"
               placeholder="At least 8 characters"
-              value={password}
+              value={form.password}
               margin="dense"
               autoComplete="current-password"
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={handleChange}
             />
             <Button
               type="submit"
               variant="contained"
               size="large"
               fullWidth
-              disabled={!email || !password} // 空欄があった場合はボタンを押せないように
+              disabled={!form.email || !form.password} // 空欄があった場合はボタンを押せないように
               onClick={handleSubmit}
             >
               実行

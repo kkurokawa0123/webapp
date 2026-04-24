@@ -1,10 +1,10 @@
+import axios from "axios";
 import * as api from "@/infrastructure/api_layer/todo/todo_api_request";
-import { HTTP_STATUS } from "@/domain/datas/api/http_status";
-import type { Todo, ApiResponse } from "@/domain/datas/api/todo_data";
-import type {
-  RequestTodoCreate,
-  RequestTodoUpdate,
-} from "@/domain/datas/api/todo_data";
+import { HTTP_STATUS } from "@/shared/constants/http_status";
+import { type Todo } from "@/shared/types/todo";
+import { type ApiResponse } from "@/shared/types/api/api_response";
+// import type { Todo, ApiResponse } from "@/domain/datas/api/todo_data";
+import { TodoParams } from "@/domain/entities/todo/todo_params";
 
 export const fetchTodosByUserId = async (): Promise<Todo[] | undefined> => {
   try {
@@ -15,14 +15,21 @@ export const fetchTodosByUserId = async (): Promise<Todo[] | undefined> => {
     const apiResponse = response.data as ApiResponse<Todo[]>;
     const todos = apiResponse.data as Todo[];
     return todos;
-  } catch (err) {
-    console.error("TodosByUserId failed");
-    throw err;
+  } catch (err: unknown) {
+    // APIコントローラーのエラーメッセージを受取
+    if (axios.isAxiosError(err)) {
+      const message =
+        err.response?.data?.message || err.response?.data?.errors?.join(", ");
+
+      throw new Error(message);
+    } else {
+      throw err;
+    }
   }
 };
 
 export const createTodo = async (
-  todo: RequestTodoCreate,
+  todo: TodoParams,
 ): Promise<Todo | undefined> => {
   try {
     const response = await api.requestCreateTodo(todo);
@@ -30,15 +37,22 @@ export const createTodo = async (
       throw new Error("createTodo failed");
     }
     return response.data as Todo;
-  } catch (err) {
-    console.error("createTodo failed");
-    throw err;
+  } catch (err: unknown) {
+    // APIコントローラーのエラーメッセージを受取
+    if (axios.isAxiosError(err)) {
+      const message =
+        err.response?.data?.message || err.response?.data?.errors?.join(", ");
+
+      throw new Error(message);
+    } else {
+      throw err;
+    }
   }
 };
 
 export const updateTodo = async (
   id: number,
-  todo: RequestTodoUpdate,
+  todo: TodoParams,
 ): Promise<Todo | undefined> => {
   try {
     const response = await api.requestUpdateTodo(id, todo);
@@ -46,23 +60,35 @@ export const updateTodo = async (
       throw new Error("updateTodo failed");
     }
     return response.data as Todo;
-  } catch (err) {
-    console.error("updateTodo failed");
-    throw err;
+  } catch (err: unknown) {
+    // APIコントローラーのエラーメッセージを受取
+    if (axios.isAxiosError(err)) {
+      const message =
+        err.response?.data?.message || err.response?.data?.errors?.join(", ");
+
+      throw new Error(message);
+    } else {
+      throw err;
+    }
   }
 };
 
-export const bulkDeleteTodo = async (
-  user_id: number | undefined,
-): Promise<Todo | undefined> => {
+export const bulkDeleteTodo = async (): Promise<Todo | undefined> => {
   try {
-    const response = await api.requestBulkDeleteTodo(user_id);
+    const response = await api.requestBulkDeleteTodo();
     if (response.status !== HTTP_STATUS.OK) {
       throw new Error("bulkDeleteTodo failed");
     }
     return response.data as Todo;
-  } catch (err) {
-    console.error("bulkDeleteTodo failed");
-    throw err;
+  } catch (err: unknown) {
+    // APIコントローラーのエラーメッセージを受取
+    if (axios.isAxiosError(err)) {
+      const message =
+        err.response?.data?.message || err.response?.data?.errors?.join(", ");
+
+      throw new Error(message);
+    } else {
+      throw err;
+    }
   }
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as api from "@/infrastructure/api_layer/password/password_api_request";
-import { HTTP_STATUS } from "@/domain/datas/api/http_status";
+import { HTTP_STATUS } from "@/shared/constants/http_status";
 import { PasswordChangeParams } from "@/domain/entities/auth/password_change_params";
 
 export const updatePassword = async (
@@ -19,7 +19,6 @@ export const updatePassword = async (
       const message =
         err.response?.data?.message || err.response?.data?.errors?.join(", ");
 
-      console.log("updatePasswordサービス層例外", message);
       throw new Error(message);
     } else {
       throw err;

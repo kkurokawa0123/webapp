@@ -5,15 +5,11 @@ import {
   updateTodo,
   bulkDeleteTodo,
 } from "@/domain/service_layer/todo/todo_api_service";
-import type {
-  RequestTodoCreate,
-  RequestTodoUpdate,
-  RequestTodoDelete,
-} from "@/domain/datas/api/todo_data";
+import { TodoParams } from "@/domain/entities/todo/todo_params";
 
 export const useTodosById = (id: number | undefined) => {
   return useQuery({
-    queryKey: ["todos", id], // IDごとにキャッシュ分離
+    queryKey: ["todos"], // IDごとにキャッシュ分離
     queryFn: () => {
       return fetchTodosByUserId();
     },
@@ -25,12 +21,12 @@ export const useCreateTodo = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (todo: RequestTodoCreate) => {
+    mutationFn: (todo: TodoParams) => {
       return createTodo(todo);
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["todos", variables?.user_id],
+        queryKey: ["todos"],
       });
     },
   });
@@ -40,12 +36,12 @@ export const useUpdateTodo = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (todo: RequestTodoUpdate) => {
-      return updateTodo(todo.id, todo);
+    mutationFn: ({ id, todo }: { id: number; todo: TodoParams }) => {
+      return updateTodo(id, todo);
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["todos", variables?.user_id],
+        queryKey: ["todos"],
       });
     },
   });
@@ -55,12 +51,12 @@ export const useBulkDeleteTodo = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (param: RequestTodoDelete) => {
-      return bulkDeleteTodo(param.user_id);
+    mutationFn: () => {
+      return bulkDeleteTodo();
     },
-    onSuccess: async (_, variables) => {
-      await queryClient.refetchQueries({
-        queryKey: ["todos", variables?.user_id],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["todos"],
       });
     },
   });

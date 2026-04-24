@@ -8,7 +8,6 @@ export const useUpdatePassword = () => {
       return updatePassword(params);
     },
     onSuccess: (message) => {
-      console.log("useUpdatePassword success", message);
       return message;
     },
   });

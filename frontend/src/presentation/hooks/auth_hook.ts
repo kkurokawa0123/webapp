@@ -5,6 +5,8 @@ import {
   onSignUp,
   onSignOut,
 } from "@/domain/service_layer/auth/auth_api_service";
+import { SignUpParams } from "@/domain/entities/auth/sign_up_params";
+import { SignInParams } from "@/domain/entities/auth/sign_in_params";
 
 export const useAuth = () => {
   return useQuery({
@@ -20,8 +22,7 @@ export const useSingIn = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      onSignIn({ email, password }),
+    mutationFn: (params: SignInParams) => onSignIn(params),
     onSuccess: (user) => {
       queryClient.setQueryData(["authUser"], {
         id: user?.id,
@@ -37,18 +38,10 @@ export const useSingIn = () => {
 
 export const useSingUp = () => {
   return useMutation({
-    mutationFn: ({
-      name,
-      email,
-      password,
-    }: {
-      name: string;
-      email: string;
-      password: string;
-    }) => onSignUp({ name, email, password }),
-    onSuccess: (user) => {
-      // サインアップでは、サーバーキャッシュに情報を保存しない
-      console.log("useSingUp success", user);
+    mutationFn: (params: SignUpParams) => onSignUp(params),
+    onSuccess: async () => {
+      // DeviseTokenAuthの仕様で、自動ログインが走るため、強制的にサインアウトする
+      await onSignOut();
     },
     onError: (error) => {
       console.error("useSingUp fail", error);

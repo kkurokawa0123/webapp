@@ -16,14 +16,26 @@ import { TodoActionButton } from "@/presentation/views/pages/Todos/partial/TodoA
 import { TodoAlertDialog } from "@/presentation/views/pages/Todos/partial/TodoAlertDialog";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
-import { TODO_TYPE } from "@/domain/datas/@types/TodoFilter";
-import { SEVERITY } from "@/domain/datas/@types/Severity";
-import { type Todo } from "@/domain/datas/api/todo_data";
-import { COMMON_MESSAGES } from "@/domain/datas/@types/Message";
+import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
+import { SEVERITY } from "@/shared/constants/severity";
+import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
+import { TodoName } from "@/domain/value_objects/todo/todoname";
+import { Memo } from "@/domain/value_objects/todo/memo";
+import { IsDone } from "@/domain/value_objects/todo/isdone";
+import { IsTrashed } from "@/domain/value_objects/todo/istrashed";
+import { UserId } from "@/domain/value_objects/todo/userid";
+import { TodoParams } from "@/domain/entities/todo/todo_params";
+import { IS_DONE_STATUS } from "@/shared/constants/is_done_status";
+import { IS_TRASHED_STATUS } from "@/shared/constants/is_trashed_status";
+import { type TodoForm } from "@/presentation/views/shared/types/todoForm";
 
 const TodoMain: React.FC = () => {
-  const [todoName, setTodoName] = useState("");
-  const [todoMemo, setTodoMemo] = useState("固定メモ");
+  const [form, setForm] = useState<TodoForm>({
+    name: "",
+    memo: "",
+    is_done: IS_DONE_STATUS.UNCHEKED,
+    is_trashed: IS_TRASHED_STATUS.UNCHEKED,
+  });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
 
@@ -33,23 +45,34 @@ const TodoMain: React.FC = () => {
   const { todoFilter } = useTodoStatusContext();
   const authData_id = isAuthenticated ? authData?.id : undefined;
   const { data, isLoading } = useTodosById(authData_id);
+
   const createTodo = useCreateTodo();
   const updateTodo = useUpdateTodo();
   const bulkDeleteTodo = useBulkDeleteTodo();
 
+  if (!authData_id || isLoading) return;
+
   const handleToggleDialog = () => {
     setDialogOpen((dialogOpen) => !dialogOpen);
-    setTodoName("");
-    setTodoMemo("");
+    setForm({
+      name: "",
+      memo: "",
+      is_done: IS_DONE_STATUS.UNCHEKED,
+      is_trashed: IS_TRASHED_STATUS.UNCHEKED,
+    });
   };
 
-  const handleChange = (
+  const handleChangeTodo = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setTodoName(e.target.value);
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async () => {
+  const handleToggleAlert = () => {
+    setAlertOpen((alertOpen) => !alertOpen);
+  };
+
+  const handleCreateTodo = async () => {
     try {
       openLoading();
       // （超重要）
@@ -59,38 +82,63 @@ const TodoMain: React.FC = () => {
         "入力したタスク内容を追加しています....しばらくお待ちください",
         SEVERITY.INFO,
       );
-      await createTodo.mutateAsync({
-        name: todoName,
-        memo: todoMemo,
-        user_id: authData_id,
-      });
-
+      const params = TodoParams.create(
+        new TodoName(form.name),
+        new Memo(form.memo),
+        new IsDone(form.is_done),
+        new IsTrashed(form.is_trashed),
+        new UserId(authData_id),
+      );
+      await createTodo.mutateAsync(params);
       await new Promise((resolve) => setTimeout(resolve, 3000));
       showMessage("タスクを新たに追加しました", SEVERITY.SUCCESS);
-
       setDialogOpen(false);
     } catch (err) {
-      showMessage(COMMON_MESSAGES.VALIDATION_ERROR, SEVERITY.ERROR);
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR;
 
+      showMessage(message, SEVERITY.ERROR);
+    } finally {
+      closeLoading();
+    }
+  };
+  // const handleUpdateTodo = async <K extends keyof Todo, V extends Todo[K]>(
+  const handleUpdateTodo = async (id: number, form: TodoForm) => {
+    try {
+      openLoading();
+      showMessage(
+        "タスクを更新しています....しばらくお待ちください",
+        SEVERITY.INFO,
+      );
+
+      const params = TodoParams.create(
+        new TodoName(form.name),
+        new Memo(form.memo),
+        new IsDone(form.is_done),
+        new IsTrashed(form.is_trashed),
+        new UserId(authData_id),
+      );
+      await updateTodo.mutateAsync({ id, todo: params });
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      showMessage("タスクの更新が完了しました", SEVERITY.SUCCESS);
+    } catch (err) {
+      showMessage("タスクの更新に失敗しました", SEVERITY.ERROR);
       throw err;
     } finally {
       closeLoading();
-      setDialogOpen(false);
     }
   };
 
-  const handleToggleAlert = () => {
-    setAlertOpen((alertOpen) => !alertOpen);
-  };
-
-  const handleEmpty = async () => {
+  const handleDeleteTodo = async () => {
     try {
       openLoading();
       showMessage(
         "指定したタスクを削除しています....しばらくお待ちください",
         SEVERITY.INFO,
       );
-      await bulkDeleteTodo.mutateAsync({ user_id: authData_id });
+      await bulkDeleteTodo.mutateAsync();
       await new Promise((resolve) => setTimeout(resolve, 3000));
       showMessage("タスクを削除しました", SEVERITY.SUCCESS);
     } catch (err) {
@@ -101,44 +149,13 @@ const TodoMain: React.FC = () => {
     }
   };
 
-  const handleUpdateTodo = async <K extends keyof Todo, V extends Todo[K]>(
-    id: number,
-    key: K,
-    value: V,
-  ) => {
-    try {
-      openLoading();
-      showMessage(
-        "タスクを更新しています....しばらくお待ちください",
-        SEVERITY.INFO,
-      );
-
-      await updateTodo.mutateAsync({
-        id,
-        [key]: value,
-        user_id: authData_id,
-      });
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      showMessage("タスクの更新が完了しました", SEVERITY.SUCCESS);
-    } catch (err) {
-      showMessage("タスクの更新に失敗しました", SEVERITY.ERROR);
-
-      throw err;
-    } finally {
-      closeLoading();
-    }
-  };
-
-  if (!authData_id || isLoading) return;
-
   return (
     <>
       <TodoAddFormDialog
-        name={todoName}
+        todoName={form.name}
         dialogOpen={dialogOpen}
-        onSubmit={handleSubmit}
-        onChange={handleChange}
+        onCreateTodo={handleCreateTodo}
+        onChangeTodo={handleChangeTodo}
         onToggleDialog={handleToggleDialog}
       />
       {isAuthenticated && !!data?.length ? (
@@ -147,7 +164,7 @@ const TodoMain: React.FC = () => {
         </>
       ) : (
         <>
-          {todoFilter === TODO_TYPE.TRASH ? (
+          {todoFilter === TODO_FILTER_TYPE.TRASH ? (
             <Typography variant="h5" color="text.secondary">
               ゴミ箱
               <DeleteIcon
@@ -175,7 +192,7 @@ const TodoMain: React.FC = () => {
       />
       <TodoAlertDialog
         alertOpen={alertOpen}
-        onEmpty={handleEmpty}
+        onEmpty={handleDeleteTodo}
         onToggleAlert={handleToggleAlert}
       />
     </>
