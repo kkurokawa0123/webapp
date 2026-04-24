@@ -1,4 +1,3 @@
-// import { type Todo_type } from "@/domain/datas/@types/TodoFilter";
 import { type Todo_Filter_Type } from "@/shared/constants/todo_filter_type";
 import { createContext, useContext } from "react";
 

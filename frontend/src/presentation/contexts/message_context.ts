@@ -1,7 +1,5 @@
 import { useContext } from "react";
 import { createContext } from "react";
-
-// import { type Severity } from "@/domain/datas/@types/Severity";
 import { type Severity } from "@/shared/constants/severity";
 
 type MessageContextType = {
