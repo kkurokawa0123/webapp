@@ -6,20 +6,28 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { SEVERITY } from "@/domain/datas/@types/Severity";
+import { SEVERITY } from "@/shared/constants/severity";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useSingUp } from "@/presentation/hooks/auth_hook";
 import { useLoadingContext } from "@/presentation/contexts/loding_context";
-import { COMMON_MESSAGES } from "@/domain/datas/@types/Message";
+import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
+
+import { UserName } from "@/domain/value_objects/auth/username";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
+import { SignUpParams } from "@/domain/entities/auth/sign_up_params";
 
 // サインアップ用ページ
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const singUp = useSingUp();
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+  });
 
   const { showMessage } = useMessageContext();
   const { openLoading, closeLoading } = useLoadingContext();
@@ -34,21 +42,29 @@ const SignUp: React.FC = () => {
         "ユーザーアカウントを登録しています....しばらくお待ちください",
         SEVERITY.INFO,
       );
-      await singUp.mutateAsync({
-        name,
-        email,
-        password,
-      });
+
+      const params = SignUpParams.create(
+        new UserName(form.name),
+        new Email(form.email),
+        new Password(form.password),
+        new Password(form.passwordConfirmation),
+      );
+      await singUp.mutateAsync(params);
       await new Promise((resolve) => setTimeout(resolve, 3000));
       showMessage("サインアップが完了しました", SEVERITY.SUCCESS);
       navigate("/signin");
     } catch (err) {
-      showMessage(COMMON_MESSAGES.VALIDATION_ERROR, SEVERITY.ERROR);
-
-      throw err;
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR;
+      showMessage(message, SEVERITY.ERROR);
     } finally {
       closeLoading();
     }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   return (
@@ -64,49 +80,53 @@ const SignUp: React.FC = () => {
 
           <CardContent>
             <TextField
+              name="name"
               variant="outlined"
               required
               fullWidth
               label="Name"
-              value={name}
+              value={form.name}
               margin="dense"
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleChange}
             />
 
             <TextField
+              name="email"
               variant="outlined"
               required
               fullWidth
               label="Email"
-              value={email}
+              value={form.email}
               margin="dense"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange}
             />
 
             <TextField
+              name="password"
               variant="outlined"
               required
               fullWidth
               label="Password"
               type="password"
-              value={password}
+              value={form.password}
               margin="dense"
               autoComplete="current-password"
               placeholder="At least 8 characters"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleChange}
             />
 
             <TextField
+              name="passwordConfirmation"
               variant="outlined"
               required
               fullWidth
               label="Password Confirmation"
               type="password"
-              value={passwordConfirmation}
+              value={form.passwordConfirmation}
               margin="dense"
               autoComplete="current-password"
               placeholder="At least 8 characters"
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              onChange={handleChange}
             />
 
             <Button
@@ -114,7 +134,12 @@ const SignUp: React.FC = () => {
               variant="contained"
               size="large"
               fullWidth
-              disabled={!name || !email || !password || !passwordConfirmation}
+              disabled={
+                !form.name ||
+                !form.email ||
+                !form.password ||
+                !form.passwordConfirmation
+              }
               sx={{
                 mt: 2,
                 textTransform: "none",

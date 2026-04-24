@@ -1,22 +1,23 @@
 import { ApiRequest } from "@/infrastructure/api/api_request";
-import type { RequestTodoCreate } from "@/domain/datas/api/todo_data";
-import type { RequestTodoUpdate } from "@/domain/datas/api/todo_data";
+import { TodoParams } from "@/domain/entities/todo/todo_params";
 
 export const requestFetchTodosById = async () => {
   return ApiRequest.get(`/todos`);
 };
 
-export const requestCreateTodo = async (todo: RequestTodoCreate) => {
-  return ApiRequest.post(`/todos`, { todo });
+export const requestCreateTodo = async (todo_params: TodoParams) => {
+  const datas = todo_params.toRequestCreateData();
+  return ApiRequest.post(`/todos`, { todo: datas });
 };
 
 export const requestUpdateTodo = async (
   id: number,
-  todo: RequestTodoUpdate,
+  todo_params: TodoParams,
 ) => {
-  return ApiRequest.put(`/todos/${id}`, { todo });
+  const datas = todo_params.toRequestUpdateData(id);
+  return ApiRequest.put(`/todos/${id}`, { todo: datas });
 };
 
-export const requestBulkDeleteTodo = async (user_id: number | undefined) => {
-  return ApiRequest.patch(`/todos/bulk_delete?user_id=${user_id}`);
+export const requestBulkDeleteTodo = async () => {
+  return ApiRequest.patch(`/todos/bulk_delete`);
 };

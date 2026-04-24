@@ -50,4 +50,11 @@ export class PasswordChangeParams extends BaseEntity<PasswordChangeParams> {
   get newPasswordConfirmation(): Password {
     return this.password_confirmation;
   }
+  toRequestData() {
+    return {
+      current_password: this.current_password.value,
+      password: this.password.value,
+      password_confirmation: this.password_confirmation.value,
+    };
+  }
 }
