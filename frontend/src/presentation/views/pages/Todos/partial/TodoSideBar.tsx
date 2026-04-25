@@ -13,7 +13,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { styled } from "@mui/material/styles";
 import { indigo, lightBlue, pink } from "@mui/material/colors";
 import { useAuthContex } from "@/presentation/contexts/auth_context";
-import { TODO_TYPE, type Todo_type } from "@/domain/datas/@types/TodoFilter";
+import {
+  TODO_FILTER_TYPE,
+  type Todo_Filter_Type,
+} from "@/shared/constants/todo_filter_type";
 
 // ドロワー内リストの幅をカスタマイズ
 const DrawerList = styled("div")(() => ({
@@ -43,7 +46,7 @@ const DrawerAvatar = styled(Avatar)(({ theme }) => ({
 type Props = {
   drawerOpen: boolean;
   onToggleDrawer: () => void;
-  onFilter: (filter: Todo_type) => void;
+  onFilter: (filter: Todo_Filter_Type) => void;
 };
 
 export const TodoSideBar = (props: Props) => {
@@ -68,7 +71,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter(TODO_TYPE.ALL)}
+                onClick={() => props.onFilter(TODO_FILTER_TYPE.ALL)}
               >
                 <ListItemIcon>
                   <SubjectIcon />
@@ -79,7 +82,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter(TODO_TYPE.UNCHECK)}
+                onClick={() => props.onFilter(TODO_FILTER_TYPE.UNCHECK)}
               >
                 <ListItemIcon>
                   <RadioButtonUncheckedIcon sx={{ color: lightBlue[500] }} />
@@ -90,7 +93,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter(TODO_TYPE.CHECK)}
+                onClick={() => props.onFilter(TODO_FILTER_TYPE.CHECK)}
               >
                 <ListItemIcon>
                   <CheckCircleOutlineIcon sx={{ color: pink.A200 }} />
@@ -101,7 +104,7 @@ export const TodoSideBar = (props: Props) => {
             <ListItem disablePadding>
               <ListItemButton
                 aria-label="list-all"
-                onClick={() => props.onFilter(TODO_TYPE.TRASH)}
+                onClick={() => props.onFilter(TODO_FILTER_TYPE.TRASH)}
               >
                 <ListItemIcon>
                   <DeleteIcon />
@@ -115,4 +118,3 @@ export const TodoSideBar = (props: Props) => {
     </>
   );
 };
-// export default TodoSideBar;

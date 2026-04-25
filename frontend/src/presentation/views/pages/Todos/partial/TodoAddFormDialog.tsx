@@ -4,10 +4,10 @@ import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 
 type TodoParams = {
-  name: string;
+  todoName: string;
   dialogOpen: boolean;
-  onSubmit: () => void;
-  onChange: (
+  onCreateTodo: () => void;
+  onChangeTodo: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   onToggleDialog: () => void;
@@ -22,11 +22,12 @@ export const TodoAddFormDialog = (todoParams: TodoParams) => (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        todoParams.onSubmit();
+        todoParams.onCreateTodo();
       }}
     >
       <div style={{ margin: "1em" }}>
         <TextField
+          name="name"
           aria-label="todo-input"
           variant="standard"
           style={{
@@ -35,16 +36,16 @@ export const TodoAddFormDialog = (todoParams: TodoParams) => (
             fontFamily: "-apple-system, BlinkMacSystemFont, Roboto, sans-serif",
           }}
           label="タスクを入力..."
-          onChange={(e) => todoParams.onChange(e)}
-          value={todoParams.name}
+          onChange={(e) => todoParams.onChangeTodo(e)}
+          value={todoParams.todoName}
           autoFocus
         />
         <DialogActions>
           <Button
             aria-label="form-add"
             color="secondary"
-            onClick={todoParams.onSubmit}
-            disabled={todoParams.name.length === 0}
+            onClick={todoParams.onCreateTodo}
+            disabled={todoParams.todoName.length === 0}
           >
             追加
           </Button>
