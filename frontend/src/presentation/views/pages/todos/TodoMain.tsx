@@ -10,10 +10,10 @@ import {
   useUpdateTodo,
   useBulkDeleteTodo,
 } from "@/presentation/hooks/todo_hook";
-import { TodoList } from "@/presentation/views/pages/Todos/partial/TodoList";
-import { TodoAddFormDialog } from "@/presentation/views/pages/Todos/partial/TodoAddFormDialog";
-import { TodoActionButton } from "@/presentation/views/pages/Todos/partial/TodoActionButton";
-import { TodoAlertDialog } from "@/presentation/views/pages/Todos/partial/TodoAlertDialog";
+import { TodoList } from "@/presentation/views/pages/todos/features/TodoList";
+import { TodoAddFormDialog } from "@/presentation/views/pages/todos/features/TodoAddFormDialog";
+import { TodoActionButton } from "@/presentation/views/pages/todos/features/TodoActionButton";
+import { TodoAlertDialog } from "@/presentation/views/pages/todos/features/TodoAlertDialog";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
 import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
@@ -44,7 +44,7 @@ const TodoMain: React.FC = () => {
   const { authData, isAuthenticated } = useAuthContex();
   const { todoFilter } = useTodoStatusContext();
   const authData_id = isAuthenticated ? authData?.id : undefined;
-  const { data, isLoading } = useTodosById(authData_id);
+  const { data, isLoading } = useTodosById();
 
   const createTodo = useCreateTodo();
   const updateTodo = useUpdateTodo();

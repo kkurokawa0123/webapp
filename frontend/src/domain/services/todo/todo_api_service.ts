@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as api from "@/infrastructure/api_layer/todo/todo_api_request";
+import * as api from "@/infrastructure/api_services/todo/todo_api_request";
 import { HTTP_STATUS } from "@/shared/constants/http_status";
 import { type Todo } from "@/shared/types/todo";
 import { type ApiResponse } from "@/shared/types/api/api_response";

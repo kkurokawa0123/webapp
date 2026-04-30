@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import type { Todo } from "@/shared/types/todo";
 import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
-import { TodoItem } from "@/presentation/views/pages/Todos/partial/TodoItem";
+import { TodoItem } from "@/presentation/views/pages/todos/features/TodoItem";
 import { type TodoForm } from "@/presentation/views/shared/types/todoForm";
 
 type Props = {
