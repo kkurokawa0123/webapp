@@ -4,16 +4,15 @@ import {
   createTodo,
   updateTodo,
   bulkDeleteTodo,
-} from "@/domain/service_layer/todo/todo_api_service";
+} from "@/domain/services/todo/todo_api_service";
 import { TodoParams } from "@/domain/entities/todo/todo_params";
 
-export const useTodosById = (id: number | undefined) => {
+export const useTodosById = () => {
   return useQuery({
     queryKey: ["todos"], // IDごとにキャッシュ分離
-    queryFn: () => {
-      return fetchTodosByUserId();
-    },
-    enabled: !!id, // idがあるときだけ実行
+    queryFn: fetchTodosByUserId,
+
+    // enabled: !!id, // idがあるときだけ実行
   });
 };
 

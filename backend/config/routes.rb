@@ -3,7 +3,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'passwords/update'
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-        registrations: 'api/v1/auth/registrations'
+        registrations: 'api/v1/auth/registrations',
+        sessions: 'api/v1/auth/sessions'
       }
       resources :test, only: %i[index]
       resources :todos, only: [:index,:show,:create,:update] do
