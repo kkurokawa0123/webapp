@@ -4,7 +4,7 @@ import {
   onSignIn,
   onSignUp,
   onSignOut,
-} from "@/domain/services/auth/auth_api_service";
+} from "@/domain/service_layer/auth/auth_api_service";
 import { SignUpParams } from "@/domain/entities/auth/sign_up_params";
 import { SignInParams } from "@/domain/entities/auth/sign_in_params";
 

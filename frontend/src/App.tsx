@@ -6,7 +6,7 @@ import { indigo, pink } from "@mui/material/colors";
 import { AuthProvider } from "@/presentation/views/providers/AuthProvider";
 import { TodoFilterProvider } from "@/presentation/views/providers/TodoFilterProvider";
 import CommonLayout from "@/presentation/views/layouts/CommonLayout";
-import TodoMain from "@/presentation/views/pages/todos/TodoMain";
+import TodoMain from "@/presentation/views/pages/Todos/TodoMain";
 import SignIn from "@/presentation/views/pages/SignIn";
 import SignUp from "@/presentation/views/pages/SignUp";
 import PasswordChange from "@/presentation/views/pages/PasswordChange";

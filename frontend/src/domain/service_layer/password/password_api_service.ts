@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as api from "@/infrastructure/api_services/password/password_api_request";
+import * as api from "@/infrastructure/api_layer/password/password_api_request";
 import { HTTP_STATUS } from "@/shared/constants/http_status";
 import { PasswordChangeParams } from "@/domain/entities/auth/password_change_params";
 

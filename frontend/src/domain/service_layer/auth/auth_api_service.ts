@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as api from "@/infrastructure/api_services/auth/auth_api_request";
+import * as api from "@/infrastructure/api_layer/auth/auth_api_request";
 import { authStorage } from "@/infrastructure/lib/auth_storage";
 import type { AuthAccount } from "@/shared/types/auth_account";
 import type { User } from "@/shared/types/user";
