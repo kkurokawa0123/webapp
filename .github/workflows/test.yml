@@ -2,9 +2,9 @@ name: Frontend Test
 
 on:
   push:
-    branches: [main, develop, develop-dummy]
+    branches: [main, develop, develop-dummy, main-dummy]
   pull_request:
-    branches: [main, develop, develop-dummy]
+    branches: [main, develop, develop-dummy, main-dummy]
 
 jobs:
   test:
