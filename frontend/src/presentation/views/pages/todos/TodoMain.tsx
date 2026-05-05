@@ -10,10 +10,10 @@ import {
   useUpdateTodo,
   useBulkDeleteTodo,
 } from "@/presentation/hooks/todo_hook";
-import { TodoList } from "@/presentation/views/pages/Todos/partial/TodoList";
-import { TodoAddFormDialog } from "@/presentation/views/pages/Todos/partial/TodoAddFormDialog";
-import { TodoActionButton } from "@/presentation/views/pages/Todos/partial/TodoActionButton";
-import { TodoAlertDialog } from "@/presentation/views/pages/Todos/partial/TodoAlertDialog";
+import { TodoList } from "@/presentation/views/pages/todos/partial/TodoList";
+import { TodoAddFormDialog } from "@/presentation/views/pages/todos/partial/TodoAddFormDialog";
+import { TodoActionButton } from "@/presentation/views/pages/todos/partial/TodoActionButton";
+import { TodoAlertDialog } from "@/presentation/views/pages/todos/partial/TodoAlertDialog";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
 import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";

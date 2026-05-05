@@ -14,7 +14,7 @@ import { useAuthContex } from "@/presentation/contexts/auth_context";
 import { useMessageContext } from "@/presentation/contexts/message_context";
 import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
 import { useSingOut } from "@/presentation/hooks/auth_hook";
-import { TodoSideBar } from "@/presentation/views/pages/Todos/partial/TodoSideBar";
+import { TodoSideBar } from "@/presentation/views/pages/todos/partial/TodoSideBar";
 
 type Props = {
   todoFilter: Todo_Filter_Type;
