@@ -7,6 +7,9 @@ export class Password extends BaseValueObject<PasswordValue, "Password"> {
     super(value, "Password");
   }
   protected validate(value: PasswordValue): void {
+    if (!value) {
+      throw new Error("パスワードは入力必須です");
+    }
     if (
       !/[A-Z]/.test(value) ||
       !/[a-z]/.test(value) ||

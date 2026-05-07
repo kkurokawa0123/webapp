@@ -7,7 +7,10 @@ export class TodoName extends BaseValueObject<TodoNameValue, "TodoName"> {
     super(value, "TodoName");
   }
   protected validate(value: TodoNameValue): void {
-    if (value && value.length > 25) {
+    if (!value) {
+      throw new Error("タスク名は入力必須です");
+    }
+    if (value.length > 25) {
       throw new Error("タスク名は25字以内で入力してください");
     }
   }

@@ -1,8 +1,8 @@
-import { TodoName } from "@/domain/value_objects/todo/todoname";
+import { TodoName } from "@/domain/value_objects/todo/todo_name";
 import { Memo } from "@/domain/value_objects/todo/memo";
-import { IsDone } from "@/domain/value_objects/todo/isdone";
-import { IsTrashed } from "@/domain/value_objects/todo/istrashed";
-import { UserId } from "@/domain/value_objects/todo/userid";
+import { IsDone } from "@/domain/value_objects/todo/is_done";
+import { IsTrashed } from "@/domain/value_objects/todo/is_trashed";
+import { UserId } from "@/domain/value_objects/todo/user_id";
 import { BaseEntity } from "@/domain/entities/share/base_entity";
 
 export class TodoParams extends BaseEntity<TodoParams> {
