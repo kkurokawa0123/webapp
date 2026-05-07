@@ -19,11 +19,11 @@ import { useTodoStatusContext } from "@/presentation/contexts/todo_status_contex
 import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
 import { SEVERITY } from "@/shared/constants/severity";
 import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
-import { TodoName } from "@/domain/value_objects/todo/todoname";
+import { TodoName } from "@/domain/value_objects/todo/todo_name";
 import { Memo } from "@/domain/value_objects/todo/memo";
-import { IsDone } from "@/domain/value_objects/todo/isdone";
-import { IsTrashed } from "@/domain/value_objects/todo/istrashed";
-import { UserId } from "@/domain/value_objects/todo/userid";
+import { IsDone } from "@/domain/value_objects/todo/is_done";
+import { IsTrashed } from "@/domain/value_objects/todo/is_trashed";
+import { UserId } from "@/domain/value_objects/todo/user_id";
 import { TodoParams } from "@/domain/entities/todo/todo_params";
 import { IS_DONE_STATUS } from "@/shared/constants/is_done_status";
 import { IS_TRASHED_STATUS } from "@/shared/constants/is_trashed_status";
@@ -33,8 +33,8 @@ const TodoMain: React.FC = () => {
   const [form, setForm] = useState<TodoForm>({
     name: "",
     memo: "",
-    is_done: IS_DONE_STATUS.UNCHEKED,
-    is_trashed: IS_TRASHED_STATUS.UNCHEKED,
+    is_done: IS_DONE_STATUS.UNCHECKED,
+    is_trashed: IS_TRASHED_STATUS.UNCHECKED,
   });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -57,8 +57,8 @@ const TodoMain: React.FC = () => {
     setForm({
       name: "",
       memo: "",
-      is_done: IS_DONE_STATUS.UNCHEKED,
-      is_trashed: IS_TRASHED_STATUS.UNCHEKED,
+      is_done: IS_DONE_STATUS.UNCHECKED,
+      is_trashed: IS_TRASHED_STATUS.UNCHECKED,
     });
   };
 
