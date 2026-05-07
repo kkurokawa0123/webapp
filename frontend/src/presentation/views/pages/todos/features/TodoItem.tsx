@@ -69,10 +69,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
   const [form, setForm] = useState<TodoForm>({
     name: todo.name,
     memo: todo.memo,
-    is_done: todo.is_done ? IS_DONE_STATUS.CHECKED : IS_DONE_STATUS.UNCHEKED,
+    is_done: todo.is_done ? IS_DONE_STATUS.CHECKED : IS_DONE_STATUS.UNCHECKED,
     is_trashed: todo.is_trashed
       ? IS_TRASHED_STATUS.CHECKED
-      : IS_TRASHED_STATUS.UNCHEKED,
+      : IS_TRASHED_STATUS.UNCHECKED,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -12,7 +12,7 @@ import { useSingUp } from "@/presentation/hooks/auth_hook";
 import { useLoadingContext } from "@/presentation/contexts/loding_context";
 import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
 
-import { UserName } from "@/domain/value_objects/auth/username";
+import { UserName } from "@/domain/value_objects/auth/user_name";
 import { Email } from "@/domain/value_objects/auth/email";
 import { Password } from "@/domain/value_objects/auth/password";
 import { SignUpParams } from "@/domain/entities/auth/sign_up_params";

@@ -1,4 +1,4 @@
-import { UserName } from "@/domain/value_objects/auth/username";
+import { UserName } from "@/domain/value_objects/auth/user_name";
 import { Email } from "@/domain/value_objects/auth/email";
 import { Password } from "@/domain/value_objects/auth/password";
 import { BaseEntity } from "@/domain/entities/share/base_entity";

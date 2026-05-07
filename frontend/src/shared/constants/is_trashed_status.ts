@@ -1,6 +1,6 @@
 export const IS_TRASHED_STATUS = {
   CHECKED: 1,
-  UNCHEKED: 0,
+  UNCHECKED: 0,
 } as const;
 
 export type IsTrashedStatus =
