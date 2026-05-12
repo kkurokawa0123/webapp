@@ -39,7 +39,10 @@ const SignIn: React.FC = () => {
 
     try {
       openLoading();
-      showMessage("ログイン中....しばらくお待ちください", SEVERITY.INFO);
+      showMessage(
+        "ログインしています....しばらくお待ちください",
+        SEVERITY.INFO,
+      );
       const params = SignInParams.create(
         new Email(form.email),
         new Password(form.password),
