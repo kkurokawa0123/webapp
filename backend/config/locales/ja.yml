@@ -5,4 +5,4 @@ ja:
         user:
           attributes:
             email:
-              taken: "This email address is already registered."
+              taken: "このメールアドレスは既に登録されています"

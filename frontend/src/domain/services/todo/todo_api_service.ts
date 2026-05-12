@@ -19,8 +19,10 @@ export const fetchTodosByUserId = async (): Promise<Todo[] | undefined> => {
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "タスク情報の取得に失敗しました";
       throw new Error(message);
     } else {
       throw err;
@@ -41,8 +43,10 @@ export const createTodo = async (
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "タスク情報の登録に失敗しました";
       throw new Error(message);
     } else {
       throw err;
@@ -64,8 +68,10 @@ export const updateTodo = async (
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "タスク情報の更新に失敗しました";
       throw new Error(message);
     } else {
       throw err;
@@ -84,8 +90,10 @@ export const bulkDeleteTodo = async (): Promise<Todo | undefined> => {
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "タスク情報の削除に失敗しました";
       throw new Error(message);
     } else {
       throw err;

@@ -17,8 +17,10 @@ export const updatePassword = async (
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "パスワード更新に失敗しました";
       throw new Error(message);
     } else {
       throw err;

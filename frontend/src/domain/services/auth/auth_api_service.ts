@@ -16,9 +16,18 @@ export const onSignUp = async (
       throw new Error("onSignUp failed");
     }
     return response.data.data as User;
-  } catch (err) {
-    console.error("onSignUp failed");
-    throw err;
+  } catch (err: unknown) {
+    // APIコントローラーのエラーメッセージを受取
+    if (axios.isAxiosError(err)) {
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "サインアップに失敗しました";
+      throw new Error(message);
+    } else {
+      throw err;
+    }
   }
 };
 
@@ -35,8 +44,10 @@ export const onSignIn = async (
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "サインインに失敗しました";
       throw new Error(message);
     } else {
       throw err;
@@ -54,8 +65,10 @@ export const onSignOut = async () => {
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "サインアウトに失敗しました";
       throw new Error(message);
     } else {
       throw err;
@@ -76,8 +89,10 @@ export const getAuthUser = async (): Promise<AuthAccount | undefined> => {
     // APIコントローラーのエラーメッセージを受取
     if (axios.isAxiosError(err)) {
       const message =
-        err.response?.data?.message || err.response?.data?.errors?.join(", ");
-
+        err.response?.data?.message ||
+        err.response?.data?.errors?.full_messages?.join(", ") ||
+        err.response?.data?.errors?.join(", ") ||
+        "ユーザー情報の取得に失敗しました";
       throw new Error(message);
     } else {
       throw err;
