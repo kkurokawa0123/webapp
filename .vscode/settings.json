@@ -25,7 +25,8 @@
     "editor.formatOnSave": true
   },
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -35,6 +36,10 @@
     "editor.defaultFormatter": "castwide.solargraph",
     "editor.formatOnSave": true
   },
+  // "[python]": {
+  //   "editor.defaultFormatter": "ms-python.black-formatter",
+  //   "editor.formatOnSave": true,
+  // },
 
   "eslint.enable": true,
   "eslint.validate": ["typescript", "typescriptreact"],
@@ -47,7 +52,7 @@
     "erb"
   ],
 
-  // Solargraph設定
+  // Solargraph設定（Ruby用）
   "solargraph.useBundler": false,
   "solargraph.diagnostics": true,
   "solargraph.completion": true,
@@ -56,12 +61,6 @@
 
   // // Python設定
   // "python.defaultInterpreterPath": "/usr/local/bin/python",
-
-  // // Black設定（フォーマッター）
-  // "[python]": {
-  //   "editor.defaultFormatter": "ms-python.black-formatter",
-  //   "editor.formatOnSave": true,
-  // },
 
   // // Ruff設定（リンター）
   // "ruff.enable": true,
