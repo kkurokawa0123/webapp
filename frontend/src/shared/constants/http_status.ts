@@ -6,4 +6,4 @@ export const HTTP_STATUS = {
   NOT_FOUND: 404,
   UNPROCESSABLE_ENTITY: 422,
   INTERNAL_SERVER_ERROR: 500,
-} as const
+} as const;

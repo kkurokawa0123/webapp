@@ -1,19 +1,21 @@
-import { createContext, useContext } from 'react'
-import type { AuthAccount } from '@/shared/types/auth_account'
+import { createContext, useContext } from "react";
+import type { AuthAccount } from "@/shared/types/auth_account";
 
 export type AuthContextType = {
-  authData: AuthAccount | undefined
-  isLoading: boolean
-  isAuthenticated: boolean
-  refetch: () => void
-}
+  authData: AuthAccount | undefined;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  refetch: () => void;
+};
 
-export const AuthContext = createContext<AuthContextType | undefined>({} as AuthContextType)
+export const AuthContext = createContext<AuthContextType | undefined>(
+  {} as AuthContextType,
+);
 
 export const useAuthContex = () => {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider')
+    throw new Error("useAuth must be used within AuthProvider");
   }
-  return context
-}
+  return context;
+};

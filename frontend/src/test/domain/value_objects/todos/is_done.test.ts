@@ -1,32 +1,39 @@
-import { describe, it, expect } from 'vitest'
-import { IsDone } from '@/domain/value_objects/todo/is_done'
-import { IS_DONE_STATUS, type IsDoneStatus } from '@/shared/constants/is_done_status'
+import { describe, it, expect } from "vitest";
+import { IsDone } from "@/domain/value_objects/todo/is_done";
+import {
+  IS_DONE_STATUS,
+  type IsDoneStatus,
+} from "@/shared/constants/is_done_status";
 
-describe('IsDone', () => {
-  describe('正常系', () => {
-    it('IsDone: CHECKEDならインスタンス正常生成', () => {
-      const isDone = new IsDone(IS_DONE_STATUS.CHECKED)
-      expect(isDone.value).toBe(IS_DONE_STATUS.CHECKED)
-    })
-    it('IsDone: UNCHECKEDならインスタンス正常生成', () => {
-      const isDone = new IsDone(IS_DONE_STATUS.UNCHECKED)
-      expect(isDone.value).toBe(IS_DONE_STATUS.UNCHECKED)
-    })
-  })
-  describe('異常系', () => {
-    it('IsDone: 定義外の値', () => {
-      expect(() => new IsDone(999 as unknown as IsDoneStatus)).toThrow('無効なステータスです。')
-    })
-    it('IsDone: nullならエラー', () => {
-      expect(() => new IsDone(null as unknown as IsDoneStatus)).toThrow('無効なステータスです。')
-    })
-    it('IsDone: undefinedならエラー', () => {
+describe("IsDone", () => {
+  describe("正常系", () => {
+    it("IsDone: CHECKEDならインスタンス正常生成", () => {
+      const isDone = new IsDone(IS_DONE_STATUS.CHECKED);
+      expect(isDone.value).toBe(IS_DONE_STATUS.CHECKED);
+    });
+    it("IsDone: UNCHECKEDならインスタンス正常生成", () => {
+      const isDone = new IsDone(IS_DONE_STATUS.UNCHECKED);
+      expect(isDone.value).toBe(IS_DONE_STATUS.UNCHECKED);
+    });
+  });
+  describe("異常系", () => {
+    it("IsDone: 定義外の値", () => {
+      expect(() => new IsDone(999 as unknown as IsDoneStatus)).toThrow(
+        "無効なステータスです。",
+      );
+    });
+    it("IsDone: nullならエラー", () => {
+      expect(() => new IsDone(null as unknown as IsDoneStatus)).toThrow(
+        "無効なステータスです。",
+      );
+    });
+    it("IsDone: undefinedならエラー", () => {
       expect(() => new IsDone(undefined as unknown as IsDoneStatus)).toThrow(
-        '無効なステータスです。',
-      )
-    })
-  })
-})
+        "無効なステータスです。",
+      );
+    });
+  });
+});
 // it("正常系:チェック無, () => {
 //   const userName = new IsDone(2);
 //   expect(userName.value).toBe("t");

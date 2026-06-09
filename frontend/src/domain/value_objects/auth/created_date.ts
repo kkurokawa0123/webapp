@@ -1,13 +1,16 @@
-import { BaseValueObject } from '@/domain/value_objects/share/base_value_objext'
+import { BaseValueObject } from "@/domain/value_objects/share/base_value_objext";
 
-type CreatedDateValue = Date
-export class CreatedDate extends BaseValueObject<CreatedDateValue, 'CreatedDate'> {
+type CreatedDateValue = Date;
+export class CreatedDate extends BaseValueObject<
+  CreatedDateValue,
+  "CreatedDate"
+> {
   constructor(value: CreatedDateValue) {
-    super(value, 'CreatedDate')
+    super(value, "CreatedDate");
   }
   protected validate(value: CreatedDateValue): void {
     if (isNaN(value.getTime())) {
-      throw new Error('XXXXは不正な時間です')
+      throw new Error("XXXXは不正な時間です");
     }
   }
 }

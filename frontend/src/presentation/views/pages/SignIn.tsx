@@ -1,64 +1,72 @@
-import React, { useState } from 'react'
-import { useNavigate, Link, Navigate } from 'react-router-dom'
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
-import { SEVERITY } from '@/shared/constants/severity'
-import { COMMON_ERROR_MESSAGES } from '@/shared/constants/common_error_message'
-import { useMessageContext } from '@/presentation/contexts/message_context'
-import { useAuthContex } from '@/presentation/contexts/auth_context'
-import { useSingIn } from '@/presentation/hooks/auth_hook'
-import { useLoadingContext } from '@/presentation/contexts/loding_context'
-import { Email } from '@/domain/value_objects/auth/email'
-import { Password } from '@/domain/value_objects/auth/password'
-import { SignInParams } from '@/domain/entities/auth/sign_in_params'
+import React, { useState } from "react";
+import { useNavigate, Link, Navigate } from "react-router-dom";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { SEVERITY } from "@/shared/constants/severity";
+import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
+import { useMessageContext } from "@/presentation/contexts/message_context";
+import { useAuthContex } from "@/presentation/contexts/auth_context";
+import { useSingIn } from "@/presentation/hooks/auth_hook";
+import { useLoadingContext } from "@/presentation/contexts/loding_context";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
+import { SignInParams } from "@/domain/entities/auth/sign_in_params";
 
 // サインイン用ページ
 const SignIn: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [form, setForm] = useState({
-    email: '',
-    password: '',
-  })
+    email: "",
+    password: "",
+  });
 
-  const { isAuthenticated } = useAuthContex()
-  const { showMessage } = useMessageContext()
-  const { openLoading, closeLoading } = useLoadingContext()
-  const singIn = useSingIn()
+  const { isAuthenticated } = useAuthContex();
+  const { showMessage } = useMessageContext();
+  const { openLoading, closeLoading } = useLoadingContext();
+  const singIn = useSingIn();
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      openLoading()
-      showMessage('ログインしています....しばらくお待ちください', SEVERITY.INFO)
-      const params = SignInParams.create(new Email(form.email), new Password(form.password))
-      await singIn.mutateAsync(params)
-      await new Promise((resolve) => setTimeout(resolve, 3000))
-      navigate('/')
+      openLoading();
+      showMessage(
+        "ログインしています....しばらくお待ちください",
+        SEVERITY.INFO,
+      );
+      const params = SignInParams.create(
+        new Email(form.email),
+        new Password(form.password),
+      );
+      await singIn.mutateAsync(params);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      navigate("/");
     } catch (err) {
       const message =
-        err instanceof Error && err.message ? err.message : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR
-      showMessage(message, SEVERITY.ERROR)
+        err instanceof Error && err.message
+          ? err.message
+          : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR;
+      showMessage(message, SEVERITY.ERROR);
     } finally {
-      closeLoading()
+      closeLoading();
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   return (
     <>
-      <Box component="form" sx={{ display: 'flex' }}>
+      <Box component="form" sx={{ display: "flex" }}>
         <Card>
           <CardHeader title="ログイン" />
           <CardContent>
@@ -105,6 +113,6 @@ const SignIn: React.FC = () => {
         </Card>
       </Box>
     </>
-  )
-}
-export default SignIn
+  );
+};
+export default SignIn;

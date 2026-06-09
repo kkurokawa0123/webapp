@@ -1,79 +1,81 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import { SEVERITY } from '@/shared/constants/severity'
-import { useMessageContext } from '@/presentation/contexts/message_context'
-import { useLoadingContext } from '@/presentation/contexts/loding_context'
-import { useAuthContex } from '@/presentation/contexts/auth_context'
-import { useSingOut } from '@/presentation/hooks/auth_hook'
-import { useUpdatePassword } from '@/presentation/hooks/password_hook'
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import { SEVERITY } from "@/shared/constants/severity";
+import { useMessageContext } from "@/presentation/contexts/message_context";
+import { useLoadingContext } from "@/presentation/contexts/loding_context";
+import { useAuthContex } from "@/presentation/contexts/auth_context";
+import { useSingOut } from "@/presentation/hooks/auth_hook";
+import { useUpdatePassword } from "@/presentation/hooks/password_hook";
 
-import { Password } from '@/domain/value_objects/auth/password'
-import { PasswordChangeParams } from '@/domain/entities/auth/password_change_params'
-import { COMMON_ERROR_MESSAGES } from '@/shared/constants/common_error_message'
+import { Password } from "@/domain/value_objects/auth/password";
+import { PasswordChangeParams } from "@/domain/entities/auth/password_change_params";
+import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
 
 const PasswordChange: React.FC = () => {
-  const navigate = useNavigate()
-  const { openLoading, closeLoading } = useLoadingContext()
-  const { showMessage } = useMessageContext()
-  const { isAuthenticated } = useAuthContex()
+  const navigate = useNavigate();
+  const { openLoading, closeLoading } = useLoadingContext();
+  const { showMessage } = useMessageContext();
+  const { isAuthenticated } = useAuthContex();
 
-  const singOut = useSingOut()
-  const updatePassword = useUpdatePassword()
+  const singOut = useSingOut();
+  const updatePassword = useUpdatePassword();
 
   if (!isAuthenticated) {
-    navigate('/signin')
+    navigate("/signin");
   }
 
   const [form, setForm] = useState({
-    current_password: '',
-    new_password: '',
-    new_password_confirmation: '',
-  })
+    current_password: "",
+    new_password: "",
+    new_password_confirmation: "",
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      openLoading()
-      showMessage('パスワード変更中....しばらくお待ちください', SEVERITY.INFO)
+      openLoading();
+      showMessage("パスワード変更中....しばらくお待ちください", SEVERITY.INFO);
       const params = PasswordChangeParams.create(
         new Password(form.current_password),
         new Password(form.new_password),
         new Password(form.new_password_confirmation),
-      )
+      );
       // console.log("ConvertAPIData", params.toRequestData());
       // 更新処理 hook api
-      const message = await updatePassword.mutateAsync(params)
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      const message = await updatePassword.mutateAsync(params);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       if (message) {
-        showMessage(message, SEVERITY.SUCCESS)
+        showMessage(message, SEVERITY.SUCCESS);
       }
       // パスワード変更後は、強制的にログアウトする。
-      await singOut.mutateAsync()
+      await singOut.mutateAsync();
     } catch (err) {
       const message =
-        err instanceof Error && err.message ? err.message : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR
-      showMessage(message, SEVERITY.ERROR)
+        err instanceof Error && err.message
+          ? err.message
+          : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR;
+      showMessage(message, SEVERITY.ERROR);
     } finally {
-      closeLoading()
+      closeLoading();
     }
-  }
+  };
 
   return (
     <>
-      <Box component="form" sx={{ display: 'flex' }}>
+      <Box component="form" sx={{ display: "flex" }}>
         <Card>
           <CardHeader title="パスワード変更"></CardHeader>
           <CardContent>
@@ -121,7 +123,9 @@ const PasswordChange: React.FC = () => {
               size="large"
               fullWidth
               disabled={
-                !form.current_password || !form.new_password || !form.new_password_confirmation
+                !form.current_password ||
+                !form.new_password ||
+                !form.new_password_confirmation
               }
               onClick={handleSubmit}
             >
@@ -137,6 +141,6 @@ const PasswordChange: React.FC = () => {
         </Card>
       </Box>
     </>
-  )
-}
-export default PasswordChange
+  );
+};
+export default PasswordChange;
