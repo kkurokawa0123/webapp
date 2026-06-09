@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
 import { PasswordField } from '@/presentation/views/shared/components/PasswordField'
 import { SEVERITY } from '@/shared/constants/severity'
 import { useMessageContext } from '@/presentation/contexts/message_context'
@@ -106,12 +105,6 @@ const PasswordChange: React.FC = () => {
             >
               実行
             </Button>
-            <Box textAlign="center">
-              <Typography variant="body2">
-                Don't have an account? &nbsp;
-                <Link to="/signup">Sign Up now!</Link>
-              </Typography>
-            </Box>
           </CardContent>
         </Card>
       </Box>
