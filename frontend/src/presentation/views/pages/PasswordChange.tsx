@@ -106,12 +106,6 @@ const PasswordChange: React.FC = () => {
             >
               実行
             </Button>
-            <Box textAlign="center">
-              <Typography variant="body2">
-                Don't have an account? &nbsp;
-                <Link to="/signup">Sign Up now!</Link>
-              </Typography>
-            </Box>
           </CardContent>
         </Card>
       </Box>
