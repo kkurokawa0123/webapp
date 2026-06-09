@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
+import { PasswordField } from '@/presentation/views/shared/components/PasswordField'
 import { SEVERITY } from '@/shared/constants/severity'
 import { COMMON_ERROR_MESSAGES } from '@/shared/constants/common_error_message'
 import { useMessageContext } from '@/presentation/contexts/message_context'
@@ -72,18 +73,12 @@ const SignIn: React.FC = () => {
               margin="dense"
               onChange={handleChange}
             />
-            <TextField
+            <PasswordField
               name="password"
-              variant="outlined"
-              required
-              fullWidth
               label="Password"
-              type="password"
-              placeholder="At least 8 characters"
               value={form.password}
-              margin="dense"
-              autoComplete="current-password"
               onChange={handleChange}
+              autoComplete="current-password"
             />
             <Button
               type="submit"
