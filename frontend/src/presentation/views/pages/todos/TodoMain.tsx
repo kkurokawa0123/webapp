@@ -97,7 +97,7 @@ const TodoMain: React.FC = () => {
       closeLoading()
     }
   }
-  // const handleUpdateTodo = async <K extends keyof Todo, V extends Todo[K]>(
+
   const handleUpdateTodo = async (id: number, form: TodoForm) => {
     try {
       openLoading()

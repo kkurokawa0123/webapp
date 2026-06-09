@@ -81,7 +81,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdateTodo }) => {
     key: K,
     value: V,
   ) => {
-    // setForm({ ...form, [key]: value });
     const updatedForm = { ...form, [key]: value }
     setForm(updatedForm)
     onUpdateTodo(id, updatedForm)
