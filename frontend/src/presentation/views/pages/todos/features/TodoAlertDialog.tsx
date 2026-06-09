@@ -1,20 +1,20 @@
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import { styled } from "@mui/material/styles";
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import { styled } from '@mui/material/styles'
 
 type Props = {
-  alertOpen: boolean;
-  onEmpty: () => Promise<void>;
-  onToggleAlert: () => void;
-};
+  alertOpen: boolean
+  onEmpty: () => Promise<void>
+  onToggleAlert: () => void
+}
 
 const Alert = styled(Dialog)(() => ({
-  fontFamily: "-apple-system, BlinkMacSystemFont, Roboto, sans-serif",
-}));
+  fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, sans-serif',
+}))
 
 export const TodoAlertDialog = (props: Props) => (
   <Alert open={props.alertOpen} onClose={props.onToggleAlert}>
@@ -24,18 +24,14 @@ export const TodoAlertDialog = (props: Props) => (
       <DialogContentText>この操作は取り消しできません。</DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button
-        aria-label="alert-cancel"
-        onClick={props.onToggleAlert}
-        color="primary"
-      >
+      <Button aria-label="alert-cancel" onClick={props.onToggleAlert} color="primary">
         キャンセル
       </Button>
       <Button
         aria-label="alert-ok"
         onClick={() => {
-          props.onToggleAlert();
-          props.onEmpty();
+          props.onToggleAlert()
+          props.onEmpty()
         }}
         color="secondary"
         autoFocus
@@ -44,4 +40,4 @@ export const TodoAlertDialog = (props: Props) => (
       </Button>
     </DialogActions>
   </Alert>
-);
+)
