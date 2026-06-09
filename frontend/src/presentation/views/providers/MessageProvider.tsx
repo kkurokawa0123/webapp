@@ -23,8 +23,6 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
   return (
     <MessageContext.Provider value={{ showMessage }}>
       {children}
-
-      {/* ← グローバルに1個だけ置く */}
       <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
         <Alert severity={severity} variant="filled" onClose={handleClose}>
           {message}

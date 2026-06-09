@@ -6,12 +6,12 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
+import { PasswordField } from '@/presentation/views/shared/components/PasswordField'
 import { SEVERITY } from '@/shared/constants/severity'
 import { useMessageContext } from '@/presentation/contexts/message_context'
 import { useSingUp } from '@/presentation/hooks/auth_hook'
 import { useLoadingContext } from '@/presentation/contexts/loding_context'
 import { COMMON_ERROR_MESSAGES } from '@/shared/constants/common_error_message'
-
 import { UserName } from '@/domain/value_objects/auth/user_name'
 import { Email } from '@/domain/value_objects/auth/email'
 import { Password } from '@/domain/value_objects/auth/password'
@@ -21,7 +21,6 @@ import { SignUpParams } from '@/domain/entities/auth/sign_up_params'
 const SignUp: React.FC = () => {
   const navigate = useNavigate()
   const singUp = useSingUp()
-
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -37,9 +36,7 @@ const SignUp: React.FC = () => {
 
     try {
       openLoading()
-
       showMessage('ユーザーアカウントを登録しています....しばらくお待ちください', SEVERITY.INFO)
-
       const params = SignUpParams.create(
         new UserName(form.name),
         new Email(form.email),
@@ -72,7 +69,6 @@ const SignUp: React.FC = () => {
       >
         <Card sx={{ p: 2, maxWidth: 400, width: '100%' }}>
           <CardHeader title="アカウント新規登録" sx={{ textAlign: 'center' }} />
-
           <CardContent>
             <TextField
               name="name"
@@ -84,7 +80,6 @@ const SignUp: React.FC = () => {
               margin="dense"
               onChange={handleChange}
             />
-
             <TextField
               name="email"
               variant="outlined"
@@ -95,35 +90,20 @@ const SignUp: React.FC = () => {
               margin="dense"
               onChange={handleChange}
             />
-
-            <TextField
+            <PasswordField
               name="password"
-              variant="outlined"
-              required
-              fullWidth
               label="Password"
-              type="password"
               value={form.password}
-              margin="dense"
-              autoComplete="current-password"
-              placeholder="At least 8 characters"
               onChange={handleChange}
+              autoComplete="new-password"
             />
-
-            <TextField
+            <PasswordField
               name="passwordConfirmation"
-              variant="outlined"
-              required
-              fullWidth
               label="Password Confirmation"
-              type="password"
               value={form.passwordConfirmation}
-              margin="dense"
-              autoComplete="current-password"
-              placeholder="At least 8 characters"
               onChange={handleChange}
+              autoComplete="new-password-confirmation"
             />
-
             <Button
               type="submit"
               variant="contained"

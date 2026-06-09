@@ -49,7 +49,6 @@ export const useSingOut = () => {
 
   return useMutation({
     mutationFn: () => onSignOut(),
-
     onSuccess: () => {
       queryClient.setQueryData(['authUser'], null)
       // 認証情報を完全削除
