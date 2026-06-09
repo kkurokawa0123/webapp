@@ -1,10 +1,10 @@
-import React from "react";
-import Container from "@mui/material/Container";
-import { Box } from "@mui/material";
-import Header from "@/presentation/views/layouts/Header";
+import React from 'react'
+import Container from '@mui/material/Container'
+import { Box } from '@mui/material'
+import Header from '@/presentation/views/layouts/Header'
 
 interface CommonLayoutProps {
-  children: React.ReactElement;
+  children: React.ReactElement
 }
 
 // 全てのページで共通となるレイアウト
@@ -18,10 +18,10 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
         <Container>
           <Box
             sx={{
-              minHeight: "80vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              minHeight: '80vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             {children}
@@ -29,7 +29,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
         </Container>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default CommonLayout;
+export default CommonLayout

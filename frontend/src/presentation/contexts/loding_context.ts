@@ -1,18 +1,16 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react'
 
 export type LoadingContextType = {
-  openLoading: () => void;
-  closeLoading: () => void;
-};
+  openLoading: () => void
+  closeLoading: () => void
+}
 
-export const LoadingContext = createContext<LoadingContextType | undefined>(
-  undefined,
-);
+export const LoadingContext = createContext<LoadingContextType | undefined>(undefined)
 
 export const useLoadingContext = () => {
-  const context = useContext(LoadingContext);
+  const context = useContext(LoadingContext)
   if (!context) {
-    throw new Error("useLoadingContext must be used within LoadingProvider");
+    throw new Error('useLoadingContext must be used within LoadingProvider')
   }
-  return context;
-};
+  return context
+}
