@@ -1,9 +1,10 @@
 export const TODO_FILTER_TYPE = {
-  ALL: 'all',
-  CHECK: 'checked',
-  UNCHECK: 'unchecked',
-  TRASH: 'trashed',
+  ALL: "all",
+  CHECK: "checked",
+  UNCHECK: "unchecked",
+  TRASH: "trashed",
   // TRASH: "deleted",
-} as const
+} as const;
 
-export type Todo_Filter_Type = (typeof TODO_FILTER_TYPE)[keyof typeof TODO_FILTER_TYPE]
+export type Todo_Filter_Type =
+  (typeof TODO_FILTER_TYPE)[keyof typeof TODO_FILTER_TYPE];

@@ -1,64 +1,71 @@
-import List from '@mui/material/List'
-import Avatar from '@mui/material/Avatar'
-import { Drawer } from '@mui/material'
-import ListItem from '@mui/material/ListItem'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import ListItemButton from '@mui/material/ListItemButton'
-import Person from '@mui/icons-material/Person'
-import SubjectIcon from '@mui/icons-material/Subject'
-import DeleteIcon from '@mui/icons-material/Delete'
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import { styled } from '@mui/material/styles'
-import { indigo, lightBlue, pink } from '@mui/material/colors'
-import { useAuthContex } from '@/presentation/contexts/auth_context'
-import { TODO_FILTER_TYPE, type Todo_Filter_Type } from '@/shared/constants/todo_filter_type'
+import List from "@mui/material/List";
+import Avatar from "@mui/material/Avatar";
+import { Drawer } from "@mui/material";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemButton from "@mui/material/ListItemButton";
+import Person from "@mui/icons-material/Person";
+import SubjectIcon from "@mui/icons-material/Subject";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { styled } from "@mui/material/styles";
+import { indigo, lightBlue, pink } from "@mui/material/colors";
+import { useAuthContex } from "@/presentation/contexts/auth_context";
+import {
+  TODO_FILTER_TYPE,
+  type Todo_Filter_Type,
+} from "@/shared/constants/todo_filter_type";
 
 // ドロワー内リストの幅をカスタマイズ
-const DrawerList = styled('div')(() => ({
+const DrawerList = styled("div")(() => ({
   width: 250,
-}))
+}));
 
 // ドロワーヘッダーのサイズ・色などをカスタマイズ
-const DrawerHeader = styled('div')(() => ({
+const DrawerHeader = styled("div")(() => ({
   height: 150,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '1em',
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "1em",
   backgroundColor: indigo[500],
-  color: '#ffffff',
-  fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, sans-serif',
-}))
+  color: "#ffffff",
+  fontFamily: "-apple-system, BlinkMacSystemFont, Roboto, sans-serif",
+}));
 
 // ヘッダー内に表示するアバターのカスタマイズ
 const DrawerAvatar = styled(Avatar)(({ theme }) => ({
   backgroundColor: pink[500],
   width: theme.spacing(6),
   height: theme.spacing(6),
-}))
+}));
 
 type Props = {
-  drawerOpen: boolean
-  onToggleDrawer: () => void
-  onFilter: (filter: Todo_Filter_Type) => void
-}
+  drawerOpen: boolean;
+  onToggleDrawer: () => void;
+  onFilter: (filter: Todo_Filter_Type) => void;
+};
 
 export const TodoSideBar = (props: Props) => {
-  const { authData } = useAuthContex()
+  const { authData } = useAuthContex();
 
   return (
     <>
-      <Drawer variant="temporary" open={props.drawerOpen} onClose={props.onToggleDrawer}>
+      <Drawer
+        variant="temporary"
+        open={props.drawerOpen}
+        onClose={props.onToggleDrawer}
+      >
         <DrawerList role="presentation" onClick={props.onToggleDrawer}>
           <DrawerHeader>
             <DrawerAvatar>
               <Person />
             </DrawerAvatar>
             <p>ユーザー名:{authData?.name}</p>
-            <p>Todo Version{'1.2.0'}</p>
+            <p>Todo Version{"1.2.0"}</p>
           </DrawerHeader>
           <List>
             <ListItem disablePadding>
@@ -109,5 +116,5 @@ export const TodoSideBar = (props: Props) => {
         </DrawerList>
       </Drawer>
     </>
-  )
-}
+  );
+};

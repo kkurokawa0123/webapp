@@ -1,66 +1,71 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import TextField from '@mui/material/TextField'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
-import { SEVERITY } from '@/shared/constants/severity'
-import { useMessageContext } from '@/presentation/contexts/message_context'
-import { useSingUp } from '@/presentation/hooks/auth_hook'
-import { useLoadingContext } from '@/presentation/contexts/loding_context'
-import { COMMON_ERROR_MESSAGES } from '@/shared/constants/common_error_message'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import TextField from "@mui/material/TextField";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { SEVERITY } from "@/shared/constants/severity";
+import { useMessageContext } from "@/presentation/contexts/message_context";
+import { useSingUp } from "@/presentation/hooks/auth_hook";
+import { useLoadingContext } from "@/presentation/contexts/loding_context";
+import { COMMON_ERROR_MESSAGES } from "@/shared/constants/common_error_message";
 
-import { UserName } from '@/domain/value_objects/auth/user_name'
-import { Email } from '@/domain/value_objects/auth/email'
-import { Password } from '@/domain/value_objects/auth/password'
-import { SignUpParams } from '@/domain/entities/auth/sign_up_params'
+import { UserName } from "@/domain/value_objects/auth/user_name";
+import { Email } from "@/domain/value_objects/auth/email";
+import { Password } from "@/domain/value_objects/auth/password";
+import { SignUpParams } from "@/domain/entities/auth/sign_up_params";
 
 // サインアップ用ページ
 const SignUp: React.FC = () => {
-  const navigate = useNavigate()
-  const singUp = useSingUp()
+  const navigate = useNavigate();
+  const singUp = useSingUp();
 
   const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
-  })
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirmation: "",
+  });
 
-  const { showMessage } = useMessageContext()
-  const { openLoading, closeLoading } = useLoadingContext()
+  const { showMessage } = useMessageContext();
+  const { openLoading, closeLoading } = useLoadingContext();
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      openLoading()
+      openLoading();
 
-      showMessage('ユーザーアカウントを登録しています....しばらくお待ちください', SEVERITY.INFO)
+      showMessage(
+        "ユーザーアカウントを登録しています....しばらくお待ちください",
+        SEVERITY.INFO,
+      );
 
       const params = SignUpParams.create(
         new UserName(form.name),
         new Email(form.email),
         new Password(form.password),
         new Password(form.passwordConfirmation),
-      )
-      await singUp.mutateAsync(params)
-      await new Promise((resolve) => setTimeout(resolve, 3000))
-      showMessage('サインアップが完了しました', SEVERITY.SUCCESS)
-      navigate('/signin')
+      );
+      await singUp.mutateAsync(params);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      showMessage("サインアップが完了しました", SEVERITY.SUCCESS);
+      navigate("/signin");
     } catch (err) {
       const message =
-        err instanceof Error && err.message ? err.message : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR
-      showMessage(message, SEVERITY.ERROR)
+        err instanceof Error && err.message
+          ? err.message
+          : COMMON_ERROR_MESSAGES.UNEXPECTED_ERROR;
+      showMessage(message, SEVERITY.ERROR);
     } finally {
-      closeLoading()
+      closeLoading();
     }
-  }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   return (
     <>
@@ -68,10 +73,10 @@ const SignUp: React.FC = () => {
         component="form"
         noValidate
         autoComplete="off"
-        sx={{ mt: 6, display: 'flex', justifyContent: 'center' }}
+        sx={{ mt: 6, display: "flex", justifyContent: "center" }}
       >
-        <Card sx={{ p: 2, maxWidth: 400, width: '100%' }}>
-          <CardHeader title="アカウント新規登録" sx={{ textAlign: 'center' }} />
+        <Card sx={{ p: 2, maxWidth: 400, width: "100%" }}>
+          <CardHeader title="アカウント新規登録" sx={{ textAlign: "center" }} />
 
           <CardContent>
             <TextField
@@ -129,10 +134,15 @@ const SignUp: React.FC = () => {
               variant="contained"
               size="large"
               fullWidth
-              disabled={!form.name || !form.email || !form.password || !form.passwordConfirmation}
+              disabled={
+                !form.name ||
+                !form.email ||
+                !form.password ||
+                !form.passwordConfirmation
+              }
               sx={{
                 mt: 2,
-                textTransform: 'none',
+                textTransform: "none",
               }}
               onClick={handleSubmit}
             >
@@ -142,6 +152,6 @@ const SignUp: React.FC = () => {
         </Card>
       </Box>
     </>
-  )
-}
-export default SignUp
+  );
+};
+export default SignUp;

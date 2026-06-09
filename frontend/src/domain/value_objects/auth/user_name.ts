@@ -1,17 +1,17 @@
-import { BaseValueObject } from '@/domain/value_objects/share/base_value_objext'
+import { BaseValueObject } from "@/domain/value_objects/share/base_value_objext";
 
-type UserNameValue = string
+type UserNameValue = string;
 
-export class UserName extends BaseValueObject<UserNameValue, 'UserName'> {
+export class UserName extends BaseValueObject<UserNameValue, "UserName"> {
   constructor(value: UserNameValue) {
-    super(value, 'UserName')
+    super(value, "UserName");
   }
   protected validate(value: UserNameValue): void {
     if (!value) {
-      throw new Error('ユーザ名は入力必須です')
+      throw new Error("ユーザ名は入力必須です");
     }
     if (value.length > 20) {
-      throw new Error('ユーザ名は20字以内で入力してください')
+      throw new Error("ユーザ名は20字以内で入力してください");
     }
   }
 }

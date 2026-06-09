@@ -1,24 +1,28 @@
-import React, { useState } from 'react'
-import Snackbar from '@mui/material/Snackbar'
-import Alert from '@mui/material/Alert'
-import { type Severity, SEVERITY } from '@/shared/constants/severity'
-import { MessageContext } from '@/presentation/contexts/message_context'
+import React, { useState } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { type Severity, SEVERITY } from "@/shared/constants/severity";
+import { MessageContext } from "@/presentation/contexts/message_context";
 
-export const MessageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [open, setOpen] = useState(false)
-  const [message, setMessage] = useState('')
-  const [severity, setSeverity] = useState<Severity>(SEVERITY.INFO)
+export const MessageProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState<Severity>(SEVERITY.INFO);
 
   const showMessage = (msg: string, sev: Severity = SEVERITY.INFO) => {
-    setMessage(msg)
-    setSeverity(sev)
-    setOpen(true)
-  }
+    setMessage(msg);
+    setSeverity(sev);
+    setOpen(true);
+  };
 
   const handleClose = (_: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') return
-    setOpen(false)
-  }
+    if (reason === "clickaway") return;
+    setOpen(false);
+  };
 
   return (
     <MessageContext.Provider value={{ showMessage }}>
@@ -31,5 +35,5 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
         </Alert>
       </Snackbar>
     </MessageContext.Provider>
-  )
-}
+  );
+};

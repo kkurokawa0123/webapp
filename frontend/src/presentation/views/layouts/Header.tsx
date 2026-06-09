@@ -1,46 +1,48 @@
-import React, { useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
-import Person from '@mui/icons-material/Person'
-import { SEVERITY } from '@/shared/constants/severity'
-import { type Todo_Filter_Type } from '@/shared/constants/todo_filter_type'
-import { TODO_FILTER_TYPE } from '@/shared/constants/todo_filter_type'
-import { useAuthContex } from '@/presentation/contexts/auth_context'
-import { useMessageContext } from '@/presentation/contexts/message_context'
-import { useTodoStatusContext } from '@/presentation/contexts/todo_status_context'
-import { useSingOut } from '@/presentation/hooks/auth_hook'
-import { TodoSideBar } from '@/presentation/views/pages/todos/features/TodoSideBar'
+import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Person from "@mui/icons-material/Person";
+import { SEVERITY } from "@/shared/constants/severity";
+import { type Todo_Filter_Type } from "@/shared/constants/todo_filter_type";
+import { TODO_FILTER_TYPE } from "@/shared/constants/todo_filter_type";
+import { useAuthContex } from "@/presentation/contexts/auth_context";
+import { useMessageContext } from "@/presentation/contexts/message_context";
+import { useTodoStatusContext } from "@/presentation/contexts/todo_status_context";
+import { useSingOut } from "@/presentation/hooks/auth_hook";
+import { TodoSideBar } from "@/presentation/views/pages/todos/features/TodoSideBar";
 
 type Props = {
-  todoFilter: Todo_Filter_Type
-  loading: boolean
-  isSignedIn: boolean
-  onToggleDrawer: () => void
-  handleSignOut: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => Promise<void>
-}
+  todoFilter: Todo_Filter_Type;
+  loading: boolean;
+  isSignedIn: boolean;
+  onToggleDrawer: () => void;
+  handleSignOut: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => Promise<void>;
+};
 
 const toConvertTodoStatus = (arg: Todo_Filter_Type) => {
   switch (arg) {
     case TODO_FILTER_TYPE.ALL:
-      return 'すべてのタスク'
+      return "すべてのタスク";
     case TODO_FILTER_TYPE.UNCHECK:
-      return '未完了のタスク'
+      return "未完了のタスク";
     case TODO_FILTER_TYPE.CHECK:
-      return '完了したタスク'
+      return "完了したタスク";
     case TODO_FILTER_TYPE.TRASH:
-      return 'ごみ箱'
+      return "ごみ箱";
     default:
-      return 'TODO'
+      return "TODO";
   }
-}
+};
 
 const AuthButtons = (props: Props) => {
-  if (props.loading) return null
+  if (props.loading) return null;
 
   return (
     <AppBar>
@@ -48,24 +50,37 @@ const AuthButtons = (props: Props) => {
         {props.isSignedIn ? (
           <>
             {/* 左側（メニュー） */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <IconButton edge="start" color="inherit" onClick={props.onToggleDrawer}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={props.onToggleDrawer}
+              >
                 <Person />
               </IconButton>
-              <Typography component={RouterLink} to="/" variant="h6" color="inherit">
+              <Typography
+                component={RouterLink}
+                to="/"
+                variant="h6"
+                color="inherit"
+              >
                 {toConvertTodoStatus(props.todoFilter)}
               </Typography>
             </Box>
             {/* 右側（ログアウト） */}
-            <Box sx={{ ml: 'auto' }}>
-              <Button color="inherit" sx={{ textTransform: 'none' }} onClick={props.handleSignOut}>
+            <Box sx={{ ml: "auto" }}>
+              <Button
+                color="inherit"
+                sx={{ textTransform: "none" }}
+                onClick={props.handleSignOut}
+              >
                 ログアウト
               </Button>
               <Button
                 component={RouterLink}
                 to="/passwordchange"
                 color="inherit"
-                sx={{ textTransform: 'none' }}
+                sx={{ textTransform: "none" }}
               >
                 パスワード変更
               </Button>
@@ -73,12 +88,12 @@ const AuthButtons = (props: Props) => {
           </>
         ) : (
           <>
-            <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+            <Box sx={{ ml: "auto", display: "flex", gap: 1 }}>
               <Button
                 component={RouterLink}
                 to="/signin"
                 color="inherit"
-                sx={{ textTransform: 'none' }}
+                sx={{ textTransform: "none" }}
               >
                 ログイン
               </Button>
@@ -86,7 +101,7 @@ const AuthButtons = (props: Props) => {
                 component={RouterLink}
                 to="/signup"
                 color="inherit"
-                sx={{ textTransform: 'none' }}
+                sx={{ textTransform: "none" }}
               >
                 アカウント新規登録
               </Button>
@@ -95,32 +110,32 @@ const AuthButtons = (props: Props) => {
         )}
       </Toolbar>
     </AppBar>
-  )
-}
+  );
+};
 
 const Header: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const { todoFilter, onSetTodoFilter } = useTodoStatusContext()
-  const { isAuthenticated, isLoading } = useAuthContex()
-  const { showMessage } = useMessageContext()
-  const singOut = useSingOut()
+  const { todoFilter, onSetTodoFilter } = useTodoStatusContext();
+  const { isAuthenticated, isLoading } = useAuthContex();
+  const { showMessage } = useMessageContext();
+  const singOut = useSingOut();
 
   const handleToggleDrawer = () => {
-    setDrawerOpen((drawerOpen) => !drawerOpen)
-  }
+    setDrawerOpen((drawerOpen) => !drawerOpen);
+  };
 
   const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      e.preventDefault()
+      e.preventDefault();
 
-      await singOut.mutateAsync()
-      showMessage('サインアウトしました', SEVERITY.SUCCESS)
+      await singOut.mutateAsync();
+      showMessage("サインアウトしました", SEVERITY.SUCCESS);
     } catch (err) {
-      showMessage('サインアウトに失敗しました', SEVERITY.ERROR)
-      throw err
+      showMessage("サインアウトに失敗しました", SEVERITY.ERROR);
+      throw err;
     }
-  }
+  };
 
   return (
     <>
@@ -139,6 +154,6 @@ const Header: React.FC = () => {
         onFilter={onSetTodoFilter}
       />
     </>
-  )
-}
-export default Header
+  );
+};
+export default Header;
