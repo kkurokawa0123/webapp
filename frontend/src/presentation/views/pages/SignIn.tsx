@@ -92,8 +92,8 @@ const SignIn: React.FC = () => {
             </Button>
             <Box textAlign="center">
               <Typography variant="body2">
-                Don't have an account? &nbsp;
-                <Link to="/signup">Sign Up now!</Link>
+                会員登録がお済みでない場合 &nbsp;
+                <Link to="/signup">会員登録はこちら</Link>
               </Typography>
             </Box>
           </CardContent>
