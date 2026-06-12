@@ -2,14 +2,15 @@ import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { getAuthUser, onSignIn, onSignUp, onSignOut } from '@/domain/services/auth/auth_api_service'
 import { SignUpParams } from '@/domain/entities/auth/sign_up_params'
 import { SignInParams } from '@/domain/entities/auth/sign_in_params'
+import { queryKeys } from '@/shared/query_keys/query_keys'
 
 export const useAuth = () => {
   return useQuery({
-    queryKey: ['authUser'],
+    queryKey: queryKeys.authUser.key,
     queryFn: getAuthUser,
-    staleTime: 1000 * 60 * 1, // 5分キャッシュ
-    gcTime: 1000 * 60 * 1, // 5分キャッシュ
-    retry: false, // 認証はリトライしない
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
+    retry: false,
   })
 }
 
@@ -19,7 +20,7 @@ export const useSingIn = () => {
   return useMutation({
     mutationFn: (params: SignInParams) => onSignIn(params),
     onSuccess: (user) => {
-      queryClient.setQueryData(['authUser'], {
+      queryClient.setQueryData(queryKeys.authUser.key, {
         id: user?.id,
         email: user?.email,
         name: user?.name,
@@ -50,9 +51,10 @@ export const useSingOut = () => {
   return useMutation({
     mutationFn: () => onSignOut(),
     onSuccess: () => {
-      queryClient.setQueryData(['authUser'], null)
-      // 認証情報を完全削除
-      // queryClient.removeQueries({ queryKey: ["authUser"] });
+      queryClient.setQueryData(queryKeys.authUser.key, null)
+    },
+    onError: (error) => {
+      console.error('useSingOut fail', error)
     },
   })
 }

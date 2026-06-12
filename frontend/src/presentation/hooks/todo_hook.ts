@@ -6,13 +6,12 @@ import {
   bulkDeleteTodo,
 } from '@/domain/services/todo/todo_api_service'
 import { TodoParams } from '@/domain/entities/todo/todo_params'
+import { queryKeys } from '@/shared/query_keys/query_keys'
 
 export const useTodosById = () => {
   return useQuery({
-    queryKey: ['todos'], // IDごとにキャッシュ分離
+    queryKey: queryKeys.todo.key, // ユーザーIDはuseAuthから取得するため、クエリキーには含めない
     queryFn: fetchTodosByUserId,
-
-    // enabled: !!id, // idがあるときだけ実行
   })
 }
 
@@ -25,7 +24,7 @@ export const useCreateTodo = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['todos'],
+        queryKey: queryKeys.todo.key,
       })
     },
   })
@@ -40,7 +39,7 @@ export const useUpdateTodo = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['todos'],
+        queryKey: queryKeys.todo.key,
       })
     },
   })
@@ -55,7 +54,7 @@ export const useBulkDeleteTodo = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['todos'],
+        queryKey: queryKeys.todo.key,
       })
     },
   })

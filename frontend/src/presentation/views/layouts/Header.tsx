@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -99,6 +99,7 @@ const AuthButtons = (props: Props) => {
 }
 
 const Header: React.FC = () => {
+  const navigate = useNavigate()
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const { todoFilter, onSetTodoFilter } = useTodoStatusContext()
@@ -116,6 +117,7 @@ const Header: React.FC = () => {
 
       await singOut.mutateAsync()
       showMessage('サインアウトしました', SEVERITY.SUCCESS)
+      navigate('/signin')
     } catch (err) {
       showMessage('サインアウトに失敗しました', SEVERITY.ERROR)
       throw err
