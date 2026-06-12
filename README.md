@@ -21,7 +21,7 @@
 ## ３. 公開アプリケーション
 
 - ### デモURL
-  - https://webapp-six-indol.vercel.app/
+  - https://webapp-six-indol.vercel.app/ ※Vercel環境の仕様上、初回アクセスや一定時間アクセスがない場合、起動（コールドスタート）に約15〜30秒の遅延が生じます。
 
 - ### githubリポジトリ　
   - https://github.com/kkurokawa0123/webapp
