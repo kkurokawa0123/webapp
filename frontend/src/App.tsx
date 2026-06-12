@@ -35,10 +35,6 @@ const queryClient = new QueryClient()
 const PrivateRoute = () => {
   const { isLoading, isAuthenticated } = useAuthContex()
 
-  // console.log("AuthProvider-authData", authData);
-  // console.log("AuthProvider-isAuthenticated", isAuthenticated);
-  // console.log("AuthProvider useAuthContex completed");
-
   if (isLoading) return
   return isAuthenticated ? <Outlet /> : <Navigate to="/signin" replace />
 }
@@ -53,10 +49,10 @@ const App: React.FC = () => {
               <Routes>
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/todomain" element={<TodoMain />} />
-                <Route path="/passwordchange" element={<PasswordChange />} />
                 <Route element={<PrivateRoute />}>
                   <Route path="/" element={<TodoMain />} />
+                  <Route path="/todomain" element={<TodoMain />} />
+                  <Route path="/passwordchange" element={<PasswordChange />} />
                 </Route>
               </Routes>
             </CommonLayout>
